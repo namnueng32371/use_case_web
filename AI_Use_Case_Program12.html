@@ -485,7 +485,7 @@
     กดปุ่ม "เอกสาร" บนการ์ดแต่ละ use case เพื่อดูเอกสารสรุปฉบับเต็ม (รวม Spec Hardware, ความเสี่ยง, ทรัพยากร, KQI และ ROI) แล้วเลือกดาวน์โหลดเป็นไฟล์ Word หรือพิมพ์/บันทึกเป็น PDF ได้ทันที<br>
     กดปุ่ม "แผนงาน" เพื่อแปลง Flow ขั้นตอนการทำ AI เป็นแผนงานละเอียด (กิจกรรม ช่วงเวลา ผู้รับผิดชอบ สิ่งส่งมอบ และไทม์ไลน์ Gantt) โดยระบบกระจายระยะเวลาตามที่ระบุในช่อง "ทรัพยากรและประมาณการ" ให้อัตโนมัติ<br>
     ในฟอร์ม กดปุ่ม "เติม Spec แนะนำตามประเภท AI อัตโนมัติ" เพื่อให้ระบบเติม Spec hardware ความเสี่ยง ทรัพยากร KQI และ ROI ที่เหมาะกับประเภท AI นั้นให้ แล้วปรับแก้ได้ตามจริง<br>
-    ข้อมูลจะถูกบันทึกไว้ในเครื่อง/บัญชีที่ใช้งานเครื่องมือนี้เท่านั้น
+    ข้อมูลจะถูกบันทึกไว้ในฐานข้อมูลกลาง (MySQL) ผู้ใช้ทุกคนที่เข้าเครื่องมือนี้จะเห็นข้อมูลชุดเดียวกัน
   </p>
 
 </div>
@@ -901,6 +901,10 @@
   }
 
   async function loadData(){
+    try{
+      var resp = await fetch('/api/usecases');
+      if(resp.ok) return await resp.json();
+    }catch(e){ /* fall through to local fallback */ }
     if(hasClaudeStorage){
       try{
         var r = await window.storage.get(STORAGE_KEY, false);
@@ -915,6 +919,14 @@
 
   async function saveData(){
     var json = JSON.stringify(useCases);
+    try{
+      var resp = await fetch('/api/usecases', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: json
+      });
+      if(resp.ok) return true;
+    }catch(e){ /* fall through to local fallback */ }
     if(hasClaudeStorage){
       try{ var r = await window.storage.set(STORAGE_KEY, json, false); return !!r; }catch(e){ return false; }
     } else {
