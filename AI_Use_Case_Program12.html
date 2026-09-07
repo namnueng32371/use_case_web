@@ -24,6 +24,12 @@
     --med-bg:#FAEEDA;
     --low:#6B6A63;
     --low-bg:#EDECE6;
+    --indigo:#4B4A9E;
+    --indigo-light:#EEEDFE;
+    --peach:#B5624A;
+    --peach-light:#FAECE7;
+    --blue:#2E6DA4;
+    --blue-light:#E6F1FB;
   }
   *{box-sizing:border-box;}
   body{
@@ -194,9 +200,154 @@
     .row2{grid-template-columns:1fr;}
     .doc-grid2{grid-template-columns:1fr;}
   }
+
+  /* --- Nav tabs --- */
+  .nav-tabs{display:flex; gap:26px; border-bottom:1px solid var(--border); margin-bottom:24px;}
+  .nav-tab{background:transparent; border:none; padding:0 0 10px; font-size:13px; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; border-radius:0; margin-bottom:-1px;}
+  .nav-tab:hover{color:var(--text);}
+  .nav-tab.active{color:var(--navy); border-bottom-color:var(--teal);}
+
+  /* --- Org structure page --- */
+  .org-intro{font-size:13px; color:var(--text-muted); line-height:1.7; margin:0 0 20px;}
+  .org-groups{display:flex; flex-direction:column; gap:16px;}
+  .org-team{background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .org-team-head{background:var(--navy); color:#fff; padding:12px 18px; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .org-team-head .count{font-size:11px; font-weight:500; background:rgba(255,255,255,.16); padding:3px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0;}
+  .org-roles{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:1px; background:var(--border);}
+  .org-role{background:var(--card); padding:14px 18px; text-align:left; border:none; cursor:pointer; display:flex; flex-direction:column; gap:4px; font-family:inherit;}
+  .org-role:hover{background:var(--teal-light);}
+  .org-role .r-title{font-size:13px; font-weight:600; color:var(--text); line-height:1.4;}
+  .org-role .r-rate{font-size:11px; color:var(--text-muted);}
+  .org-note{padding:16px 18px; font-size:13px; line-height:1.75; color:var(--text-muted);}
+
+  .jd-head{border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:16px;}
+  .jd-head h2{font-size:19px; color:var(--navy); margin:0 0 4px; font-weight:700;}
+  .jd-head .jd-meta{font-size:12px; color:var(--text-muted);}
+  .jd-step{display:flex; gap:10px; margin-bottom:12px; align-items:flex-start;}
+  .jd-num{flex-shrink:0; width:22px; height:22px; border-radius:6px; background:var(--teal-light); color:var(--teal); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px;}
+  .jd-step-body{font-size:13px; line-height:1.7; color:var(--text);}
+  .jd-heading{font-size:12px; font-weight:700; color:var(--navy); margin:16px 0 6px;}
+  .jd-heading:first-child{margin-top:0;}
+  .jd-label{font-size:13px; line-height:1.7; margin:6px 0; color:var(--text);}
+  .jd-bullets{margin:6px 0 12px; padding-left:18px; font-size:13px; line-height:1.7; color:var(--text);}
+  .jd-bullets li{margin-bottom:4px;}
+  .jd-empty{color:var(--text-muted); font-size:13px;}
+
+  /* --- Org flow diagram --- */
+  .dg-fig{margin:0 0 22px; padding:18px 18px 4px; background:var(--card); border:1px solid var(--border); border-radius:14px;}
+  .dg-fig .dg-scroll{overflow-x:auto;}
+  .dg-fig svg{display:block; min-width:920px; width:100%; height:auto; font-family:'Inter', sans-serif;}
+  .dg-fig figcaption{font-size:12px; color:var(--text-muted); margin:10px 2px 4px; line-height:1.6;}
+  .dg-node rect, .dg-node polygon{fill:var(--card); stroke:var(--border); stroke-width:1.5;}
+  .dg-node .dg-title{fill:var(--navy); font-weight:700; font-size:13px;}
+  .dg-node .dg-sub{fill:var(--text-muted); font-size:10.5px;}
+  .dg-node.dg-gate rect, .dg-node.dg-gate polygon{fill:var(--teal-light); stroke:var(--teal);}
+  .dg-node.dg-gate .dg-title{fill:var(--teal);}
+  .dg-clickable{cursor:pointer;}
+  .dg-clickable rect, .dg-clickable polygon{transition:filter .15s;}
+  .dg-clickable:hover rect, .dg-clickable:hover polygon{filter:brightness(0.97);}
+  .dg-edge{stroke:var(--text-muted); stroke-width:1.5;}
+  .dg-edge-label{fill:var(--text-muted); font-size:10.5px;}
+  .dg-reject{stroke:var(--med); stroke-width:1.3; stroke-dasharray:4 3; fill:none;}
+  .dg-reject-label{fill:var(--med); font-size:10px; font-weight:600;}
+  .dg-loop{stroke:var(--teal); stroke-width:1.5; stroke-dasharray:5 4; fill:none;}
+  .dg-loop-label{fill:var(--teal); font-size:11px; font-weight:600;}
+  .dg-arrowhead{fill:var(--text-muted);}
+  .dg-arrowhead-amber{fill:var(--med);}
+  .dg-arrowhead-teal{fill:var(--teal);}
+  .org-team.flash{box-shadow:0 0 0 3px var(--teal); transition:box-shadow .2s;}
+  @media (max-width:600px){
+    .dg-fig{padding:14px 10px 4px;}
+  }
+
+  /* --- Role-level coordination diagram --- */
+  details.dg2-details{margin-bottom:22px; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px 18px;}
+  details.dg2-details > summary{cursor:pointer; font-size:13px; font-weight:600; color:var(--navy); list-style:none;}
+  details.dg2-details > summary::-webkit-details-marker{display:none;}
+  details.dg2-details > summary::before{content:'▸ '; color:var(--teal); font-size:11px;}
+  details.dg2-details[open] > summary::before{content:'▾ '; }
+  details.dg2-details .dg2-details-body{margin-top:14px;}
+  .dg2-fig{background:transparent; border:none; padding:0; margin:0;}
+  .dg2-lane{fill:var(--navy); font-weight:700; font-size:12.5px;}
+  .dg2-lane-rule{stroke:var(--border); stroke-width:1;}
+  .dg2-node rect{fill:var(--card); stroke:var(--border); stroke-width:1.5;}
+  .dg2-node.dg2-node-gov rect{fill:var(--teal-light); stroke:var(--teal);}
+  .dg2-title{fill:var(--navy); font-weight:700; font-size:11.5px;}
+  .dg2-node-gov .dg2-title{fill:var(--teal);}
+  .dg2-sub{fill:var(--text-muted); font-size:9.5px;}
+  .dg2-flow{stroke:var(--navy); stroke-width:1.4; fill:none; opacity:.8;}
+  .dg2-report{stroke:var(--text-muted); stroke-width:1.2; stroke-dasharray:4 3; fill:none;}
+  .dg2-gate{stroke:var(--med); stroke-width:1.4; fill:none;}
+  .dg2-gatereport{stroke:var(--med); stroke-width:1.2; stroke-dasharray:4 3; fill:none;}
+  .dg2-label-bg{fill:var(--bg); opacity:.95;}
+  .dg2-edge-label{font-size:9.4px;}
+  .dg2-flow-text{fill:var(--navy);}
+  .dg2-report-text{fill:var(--text-muted);}
+  .dg2-gate-text{fill:var(--med);}
+  .dg2-gatereport-text{fill:var(--med);}
+  .dg2-arrowhead{fill:var(--navy); opacity:.8;}
+  .dg2-arrowhead-report{fill:var(--text-muted);}
+  .dg2-arrowhead-gate{fill:var(--med);}
+  .dg2-legend{display:flex; flex-wrap:wrap; gap:10px 22px; margin:10px 2px 0; font-size:11.5px; color:var(--text-muted);}
+  .dg2-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .dg2-swatch{display:inline-block; width:18px; height:0; border-top:2px solid var(--navy);}
+  .dg2-swatch-report{border-color:var(--text-muted); border-top-style:dashed;}
+  .dg2-swatch-gate{border-color:var(--med);}
+  .dg2-swatch-badge{display:inline-block; width:14px; height:14px; border-radius:50%; background:var(--navy);}
+  .dg2-lifeline{stroke:var(--border); stroke-width:1.2; stroke-dasharray:3 3;}
+  .dg2-badge circle{fill:var(--navy);}
+  .dg2-badge text{fill:#fff; font-size:9px; font-weight:700;}
+  .dg2-badge-report circle{fill:var(--text-muted);}
+  .dg2-badge-gate circle{fill:var(--med);}
+
+  /* --- Flow chart page --- */
+  .flow-legend{display:flex; flex-wrap:wrap; gap:9px 18px; margin:0 0 22px; font-size:11.5px; color:var(--text-muted);}
+  .flow-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .flow-legend i{width:13px; height:13px; border-radius:4px; display:inline-block; flex-shrink:0;}
+  .flow-chart{overflow-x:auto; padding:4px 2px 8px;}
+  .flow-spine{display:flex; flex-direction:column; align-items:stretch; width:640px; min-width:640px; margin:0 auto;}
+  .fc-node{border-radius:14px; border:1.5px solid; padding:14px 22px; text-align:center;}
+  .fc-node h3{margin:0 0 4px; font-size:14.5px; font-weight:700; line-height:1.4;}
+  .fc-node p{margin:2px 0 0; font-size:12.5px; line-height:1.6;}
+  .fc-node .flow-note{font-size:11.5px; font-style:italic; opacity:.85; margin-top:5px;}
+  .fc-node .flow-warn{font-size:11.5px; margin-top:6px; opacity:.9;}
+  .fc-node .flow-who{font-size:11.5px; font-weight:700; margin-top:7px; padding-top:7px; border-top:1px dashed currentColor; opacity:.9;}
+  .fc-node--start{background:var(--bg); border-color:var(--border); color:var(--text);}
+  .fc-node--lead{background:var(--indigo-light); border-color:var(--indigo); color:var(--indigo);}
+  .fc-node--lead p{color:var(--text);}
+  .fc-node--role{background:var(--peach-light); border-color:var(--peach); color:var(--peach);}
+  .fc-node--role p{color:var(--text);}
+  .fc-node--role.fc-node--warn-border{border-width:2px;}
+  .fc-node--gate{background:var(--teal-light); border-color:var(--teal); color:var(--teal);}
+  .fc-node--gate p{color:var(--text);}
+  .fc-node--build{background:var(--blue-light); border-color:var(--blue); color:var(--blue);}
+  .fc-node--build p{color:var(--text);}
+  .fc-node--ops{background:var(--med-bg); border-color:var(--med); color:var(--med);}
+  .fc-node--ops p{color:var(--text);}
+  .fc-node--milestone{background:#fff; border-color:var(--teal); border-width:2.5px; color:var(--teal);}
+  .fc-node--milestone p{color:var(--text);}
+  .fc-node--summary{background:var(--bg); border-color:var(--border); color:var(--navy);}
+  .fc-node--summary p{color:var(--text-muted);}
+  .fc-node.flash{box-shadow:0 0 0 3px var(--teal); transition:box-shadow .2s;}
+  .flow-build-lanes{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px;}
+  .flow-sublane{background:var(--teal-light); border:1px solid var(--teal); border-radius:8px; padding:8px 6px; font-size:11px; line-height:1.5; color:var(--text);}
+  .flow-sublane b{display:block; color:var(--teal); font-size:11.5px; margin-bottom:2px;}
+  .fc-arrow{display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-muted); font-size:15px; padding:5px 0; line-height:1;}
+  .fc-arrow-label{font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:2px;}
+  .flow-decision-row{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px 14px; padding:4px 0;}
+  .flow-diamond{width:220px; height:96px; flex-shrink:0; clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%); background:#fff; border:2px solid var(--med); display:flex; align-items:center; justify-content:center; text-align:center; font-size:12.5px; font-weight:700; color:var(--med); padding:0 26px; box-sizing:border-box; line-height:1.4;}
+  .flow-branch{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+  .flow-branch-arrow{font-size:11px; font-weight:700; color:var(--med); flex-shrink:0; white-space:nowrap;}
+  .flow-side-box{background:var(--peach-light); border:1px solid var(--peach); border-radius:10px; padding:9px 14px; font-size:11.5px; text-align:center; color:var(--peach); line-height:1.4; max-width:170px;}
+  .flow-jump{margin-top:10px; background:var(--card); border:1px solid var(--teal); color:var(--teal); font-size:11px; font-weight:600; padding:6px 12px; border-radius:20px; cursor:pointer;}
+  .flow-jump:hover{background:var(--teal-light);}
+  @media (max-width:600px){
+    .flow-side-box{max-width:130px;}
+  }
 </style>
 </head>
 <body>
+
 <div class="app">
 
   <div class="header">
@@ -206,6 +357,14 @@
       <p>บันทึก ให้คะแนน จัดลำดับความสำคัญ และออกเอกสารสรุปของ use case AI ในองค์กร — ในโปรแกรมเดียว</p>
     </div>
   </div>
+
+  <div class="nav-tabs" role="tablist">
+    <button class="nav-tab active" id="tab-usecases" type="button" role="tab" aria-selected="true">จัดลำดับ Use Case</button>
+    <button class="nav-tab" id="tab-org" type="button" role="tab" aria-selected="false">โครงสร้างทีม AI Star</button>
+    <button class="nav-tab" id="tab-flow" type="button" role="tab" aria-selected="false">Flow การทำงาน AI Start</button>
+  </div>
+
+  <div id="view-usecases">
 
   <div class="summary" id="summary"></div>
 
@@ -488,6 +647,502 @@
     ข้อมูลจะถูกบันทึกไว้ในฐานข้อมูลกลาง (MySQL) ผู้ใช้ทุกคนที่เข้าเครื่องมือนี้จะเห็นข้อมูลชุดเดียวกัน
   </p>
 
+  </div>
+
+  <div id="view-org" hidden>
+    <p class="org-intro">โครงสร้างทีม AI Star พร้อมหน้าที่รับผิดชอบของแต่ละตำแหน่ง — สรุปจากไฟล์ "โครงการ AI Local GSK.xlsx" ชีท "โครงสร้างทีมสร้าง AI Star" กดที่ตำแหน่งเพื่อดู Job Description ฉบับเต็ม</p>
+
+    <figure class="dg-fig">
+      <div class="dg-scroll">
+      <svg viewBox="0 0 1560 380" role="img" aria-label="แผนภาพเส้นทางของ Use Case AI หนึ่งเรื่อง ตั้งแต่ฝ่ายธุรกิจส่งโจทย์ ผ่านทีมสนับสนุนข้ามสายงานทำ Roadmap, ผ่านการตรวจสอบ Governance Gate 1 ด้าน PDPA/Bias, เข้าสู่ทีมพัฒนา AI ที่รับ GPU/Cloud จากทีม Infrastructure, ผ่าน Governance Gate 2 ก่อน Deploy แล้วนำไปใช้งานจริงในฝ่ายธุรกิจ พร้อม feedback loop กลับไปเริ่มรอบใหม่ และเส้นทางปรับแก้เมื่อไม่ผ่าน Gate">
+        <defs>
+          <marker id="dgArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead"></path>
+          </marker>
+          <marker id="dgArrowAmber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead-amber"></path>
+          </marker>
+          <marker id="dgArrowTeal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead-teal"></path>
+          </marker>
+        </defs>
+
+        <!-- main flow edges -->
+        <line x1="195" y1="120" x2="285" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
+        <text x="240" y="110" class="dg-edge-label" text-anchor="middle">ส่ง Use Case</text>
+
+        <line x1="455" y1="120" x2="560" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
+        <text x="507" y="110" class="dg-edge-label" text-anchor="middle">ขออนุมัติ</text>
+
+        <line x1="700" y1="120" x2="805" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
+        <text x="752" y="110" class="dg-edge-label" text-anchor="middle">ผ่าน Gate</text>
+
+        <line x1="975" y1="120" x2="1080" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
+        <text x="1027" y="110" class="dg-edge-label" text-anchor="middle">ก่อน Deploy</text>
+
+        <line x1="1220" y1="120" x2="1325" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
+        <text x="1272" y="110" class="dg-edge-label" text-anchor="middle">Go-live</text>
+
+        <!-- infra bidirectional link -->
+        <line x1="890" y1="148" x2="890" y2="252" class="dg-edge" marker-end="url(#dgArrow)" marker-start="url(#dgArrow)"></line>
+        <text x="902" y="204" class="dg-edge-label" text-anchor="start">GPU / Cloud /</text>
+        <text x="902" y="216" class="dg-edge-label" text-anchor="start">Storage</text>
+
+        <!-- reject / rework loops -->
+        <path d="M630,80 Q500,40 372,90" class="dg-reject" marker-end="url(#dgArrowAmber)"></path>
+        <text x="500" y="34" class="dg-reject-label" text-anchor="middle">ไม่ผ่าน → ปรับแก้</text>
+
+        <path d="M1150,80 Q1020,40 892,90" class="dg-reject" marker-end="url(#dgArrowAmber)"></path>
+        <text x="1020" y="34" class="dg-reject-label" text-anchor="middle">ไม่ผ่าน → แก้ Model</text>
+
+        <!-- feedback loop -->
+        <path d="M1410,148 C1410,340 110,340 110,148" class="dg-loop" marker-end="url(#dgArrowTeal)"></path>
+        <text x="760" y="356" class="dg-loop-label" text-anchor="middle">Feedback: ผลการใช้งานจริงย้อนกลับเข้ารอบ Use Case ถัดไป</text>
+
+        <!-- N1 Business Unit -->
+        <g class="dg-node dg-clickable" data-team-idx="4">
+          <rect x="25" y="92" width="170" height="56" rx="10"></rect>
+          <text x="110" y="115" class="dg-title" text-anchor="middle">ฝ่ายธุรกิจ</text>
+          <text x="110" y="132" class="dg-sub" text-anchor="middle">Business Unit Champions</text>
+        </g>
+
+        <!-- N2 ทีมสนับสนุนข้ามสายงาน -->
+        <g class="dg-node dg-clickable" data-team-idx="0">
+          <rect x="285" y="92" width="170" height="56" rx="10"></rect>
+          <text x="370" y="112" class="dg-title" text-anchor="middle">ทีมสนับสนุนข้ามสายงาน</text>
+          <text x="370" y="130" class="dg-sub" text-anchor="middle">3 ตำแหน่ง · PO ทำ Roadmap</text>
+        </g>
+
+        <!-- G1 Gate -->
+        <g class="dg-node dg-gate dg-clickable" data-team-idx="3">
+          <polygon points="630,80 700,120 630,160 560,120"></polygon>
+          <text x="630" y="115" class="dg-title" text-anchor="middle">Gate 1</text>
+          <text x="630" y="130" class="dg-sub" text-anchor="middle">ตรวจ PDPA / Bias</text>
+        </g>
+
+        <!-- N3 TEAM พัฒนา AI -->
+        <g class="dg-node dg-clickable" data-team-idx="1">
+          <rect x="805" y="92" width="170" height="56" rx="10"></rect>
+          <text x="890" y="112" class="dg-title" text-anchor="middle">TEAM พัฒนา AI</text>
+          <text x="890" y="130" class="dg-sub" text-anchor="middle">3 ตำแหน่ง · Build Model</text>
+        </g>
+
+        <!-- N3b TEAM Infrastructure -->
+        <g class="dg-node dg-clickable" data-team-idx="2">
+          <rect x="805" y="252" width="170" height="56" rx="10"></rect>
+          <text x="890" y="272" class="dg-title" text-anchor="middle">TEAM Infrastructure</text>
+          <text x="890" y="290" class="dg-sub" text-anchor="middle">2 ตำแหน่ง · GPU/Cloud</text>
+        </g>
+
+        <!-- G2 Gate -->
+        <g class="dg-node dg-gate dg-clickable" data-team-idx="3">
+          <polygon points="1150,80 1220,120 1150,160 1080,120"></polygon>
+          <text x="1150" y="115" class="dg-title" text-anchor="middle">Gate 2</text>
+          <text x="1150" y="130" class="dg-sub" text-anchor="middle">ตรวจก่อน Deploy</text>
+        </g>
+
+        <!-- N4 Go-live -->
+        <g class="dg-node dg-clickable" data-team-idx="4">
+          <rect x="1325" y="92" width="170" height="56" rx="10"></rect>
+          <text x="1410" y="112" class="dg-title" text-anchor="middle">ใช้งานจริง</text>
+          <text x="1410" y="130" class="dg-sub" text-anchor="middle">Go-live ในฝ่ายธุรกิจ</text>
+        </g>
+      </svg>
+      </div>
+      <figcaption>เส้นทางของ Use Case หนึ่งเรื่อง ตั้งแต่ฝ่ายธุรกิจส่งโจทย์ จนถึงใช้งานจริง ผ่านการตรวจสอบความเสี่ยง (Governance Gate) 2 จุดตามหน้าที่ของทีม Governance &amp; Ethics — กดที่กล่องเพื่อเลื่อนไปดูทีมนั้นด้านล่าง</figcaption>
+    </figure>
+
+<details class="dg2-details">
+    <summary>แผนภาพละเอียด: ลำดับขั้นตอน Output → Input ระหว่างตำแหน่ง (1–22)</summary>
+    <div class="dg2-details-body">
+    <figure class="dg-fig dg2-fig">
+      <div class="dg-scroll">
+      <svg viewBox="0 0 1480 848" role="img" aria-label="แผนภาพลำดับขั้นตอนแบบ sequence diagram แสดง 11 ตำแหน่งเป็นเส้นแนวตั้ง (lifeline) และ 22 ขั้นตอนเรียงจากบนลงล่างตามลำดับเวลา แต่ละขั้นตอนมีเลขกำกับที่จุดเริ่มต้น เริ่มจากขั้นที่ 1 ฝ่ายธุรกิจส่ง Use Case ให้ Product Owner จนถึงขั้นที่ 22 ฝ่ายธุรกิจส่ง Feedback Adoption กลับให้ Change Management เส้นทุกเส้นเป็นเส้นตรงแนวนอน ไม่มีเส้นโค้งหรือทับกัน">
+        <defs>
+        <marker id="dg2Arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg2-arrowhead"></path></marker>
+        <marker id="dg2ArrowReport" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg2-arrowhead-report"></path></marker>
+        <marker id="dg2ArrowGate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg2-arrowhead-gate"></path></marker>
+        </defs>
+        <line x1="70" y1="62" x2="70" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="12" y="4" width="116" height="54" rx="8"></rect>
+        <text x="70" y="28" class="dg2-title" text-anchor="middle">ฝ่ายธุรกิจ</text>
+        <text x="70" y="42" class="dg2-sub" text-anchor="middle">Business Unit</text>
+        </g>
+        <line x1="202" y1="62" x2="202" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="144" y="4" width="116" height="54" rx="8"></rect>
+        <text x="202" y="28" class="dg2-title" text-anchor="middle">Product Owner</text>
+        <text x="202" y="42" class="dg2-sub" text-anchor="middle">Roadmap&Backlog</text>
+        </g>
+        <line x1="334" y1="62" x2="334" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="276" y="4" width="116" height="54" rx="8"></rect>
+        <text x="334" y="28" class="dg2-title" text-anchor="middle">Research Analyst</text>
+        <text x="334" y="42" class="dg2-sub" text-anchor="middle">Feasibility&PoC</text>
+        </g>
+        <line x1="466" y1="62" x2="466" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="408" y="4" width="116" height="54" rx="8"></rect>
+        <text x="466" y="28" class="dg2-title" text-anchor="middle">AI Solution Designer</text>
+        <text x="466" y="42" class="dg2-sub" text-anchor="middle">/Prompt Engineer</text>
+        </g>
+        <line x1="598" y1="62" x2="598" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="540" y="4" width="116" height="54" rx="8"></rect>
+        <text x="598" y="28" class="dg2-title" text-anchor="middle">AI Lead / Owner</text>
+        </g>
+        <line x1="730" y1="62" x2="730" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="672" y="4" width="116" height="54" rx="8"></rect>
+        <text x="730" y="28" class="dg2-title" text-anchor="middle">AI Engineer</text>
+        <text x="730" y="42" class="dg2-sub" text-anchor="middle">/ Builder</text>
+        </g>
+        <line x1="862" y1="62" x2="862" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="804" y="4" width="116" height="54" rx="8"></rect>
+        <text x="862" y="28" class="dg2-title" text-anchor="middle">AI Ops / Trainer</text>
+        </g>
+        <line x1="994" y1="62" x2="994" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="936" y="4" width="116" height="54" rx="8"></rect>
+        <text x="994" y="28" class="dg2-title" text-anchor="middle">Cloud & Infra</text>
+        </g>
+        <line x1="1126" y1="62" x2="1126" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node">
+        <rect x="1068" y="4" width="116" height="54" rx="8"></rect>
+        <text x="1126" y="28" class="dg2-title" text-anchor="middle">Observability</text>
+        <text x="1126" y="42" class="dg2-sub" text-anchor="middle">& Monitoring</text>
+        </g>
+        <line x1="1258" y1="62" x2="1258" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node dg2-node-gov">
+        <rect x="1200" y="4" width="116" height="54" rx="8"></rect>
+        <text x="1258" y="28" class="dg2-title" text-anchor="middle">Governance</text>
+        <text x="1258" y="42" class="dg2-sub" text-anchor="middle">& Ethics</text>
+        </g>
+        <line x1="1390" y1="62" x2="1390" y2="834" class="dg2-lifeline"></line>
+        <g class="dg2-node dg2-node-gov">
+        <rect x="1332" y="4" width="116" height="54" rx="8"></rect>
+        <text x="1390" y="28" class="dg2-title" text-anchor="middle">Change Mgmt</text>
+        </g>
+        <line x1="82" y1="92" x2="191" y2="92" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="70" cy="92" r="9"></circle><text x="70" y="95.2" text-anchor="middle">1</text></g>
+        <g transform="translate(136,85)">
+        <rect x="-86" y="-10.5" width="172" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">ส่ง Use Case / Requirements</text>
+        </g>
+        <line x1="82" y1="125" x2="455" y2="125" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="70" cy="125" r="9"></circle><text x="70" y="128.2" text-anchor="middle">2</text></g>
+        <g transform="translate(268,118)">
+        <rect x="-95" y="-10.5" width="190" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">โจทย์ธุรกิจ (Business Context)</text>
+        </g>
+        <line x1="214" y1="158" x2="587" y2="158" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="202" cy="158" r="9"></circle><text x="202" y="161.2" text-anchor="middle">3</text></g>
+        <g transform="translate(400,151)">
+        <rect x="-68" y="-10.5" width="136" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">Roadmap เสนอขออนุมัติ</text>
+        </g>
+        <line x1="346" y1="191" x2="587" y2="191" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="334" cy="191" r="9"></circle><text x="334" y="194.2" text-anchor="middle">4</text></g>
+        <g transform="translate(466,184)">
+        <rect x="-80" y="-10.5" width="160" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">ผล PoC → ตัดสินใจเดินหน้า</text>
+        </g>
+        <line x1="346" y1="224" x2="455" y2="224" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="334" cy="224" r="9"></circle><text x="334" y="227.2" text-anchor="middle">5</text></g>
+        <g transform="translate(400,217)">
+        <rect x="-68" y="-10.5" width="136" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">ผลประเมิน Feasibility</text>
+        </g>
+        <line x1="610" y1="257" x2="1247" y2="257" class="dg2-gate" marker-end="url(#dg2ArrowGate)"></line>
+        <g class="dg2-badge dg2-badge-gate"><circle cx="598" cy="257" r="9"></circle><text x="598" y="260.2" text-anchor="middle">6</text></g>
+        <g transform="translate(928,250)">
+        <rect x="-86" y="-10.5" width="172" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-gate-text" text-anchor="middle">ขออนุมัติ Use Case (Gate 1)</text>
+        </g>
+        <line x1="214" y1="290" x2="719" y2="290" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="202" cy="290" r="9"></circle><text x="202" y="293.2" text-anchor="middle">7</text></g>
+        <g transform="translate(466,283)">
+        <rect x="-71" y="-10.5" width="142" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">User Stories / Backlog</text>
+        </g>
+        <line x1="478" y1="323" x2="719" y2="323" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="466" cy="323" r="9"></circle><text x="466" y="326.2" text-anchor="middle">8</text></g>
+        <g transform="translate(598,316)">
+        <rect x="-86" y="-10.5" width="172" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">Solution Blueprint / Prompt</text>
+        </g>
+        <line x1="610" y1="356" x2="983" y2="356" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="598" cy="356" r="9"></circle><text x="598" y="359.2" text-anchor="middle">9</text></g>
+        <g transform="translate(796,349)">
+        <rect x="-68" y="-10.5" width="136" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">อนุมัติงบ GPU / Cloud</text>
+        </g>
+        <line x1="982" y1="389" x2="741" y2="389" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="994" cy="389" r="9"></circle><text x="994" y="392.2" text-anchor="middle">10</text></g>
+        <g transform="translate(862,382)">
+        <rect x="-95" y="-10.5" width="190" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">จัดสรร GPU / Compute / Storage</text>
+        </g>
+        <line x1="982" y1="422" x2="609" y2="422" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="994" cy="422" r="9"></circle><text x="994" y="425.2" text-anchor="middle">11</text></g>
+        <g transform="translate(796,415)">
+        <rect x="-59" y="-10.5" width="118" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">รายงาน Cloud Spend</text>
+        </g>
+        <line x1="742" y1="455" x2="1247" y2="455" class="dg2-gate" marker-end="url(#dg2ArrowGate)"></line>
+        <g class="dg2-badge dg2-badge-gate"><circle cx="730" cy="455" r="9"></circle><text x="730" y="458.2" text-anchor="middle">12</text></g>
+        <g transform="translate(994,448)">
+        <rect x="-107" y="-10.5" width="214" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-gate-text" text-anchor="middle">ส่ง Model ตรวจก่อน Deploy (Gate 2)</text>
+        </g>
+        <line x1="1246" y1="488" x2="609" y2="488" class="dg2-gatereport" marker-end="url(#dg2ArrowGate)"></line>
+        <g class="dg2-badge dg2-badge-gate"><circle cx="1258" cy="488" r="9"></circle><text x="1258" y="491.2" text-anchor="middle">13</text></g>
+        <g transform="translate(928,481)">
+        <rect x="-101" y="-10.5" width="202" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-gatereport-text" text-anchor="middle">ผลอนุมัติ / ความเสี่ยงที่ต้องแก้</text>
+        </g>
+        <line x1="742" y1="521" x2="851" y2="521" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="730" cy="521" r="9"></circle><text x="730" y="524.2" text-anchor="middle">14</text></g>
+        <g transform="translate(796,514)">
+        <rect x="-53" y="-10.5" width="106" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">ระบบพร้อม Deploy</text>
+        </g>
+        <line x1="850" y1="554" x2="741" y2="554" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="862" cy="554" r="9"></circle><text x="862" y="557.2" text-anchor="middle">15</text></g>
+        <g transform="translate(796,547)">
+        <rect x="-71" y="-10.5" width="142" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">Feedback ผู้ใช้งานจริง</text>
+        </g>
+        <line x1="1114" y1="587" x2="741" y2="587" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="1126" cy="587" r="9"></circle><text x="1126" y="590.2" text-anchor="middle">16</text></g>
+        <g transform="translate(928,580)">
+        <rect x="-68" y="-10.5" width="136" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">Drift Alert → Retrain</text>
+        </g>
+        <line x1="1114" y1="620" x2="609" y2="620" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="1126" cy="620" r="9"></circle><text x="1126" y="623.2" text-anchor="middle">17</text></g>
+        <g transform="translate(862,613)">
+        <rect x="-62" y="-10.5" width="124" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">Executive Dashboard</text>
+        </g>
+        <line x1="1138" y1="653" x2="1247" y2="653" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="1126" cy="653" r="9"></circle><text x="1126" y="656.2" text-anchor="middle">18</text></g>
+        <g transform="translate(1192,646)">
+        <rect x="-71" y="-10.5" width="142" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">แจ้งเตือน Data Anomaly</text>
+        </g>
+        <line x1="1114" y1="686" x2="477" y2="686" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="1126" cy="686" r="9"></circle><text x="1126" y="689.2" text-anchor="middle">19</text></g>
+        <g transform="translate(796,679)">
+        <rect x="-86" y="-10.5" width="172" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">Feedback คุณภาพ Output (QA)</text>
+        </g>
+        <line x1="190" y1="719" x2="81" y2="719" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="202" cy="719" r="9"></circle><text x="202" y="722.2" text-anchor="middle">20</text></g>
+        <g transform="translate(136,712)">
+        <rect x="-56" y="-10.5" width="112" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">รายงานความคืบหน้า</text>
+        </g>
+        <line x1="1378" y1="752" x2="81" y2="752" class="dg2-flow" marker-end="url(#dg2Arrow)"></line>
+        <g class="dg2-badge"><circle cx="1390" cy="752" r="9"></circle><text x="1390" y="755.2" text-anchor="middle">21</text></g>
+        <g transform="translate(730,745)">
+        <rect x="-116" y="-10.5" width="232" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-flow-text" text-anchor="middle">สร้าง / บริหาร Champion Network, อบรม</text>
+        </g>
+        <line x1="82" y1="785" x2="1379" y2="785" class="dg2-report" marker-end="url(#dg2ArrowReport)"></line>
+        <g class="dg2-badge dg2-badge-report"><circle cx="70" cy="785" r="9"></circle><text x="70" y="788.2" text-anchor="middle">22</text></g>
+        <g transform="translate(730,778)">
+        <rect x="-95" y="-10.5" width="190" height="14" rx="3" class="dg2-label-bg"></rect>
+        <text x="0" y="0" class="dg2-edge-label dg2-report-text" text-anchor="middle">Feedback Adoption กลับ AI Unit</text>
+        </g>
+      </svg>
+      </div>
+      <div class="dg2-legend">
+        <span><i class="dg2-swatch dg2-swatch-flow"></i>ส่งมอบงาน/ข้อมูล (deliverable)</span>
+        <span><i class="dg2-swatch dg2-swatch-report"></i>รายงาน / feedback ย้อนกลับ</span>
+        <span><i class="dg2-swatch dg2-swatch-gate"></i>ขออนุมัติ / ผลตอบกลับ Governance Gate</span>
+        <span><i class="dg2-swatch-badge"></i>เลขกำกับ = ลำดับขั้นตอน (เริ่มที่ 1 ฝ่ายธุรกิจ)</span>
+      </div>
+      <figcaption>อ่านจากบนลงล่างตามหมายเลข 1–22 เส้นแนวนอนตรงทุกเส้น (ไม่มีเส้นโค้ง) ลากจากตำแหน่งต้นทาง (มีเลขกำกับ) ไปยังตำแหน่งปลายทาง (หัวลูกศร) — สรุปจาก Job Description ในไฟล์ "โครงการ AI Local GSK.xlsx" กดเลื่อนแนวนอนเพื่อดูตำแหน่งฝั่งขวา</figcaption>
+    </figure>
+    </div>
+  </details>
+
+    <div class="org-groups" id="org-groups"></div>
+  </div>
+
+  <div id="view-flow" hidden>
+    <p class="org-intro">ขั้นตอนการทำงานของ AI Unit ตั้งแต่ฝ่ายธุรกิจเสนอ Use Case จนถึงใช้งานจริง — สรุปจากไฟล์ "โครงการ AI Local GSK.xlsx" ชีท "Flow การทำงาน AI Start" ระบุตำแหน่งผู้รับผิดชอบในแต่ละขั้นตอนตามชีทโครงสร้างทีมเดียวกัน</p>
+
+    <div class="flow-legend">
+      <span><i style="background:var(--bg); border:1px solid var(--border);"></i>จุดเริ่ม/สิ้นสุด</span>
+      <span><i style="background:var(--indigo-light); border:1px solid var(--indigo);"></i>AI Lead</span>
+      <span><i style="background:var(--peach-light); border:1px solid var(--peach);"></i>ตำแหน่งผู้รับผิดชอบขั้นตอน</span>
+      <span><i style="background:var(--teal-light); border:1px solid var(--teal);"></i>Governance Gate</span>
+      <span><i style="background:var(--blue-light); border:1px solid var(--blue);"></i>Build / Deploy</span>
+      <span><i style="background:var(--med-bg); border:1px solid var(--med);"></i>QA / Training / Change Mgmt</span>
+      <span><i style="background:#fff; border:2px solid var(--med);"></i>จุดตัดสินใจ</span>
+    </div>
+
+    <div class="flow-chart">
+    <div class="flow-spine">
+
+      <div class="fc-node fc-node--start" id="fs-start">
+        <h3>📋 Business Unit เสนอ Use Case</h3>
+        <p>Sales · Marketing · HR · Finance · Ops</p>
+        <p class="flow-who">👤 ตัวแทนฝ่าย: AMD, GM, ผจก.ฝ่าย</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--lead" id="fs-step1">
+        <h3>1. AI Lead รับเรื่อง</h3>
+        <p>ประเมิน Priority ก่อนเข้าสู่ขั้นวางแผน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--role">
+        <h3>2. Product Owner / UX Designer</h3>
+        <p>วาง Roadmap + คิด UX ระบบ</p>
+        <p class="flow-note">โดย AI Lead · เวลา: 1-2 วัน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--gate">
+        <h3>🛡️ Governance Gate 1</h3>
+        <p>PDPA, Bias risk, Data ownership (AI Lead ตรวจ)</p>
+        <p class="flow-warn">🚫 ไม่ผ่าน → ส่งกลับ BU</p>
+        <p class="flow-who">👤 ผู้ตรวจ: QMR (ใช้ Checklist สำเร็จรูป)</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--role fc-node--warn-border">
+        <h3>💰 AI Lead เสนองบให้ CFO</h3>
+        <p>คำนวณ ROI + เสนอราคา Vendor</p>
+        <p class="flow-warn">🚫 ไม่อนุมัติ → ปรับ scope</p>
+        <p class="flow-who">👤 ผู้อนุมัติจริง: BOD — AI Lead เป็นผู้เสนอเท่านั้น</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="flow-decision-row">
+        <div class="flow-diamond">CFO<br>อนุมัติ?</div>
+        <div class="flow-branch">
+          <span class="flow-branch-arrow">— ไม่ →</span>
+          <div class="flow-side-box">ปรับ scope / พับโครงการ</div>
+        </div>
+      </div>
+      <div class="fc-arrow"><span class="fc-arrow-label">อนุมัติ</span>▾</div>
+
+      <div class="fc-node fc-node--role">
+        <h3>3. Research Analyst / Data Scientist</h3>
+        <p>ประเมิน Feasibility + ข้อมูล + POC</p>
+        <p class="flow-note">โดย AI Engineer · เวลา: 3-5 วัน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="flow-decision-row">
+        <div class="flow-diamond">POC<br>ผ่านไหม?</div>
+        <div class="flow-branch">
+          <span class="flow-branch-arrow">— ไม่ผ่าน →</span>
+          <div class="flow-side-box">ปรับ Model/Prompt แล้วลองใหม่</div>
+        </div>
+      </div>
+      <div class="fc-arrow"><span class="fc-arrow-label">ผ่าน</span>▾</div>
+
+      <div class="fc-node fc-node--role">
+        <h3>4. Solution Designer / Prompt Engineer</h3>
+        <p>ออกแบบ Architecture + เขียน Prompt</p>
+        <p class="flow-note">โดย AI Engineer · เวลา: 2-3 วัน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--build">
+        <h3>5. AI Engineer พัฒนาระบบ (Build)</h3>
+        <div class="flow-build-lanes">
+          <div class="flow-sublane"><b>ML Engineer</b>เลือก/Fine-tune Model</div>
+          <div class="flow-sublane"><b>Backend Dev</b>เขียน API, Gateway</div>
+          <div class="flow-sublane"><b>Infra</b>Setup GPU, Storage, Network</div>
+        </div>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--gate">
+        <h3>🛡️ Governance Gate 2</h3>
+        <p>Output safety, bias test ก่อนปล่อยใช้จริง</p>
+        <p class="flow-warn">🚫 ไม่ผ่าน → กลับไปแก้ที่ Build</p>
+        <p class="flow-who">👤 ผู้ตรวจ: QMR (ใช้ Checklist สำเร็จรูป)</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--build">
+        <h3>6. Deploy ระบบลง Server บริษัท</h3>
+        <p>AI Engineer ติดตั้งบน GPU ภายในบริษัท</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--milestone">
+        <h3>🖥️ AI Local พร้อมใช้งาน</h3>
+        <p>รันบน GPU Server ภายในบริษัท — ข้อมูลไม่ออกนอก</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--ops">
+        <h3>7. AI Ops ตรวจคุณภาพ (QA)</h3>
+        <p>ทดสอบความแม่นยำ, เช็ค Log, Monitor Uptime</p>
+        <p class="flow-note">เวลา: 3-5 วัน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--ops">
+        <h3>🔄 Change Management</h3>
+        <p>AI Lead สื่อสารตรงกับ BU เรื่อง workflow ใหม่ จัดการความกังวลของพนักงาน</p>
+        <p class="flow-note">คู่ขนานกับ Training</p>
+        <p class="flow-who">👤 ร่วมรับผิดชอบ: AMD, GM, ผจก.ฝ่าย (ทีมเล็ก)</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--ops">
+        <h3>8. AI Ops อบรมผู้ใช้งาน (Training)</h3>
+        <p>สอน BU Champion + เขียนคู่มือการใช้งาน</p>
+        <p class="flow-note">เวลา: 3-5 วัน</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--role">
+        <h3>9. BU Champions รับ Training</h3>
+        <p>นำไปสอนต่อในแผนกตัวเอง (ไม่ใช่คนใน AI Unit)</p>
+        <p class="flow-who">👤 คือใคร: คนใน BU เอง แต่งตั้งผ่าน AMD, GM, ผจก.ฝ่าย</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--start">
+        <h3>✅ Business Unit ใช้งานจริง</h3>
+        <p>ระบบ AI Local เริ่มทำงานเต็มรูปแบบ</p>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--gate" id="fs-gate3">
+        <h3>🛡️ Governance Gate 3 — เฝ้าระวัง</h3>
+        <p>Audit ทุก 3 เดือน + Monitor ทุกวัน</p>
+        <p class="flow-note">รับ Feedback ต่อเนื่อง</p>
+        <p class="flow-who">👤 ผู้ตรวจ: QMR (ใช้ Checklist สำเร็จรูป)</p>
+        <button type="button" class="flow-jump" data-target="fs-step1">🔁 Feedback Loop — วนกลับไปขั้นตอนที่ 1 เมื่อมี Use Case ใหม่</button>
+      </div>
+      <div class="fc-arrow">▾</div>
+
+      <div class="fc-node fc-node--summary">
+        <h3 style="text-align:center;">สรุป Timeline รวม (ต่อ 1 Use Case)</h3>
+        <p style="text-align:center;">รับเรื่อง+Roadmap 1-2 วัน → อนุมัติ 3-5 วัน → Research+POC 3-5 วัน → Design 2-3 วัน → Build 4-8 สัปดาห์ → QA+Training 1-2 สัปดาห์</p>
+        <p style="text-align:center; font-weight:600; color:var(--navy); margin-top:8px;">รวมทั้งหมด ~2-3 เดือนต่อ Use Case</p>
+        <p class="flow-note" style="text-align:center;">ทีม 3 คน ควรทำทีละ 1 Use Case ไม่ทำพร้อมกันหลายเรื่อง</p>
+      </div>
+
+    </div>
+    </div>
+  </div>
+
+
 </div>
 
 <footer id="app-footer">
@@ -527,7 +1182,14 @@
   </div>
 </div>
 
-
+<div class="modal-overlay" id="org-role-modal">
+  <div class="doc-card">
+    <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
+      <button class="btn-secondary" id="org-role-close-btn">ปิด</button>
+    </div>
+    <div id="org-role-content"></div>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
@@ -2194,10 +2856,148 @@
     reader.readAsDataURL(file);
   });
 
+  var SAMPLE_DATA = [{"id":"uc_mock_1","name":"AI Chatbot ค้นหาข้อมูลลูกค้าและสนับสนุนการขาย","dept":"Sales & Marketing","owner":"คุณแพร","problem":"ทีมขายเสียเวลาค้นหาประวัติลูกค้า ยอดซื้อ สินค้าที่เคยใช้ และแนวโน้มอุตสาหกรรมก่อนเข้าพบลูกค้า ทำให้เตรียมข้อมูลได้ไม่ทันและไม่ครบถ้วน","solution":"พนักงานขายค้นหาข้อมูลเองจากหลายระบบ (ERP, ไฟล์ Excel, อีเมลย้อนหลัง) ใช้เวลาเฉลี่ย 30-45 นาทีต่อลูกค้าหนึ่งราย","attachRef":"","aiType":"text","hardware":"ใช้ Cloud API (Claude/GPT) ไม่ต้องลงทุน GPU เพิ่มในปีแรก","impact":5,"feasibility":4,"data":4,"risk":2,"risks":"ข้อมูลลูกค้าเป็นความลับทางธุรกิจ ต้องจำกัดสิทธิ์การเข้าถึงตามแผนก","resources":"ทีม AI Dev 2 คน, ระยะเวลา 6 สัปดาห์, งบประมาณ ~150,000 บาท","kpi":"ลดเวลาค้นหาข้อมูลก่อนพบลูกค้าลง 70%, เพิ่มอัตราการปิดการขาย 10%","roi":"คาดคืนทุนภายใน 4 เดือนจากเวลาที่ประหยัดได้ของทีมขาย 15 คน","recommendation":"เริ่ม Pilot กับทีมขาย S.K.Polymer ก่อน แล้วขยายไป Thairubbtech และ Polymate","preparedBy":"คุณแพร","approver":"ผจก.ฝ่ายขาย","output":"สรุปข้อมูลลูกค้าและคำแนะนำเชิงกลยุทธ์ก่อนเข้าพบ เหมือนถาม ChatGPT/Claude","users":"15 คน/วัน","language":"Thai+Eng.","dataSensitivity":"ภายในองค์กร (Internal)","latency":"ปานกลาง (3-10 วินาที)","availability":"เวลาทำการ 8x5 (จันทร์-ศุกร์)","qwp":"QWP-SAL-001 กระบวนการเตรียมข้อมูลก่อนเข้าพบลูกค้า","refStep":"ขั้นตอนที่ 2: รวบรวมและวิเคราะห์ข้อมูลลูกค้าก่อนนัดหมาย","control":"ต้องตรวจสอบความถูกต้องของข้อมูลลูกค้าก่อนนำเสนอ และจำกัดสิทธิ์เข้าถึงเฉพาะทีมขายที่เกี่ยวข้อง","kqi":"ระยะเวลาเตรียมข้อมูลต่อลูกค้า 1 ราย ≤ 10 นาที"},{"id":"uc_mock_2","name":"AI Chatbot + RAG ค้นหาเอกสารภายในฝ่ายผลิต","dept":"Production","owner":"คุณวันชาติ","problem":"พนักงานฝ่ายผลิตค้นหาเอกสาร QWP, WI, Spec สินค้า และสัญญาที่เกี่ยวข้องยาก เพราะกระจายอยู่หลายระบบและหลายเวอร์ชัน","solution":"ค้นหาด้วยชื่อไฟล์ผ่าน shared drive และถามหัวหน้างานโดยตรง","attachRef":"","aiType":"rag","hardware":"Cloud API + Vector database (embedding) สำหรับค้นหาเอกสารภายใน","impact":4,"feasibility":3,"data":3,"risk":3,"risks":"เอกสารบางส่วนเป็นความลับ (สูตร/กระบวนการผลิต) ต้องคัดกรองก่อนนำเข้าระบบ และคุณภาพ index เอกสารยังไม่สม่ำเสมอ","resources":"ทีม AI Dev 2 คน + Business Unit Champion ฝ่ายผลิต, ระยะเวลา 10 สัปดาห์, งบประมาณ ~300,000 บาท","kpi":"ลดเวลาค้นหาเอกสารจากเฉลี่ย 20 นาที เหลือ < 2 นาที","roi":"คาดคืนทุนภายใน 8 เดือน","recommendation":"เริ่มจากเอกสารสาธารณะ/ภายในที่ไม่ลับก่อน ค่อยขยายขอบเขตหลัง Governance อนุมัติ","preparedBy":"คุณวันชาติ","approver":"ผจก.ฝ่ายผลิต","output":"AI Chatbot ตอบคำถามพร้อมอ้างอิงเอกสารต้นฉบับจากคลังความรู้ภายในองค์กร","users":"100 คน/วัน","language":"Thai+Eng.","dataSensitivity":"ลับ - ต้องการ Access Control","latency":"ปานกลาง (3-10 วินาที)","availability":"ตลอดเวลา 24x7 (99.9%+)","qwp":"QWP-PRD-014 กระบวนการควบคุมเอกสารฝ่ายผลิต","refStep":"ขั้นตอนที่ 3: เบิกจ่ายและอ้างอิงเอกสารควบคุมคุณภาพระหว่างผลิต","control":"ระบบต้องดึงเฉพาะเอกสารเวอร์ชันล่าสุดที่อนุมัติแล้ว และบันทึก log การเข้าถึงทุกครั้ง","kqi":"ความถูกต้องของเอกสารที่อ้างอิง ≥ 98%"},{"id":"uc_mock_3","name":"AI ผู้ช่วยความรู้ภายในฝ่าย Admin","dept":"หน่วยงาน ADMIN","owner":"คุณอีฟ","problem":"พนักงานใหม่และพนักงานทั่วไปไม่ทราบขั้นตอนงานเอกสาร สัญญา และ SOP ของแต่ละฝ่าย ต้องถามหัวหน้างานซ้ำ ๆ","solution":"มี SOP เป็นไฟล์ PDF แยกตามฝ่าย พนักงานต้องเปิดหาเองหรือถามฝ่าย HR","attachRef":"","aiType":"knowledge","hardware":"Cloud API + RAG บนคลังเอกสาร SOP/สัญญา/รายงานภายใน","impact":3,"feasibility":4,"data":4,"risk":2,"risks":"ความเสี่ยงต่ำ เนื่องจากเอกสารส่วนใหญ่เป็นข้อมูลสาธารณะภายในองค์กร","resources":"ทีม AI Dev 1 คน, ระยะเวลา 4 สัปดาห์, งบประมาณ ~100,000 บาท","kpi":"ลดจำนวนคำถามซ้ำถึง HR/หัวหน้างานลง 50%","roi":"คาดคืนทุนภายใน 5 เดือน","recommendation":"ใช้เป็น Quick win ของปีแรก เพราะ feasibility และความพร้อมข้อมูลสูง","preparedBy":"คุณอีฟ","approver":"ผจก.ฝ่าย Admin","output":"AI Chatbot ค้นหาคำตอบจากคลัง Knowledge ภายในองค์กรและตอบคำถามพนักงาน","users":"100 คน/วัน","language":"Thai+Eng.","dataSensitivity":"สาธารณะ (Public)","latency":"เร็ว (1-3 วินาที)","availability":"เวลาทำการ 8x5 (จันทร์-ศุกร์)","qwp":"QWP-ADM-003 กระบวนการปฐมนิเทศและสนับสนุนพนักงาน","refStep":"ขั้นตอนที่ 1: ให้ข้อมูล SOP และนโยบายองค์กรแก่พนักงาน","control":"ต้องตรวจสอบว่าคำตอบอ้างอิงจากเอกสารฉบับล่าสุดเท่านั้น","kqi":"อัตราคำตอบที่ถูกต้องตรงตาม SOP ≥ 95%"},{"id":"uc_mock_4","name":"สร้างภาพสินค้า/โฆษณาอัตโนมัติด้วย Image Generation","dept":"Production","owner":"คุณตี๋","problem":"ทีมการตลาดต้องจ้างช่างภาพ/กราฟิกภายนอกเพื่อสร้างภาพสินค้าและภาพโฆษณา ใช้เวลานานและมีต้นทุนสูงต่อแคมเปญ","solution":"ว่าจ้าง freelance หรือเอเจนซี่ภายนอกทำภาพประกอบทุกครั้งที่มีแคมเปญใหม่","attachRef":"","aiType":"imagegen","hardware":"Cloud API (Image generation) เริ่มต้นไม่ต้องมี GPU เฉพาะ","impact":2,"feasibility":3,"data":2,"risk":3,"risks":"คุณภาพภาพที่ได้อาจไม่สม่ำเสมอ ต้องมีคนตรวจทานก่อนเผยแพร่ และประเด็นลิขสิทธิ์ของภาพที่ AI สร้าง","resources":"ทีม AI Dev 1 คน (part-time), ระยะเวลา 6 สัปดาห์, งบประมาณ ~80,000 บาท","kpi":"ลดต้นทุนภาพต่อแคมเปญลง 40%","roi":"คาดคืนทุนภายใน 10-12 เดือน","recommendation":"จัดเป็นลำดับ Nice to have ในปีแรก รอผลจาก use case อื่นที่ feasibility สูงกว่าก่อน","preparedBy":"คุณตี๋","approver":"ผจก.ฝ่ายผลิต","output":"ภาพสินค้า/ภาพโฆษณาตามคำสั่ง (prompt) พร้อมใช้งานเบื้องต้น","users":"10 คน/วัน","language":"Thai+Eng.","dataSensitivity":"สาธารณะ (Public)","latency":"แบบกลุ่ม/ไม่เร่งด่วน (Batch)","availability":"ใช้งานเป็นครั้งคราว (ไม่กำหนด SLA)","qwp":"QWP-MKT-007 กระบวนการจัดทำสื่อการตลาด","refStep":"ขั้นตอนที่ 2: จัดเตรียมภาพประกอบสำหรับแคมเปญ","control":"ต้องมีผู้ตรวจสอบภาพก่อนเผยแพร่ทุกครั้ง เพื่อคัดกรองภาพที่ไม่เหมาะสมหรือผิดลิขสิทธิ์","kqi":"สัดส่วนภาพที่ผ่านการตรวจสอบครั้งแรกโดยไม่ต้อง generate ซ้ำ ≥ 70%"},{"id":"uc_mock_5","name":"พยากรณ์ความต้องการสินค้า (Demand Forecasting)","dept":"Sales & Marketing","owner":"คุณกวาง","problem":"การวางแผนสต็อกและการจัดซื้อวัตถุดิบยางพาราอิงจากประสบการณ์และยอดขายย้อนหลังแบบง่าย ทำให้เกิดสต็อกขาด/ล้นบ่อยครั้ง","solution":"ทีมจัดซื้อประมาณการด้วย Excel และประสบการณ์ของผู้จัดการ","attachRef":"","aiType":"demand","hardware":"Cloud API หรือ ML pipeline บน server ภายใน (CPU พอในปีแรก)","impact":5,"feasibility":2,"data":2,"risk":4,"risks":"ข้อมูลยอดขายย้อนหลังยังไม่ครบถ้วน/ไม่เป็นมาตรฐานเดียวกันระหว่างบริษัทในเครือ ต้องทำ data cleansing ก่อน","resources":"ทีม AI Dev 2 คน + Data engineer เพิ่มเติม, ระยะเวลา 14 สัปดาห์, งบประมาณ ~450,000 บาท","kpi":"ลดความคลาดเคลื่อนของการพยากรณ์ (MAPE) ลงต่ำกว่า 15%","roi":"คาดคืนทุนภายใน 12-14 เดือนจากการลดสต็อกส่วนเกินและการขาดสต็อก","recommendation":"ควรทำ Data Quality ให้พร้อมก่อนเริ่มพัฒนาโมเดล แนะนำเป็นโครงการเฟส 2 ของปีแรก","preparedBy":"คุณกวาง","approver":"ผจก.ฝ่ายขาย","output":"รายงานพยากรณ์ความต้องการสินค้ารายเดือนแยกตามกลุ่มสินค้าและบริษัทในเครือ","users":"5 คน/วัน","language":"Thai","dataSensitivity":"ภายในองค์กร (Internal)","latency":"แบบกลุ่ม/ไม่เร่งด่วน (Batch)","availability":"เวลาทำการ 8x5 (จันทร์-ศุกร์)","qwp":"QWP-SAL-009 กระบวนการวางแผนสต็อกและจัดซื้อวัตถุดิบ","refStep":"ขั้นตอนที่ 1: ประมาณการความต้องการสินค้าล่วงหน้ารายไตรมาส","control":"ต้องมีผู้จัดการฝ่ายขายอนุมัติตัวเลขพยากรณ์ก่อนส่งต่อฝ่ายจัดซื้อ","kqi":"ค่าความคลาดเคลื่อนพยากรณ์เฉลี่ย (MAPE) ต่อเดือน"},{"id":"uc_mock_6","name":"ตรวจจับความผิดปกติคุณภาพการผลิตด้วย Computer Vision","dept":"Production","owner":"คุณเอก","problem":"การตรวจสอบคุณภาพสินค้ายางพาราหน้างานใช้แรงงานคนตรวจด้วยสายตา เกิดความผิดพลาดและความล่าช้าในช่วงที่มีปริมาณผลิตสูง","solution":"พนักงาน QC ตรวจสอบด้วยสายตาทีละชิ้นตามรอบเวลา","attachRef":"","aiType":"anomaly","hardware":"กล้อง + GPU เฉพาะจุด (Edge) หรือ Server กลาง Tier 1 ตามแผน Desing Server Local","impact":5,"feasibility":3,"data":3,"risk":3,"risks":"ต้องเก็บภาพตัวอย่างของเสียให้เพียงพอสำหรับเทรนโมเดล และมีความเสี่ยงด้าน false positive/negative ช่วงแรก","resources":"ทีม AI Dev 2 คน + ทีม Infrastructure, ระยะเวลา 12 สัปดาห์, งบประมาณ ~600,000 บาท (รวมกล้อง/GPU)","kpi":"ลดอัตราสินค้าเสียหลุดออกจากไลน์ผลิตลง 30%","roi":"คาดคืนทุนภายใน 9 เดือนจากการลด claim ลูกค้าและของเสีย","recommendation":"นำร่องที่ไลน์ผลิตที่มีอัตราของเสียสูงสุดก่อน แล้วขยายไปไลน์อื่นในปีถัดไป","preparedBy":"คุณเอก","approver":"ผจก.ฝ่ายผลิต","output":"ระบบแจ้งเตือนอัตโนมัติเมื่อพบชิ้นงานผิดปกติ พร้อมบันทึกภาพหลักฐาน","users":"50 คน/วัน","language":"Thai","dataSensitivity":"ภายในองค์กร (Internal)","latency":"ทันที (< 1 วินาที)","availability":"ตลอดเวลา 24x7 (99.9%+)","qwp":"QWP-PRD-002 กระบวนการตรวจสอบคุณภาพระหว่างผลิต","refStep":"ขั้นตอนที่ 4: ตรวจสอบคุณภาพชิ้นงานก่อนบรรจุ","control":"ต้องมีการสุ่มตรวจซ้ำโดยพนักงาน QC อย่างน้อย 5% ของชิ้นงานที่ระบบผ่าน","kqi":"อัตราการตรวจพบของเสียถูกต้อง (accuracy) ≥ 90%"}];
+
+  var ORG_DATA = {"sheet":"โครงสร้างทีมสร้าง AI Star","teams":[{"name":"ทีมสนับสนุนข้ามสายงาน","members":[{"no":1,"title":"Product Owner กำหนด roadmap & UX / AI Designer \n(ออกแบบประสบการณ์)","rate":"na\n(Digital Devlopment)","jd":"1. Product Vision & Roadmap กำหนดทิศทางของ AI Products ในระยะสั้นและยาว, จัดลำดับความสำคัญของ features และ use cases ที่ให้ value สูงสุดก่อน, อัปเดต roadmap ทุกไตรมาสให้สอดคล้องกับทิศทางธุรกิจ และนำเสนอ roadmap ต่อ Head of AI Unit และ C-Suite\n2.Backlog Management รวบรวม requirements จาก Business Unit Champions ทุกฝ่าย, เขียน User Stories ในรูปแบบที่ทีม Engineering เข้าใจและนำไปพัฒนาได้, จัดลำดับ backlog ตาม business value, effort และ dependency และ groom backlog รายสัปดาห์กับทีม Engineering\n3.Stakeholder Management เป็น single point of contact สำหรับทุกฝ่ายที่ต้องการใช้ AI, รับ feedback จาก Business Units และแปลงเป็น actionable requirements, จัดการ expectations เมื่อ scope เกิน timeline หรือ budget และรายงานความคืบหน้าต่อ stakeholders อย่างสม่ำเสมอ\n4.Sprint & Delivery Management ทำงานร่วมกับ ML Engineer และ Backend Developer ใน sprint planning, ตรวจรับ (accept/reject) งานที่ทีม deliver ว่าตรงตาม acceptance criteria หรือไม่, ทำ sprint review กับ stakeholders และ retrospective กับทีม และติดตาม velocity ของทีมเพื่อ forecast delivery date ได้แม่นยำ\n5.Success Measurement กำหนด success metrics ของแต่ละ AI Product ก่อนเริ่มพัฒนา, ติดตามว่า AI Products ที่ deploy ไปสร้าง business value จริงหรือไม่, ทำ post-launch review หลัง deploy 30/60/90 วัน และรายงาน ROI ของ AI Products ต่อ Head of AI Unit\n7.AI Interaction Design ออกแบบวิธีที่ผู้ใช้โต้ตอบกับ AI เช่น chatbot, voice interface, recommendation UI และ AI-assisted forms, ออกแบบ conversation flow ที่เป็นธรรมชาติและเข้าใจง่าย, จัดการ edge cases เมื่อ AI ไม่เข้าใจ input หรือ confidence ต่ำ และออกแบบ error states ที่ helpful ไม่ใช่แค่แสดง error message\n8.Explainable AI Design ออกแบบวิธีอธิบายว่า AI ตัดสินใจอย่างไรให้ผู้ใช้เข้าใจ เช่น \"แนะนำสินค้านี้เพราะคุณเคยซื้อ X\", แสดง confidence level ของ AI อย่างเหมาะสม เช่น \"มั่นใจ 85%\" โดยไม่ทำให้ผู้ใช้สับสน, ออกแบบ transparency ว่าข้อมูลอะไรถูกนำมาใช้ และช่วยผู้ใช้ override AI เมื่อต้องการ\n9.User Research & Testing ทำ user research เพื่อเข้าใจว่าผู้ใช้ trust AI แค่ไหนและในบริบทอะไร, ทำ usability testing กับ AI features ก่อน launch, วัด user acceptance และ adoption ของ AI features และเก็บ qualitative feedback เพื่อปรับปรุง AI interaction\n10.AI Ethics in Design ออกแบบให้หลีกเลี่ยง dark patterns ที่บังคับให้ผู้ใช้พึ่ง AI มากเกินไป, ดูแลให้ AI interface ไม่ discriminate ต่อกลุ่มผู้ใช้ใด, ออกแบบ consent flow ที่ชัดเจนว่าข้อมูลของผู้ใช้ถูกนำไปใช้อะไร และทำงานร่วมกับ Ethics & Compliance เพื่อให้ design สอดคล้องกับ AI Policy\n11.Design System for AI สร้าง design system และ component library สำหรับ AI features โดยเฉพาะ เช่น loading states สำหรับ AI thinking, confidence indicators, feedback buttons และ AI badges, ทำให้ทุก AI Product ในองค์กรมี look and feel ที่สอดคล้องกัน และจัดทำ guidelines สำหรับ developer ในการ implement AI UI components"},{"no":3,"title":"Research Analyst","rate":"na\n(Digital Devlopment)","jd":"หน้าที่หลัก 4 ด้าน\n1. ประเมินความเป็นไปได้ของ Use Case (Feasibility Check)ก่อนเริ่ม Build ต้องตอบคำถามเหล่านี้ให้ได้ก่อน:\n1.1 ข้อมูลที่มีอยู่พอสร้าง AI ตัวนี้ได้จริงหรือไม่ (เช่น มีเอกสารลูกค้าครบหรือไม่ถ้าจะทำ RAG Chatbot)\n1.2 ปัญหานี้ AI แก้ได้จริงหรือควรใช้วิธีอื่น (บางทีปัญหาแก้ด้วย Excel Macro ง่ายกว่า AI)\n1.3 มี Model สำเร็จรูปที่ใช้ได้เลยหรือต้อง Fine-tune เพิ่ม\n\n2. สำรวจและเตรียมข้อมูล (Data Discovery)\n2.1 หาว่าข้อมูลที่ต้องใช้อยู่ที่ไหนในบริษัท (Excel, Database, PDF, Email)\n2.2 ตรวจคุณภาพข้อมูล — ข้อมูลซ้ำ ข้อมูลเก่า ข้อมูลไม่ครบ ต้องทำความสะอาดก่อนหรือไม่\n2.3 ประเมินขนาดข้อมูล (GB) เพื่อคำนวณ Storage และเวลาที่ต้องใช้เตรียมข้อมูล\n\n3. เลือกแนวทางเทคนิคที่เหมาะสม (Approach Selection)\n3.1 เทียบว่าควรใช้ RAG (ดึงข้อมูลมาตอบ), Fine-tuning (ฝึก Model ใหม่), หรือ Prompt Engineering ธรรมดา\n3.2 ทดสอบ Model หลายตัวแบบเร็ว ๆ (Llama, Typhoon2, GPT-4o) ว่าตัวไหนตอบภาษาไทยหรือ Domain เฉพาะของบริษัทได้ดีที่สุด\n3.3 ประเมินว่าต้องใช้ GPU ขนาดไหน ถ้า Model ใหญ่เกินไปอาจต้องลดขนาดหรือเปลี่ยนแนวทาง\n\n4. ทำ Proof of Concept เล็ก ๆ ก่อน Build จริง\n4.1สร้างต้นแบบเร็ว ๆ ด้วยข้อมูลตัวอย่าง 10-20 รายการ ทดสอบว่า AI ตอบได้ตามที่ต้องการหรือไม่\n4.2ถ้าผลลัพธ์ไม่ดี ปรับวิธีหรือ Prompt ก่อนลงทุนเวลา Build เต็มระบบ\n4.3 นำผลที่ได้ไปคุยกับ AI Lead เพื่อตัดสินใจว่าควรเดินหน้าต่อหรือไม่"},{"no":4,"title":"AI Solution Designer\n/ Prompt Engineer","rate":"na\n(Digital Devlopment)","jd":"1. Solution Architecture วิเคราะห์โจทย์ธุรกิจจาก Business Unit Champions และออกแบบ AI solution ที่ตอบโจทย์, เลือก AI approach ที่เหมาะสม เช่น RAG, Fine-tuning, Agent หรือ Prompt Engineering, ออกแบบ system architecture ที่เชื่อมต่อ AI model กับ data sources และ existing systems และจัดทำ Solution Blueprint ส่งให้ AI Engineering พัฒนาต่อ\n2. Prompt Engineering ออกแบบและพัฒนา prompt templates สำหรับ use cases ต่างๆ ในองค์กร, ทำ prompt optimization เพื่อให้ได้ผลลัพธ์ที่แม่นยำ สม่ำเสมอ และมีประสิทธิภาพ, สร้าง prompt library ที่ทุกทีมนำไปใช้ได้ และทดสอบ prompt ด้วย systematic evaluation เช่น A/B testing และ LLM evaluation frameworks\n3. RAG & Knowledge Management ออกแบบ Retrieval Augmented Generation (RAG) systems ที่ดึงข้อมูลถูกต้องมาเสริม LLM, จัดการ knowledge base และ vector database สำหรับ RAG, ทำ chunking strategy และ embedding optimization และดูแล knowledge base ให้ up-to-date และมีคุณภาพ\n4. AI Agent Design ออกแบบ AI Agents ที่สามารถทำงานหลายขั้นตอนอัตโนมัติ, กำหนด tools และ capabilities ที่ Agent มีสิทธิ์ใช้, ออกแบบ safety guardrails ป้องกันไม่ให้ Agent ทำสิ่งที่ไม่ต้องการ และทดสอบ Agent ในสถานการณ์ต่างๆ รวมถึง edge cases\n5. Output Quality & Evaluation กำหนดมาตรฐานคุณภาพ AI output สำหรับแต่ละ use case, สร้าง evaluation framework วัดว่า output ดีพอหรือไม่ เช่น accuracy, relevance, safety และ consistency, ทำ red teaming ทดสอบว่า AI จะทำงานผิดพลาดในสถานการณ์ไหน และวนลูป feedback จาก QA & Monitoring กลับมาปรับปรุง prompt และ solution\n6. Knowledge Transfer จัดอบรม Prompt Engineering basics ให้ทีมอื่นในองค์กร, สร้าง prompt engineering guidelines และ best practices, ทำงานร่วมกับ AI Adoption & Training เพื่อ upskill พนักงานทั่วองค์กร และจัดทำ documentation ของ solutions ทั้งหมดที่สร้าง"}]},{"name":"TEAM พัฒนา AI","members":[{"no":1,"title":"AI Lead / Owner","rate":1,"jd":"หน้าที่หลัก: กำหนดทิศทาง วางกลยุทธ์ และเป็นคนตัดสินใจสุดท้ายของทุก Use Case\nงานที่ต้องทำจริง:\n\nคุยกับ Business Unit (Sales, Marketing, HR) เพื่อรับ Use Case และตัดสินว่าเรื่องไหนควรทำก่อน\nตั้งงบประมาณ คำนวณ ROI และอนุมัติการลงทุน GPU/Cloud\nเจรจาสัญญากับ Vendor — ผู้ขาย GPU, Cloud provider (AWS/GCP), หรือ LLM API (OpenAI, Anthropic)\nตรวจสอบว่า Use Case ไหนมีความเสี่ยงด้าน PDPA หรือ Bias ก่อนอนุมัติ (ทำหน้าที่ Governance เอง)\nสื่อสารกับพนักงานที่ได้รับผลกระทบจากการเปลี่ยนแปลง (Change Management)\nวาง Roadmap ว่าจะทำ Use Case อะไรก่อน-หลัง (Product Owner)\nคิดเรื่อง User Experience ของระบบที่จะสร้าง (UX Designer)\n\nทักษะที่ต้องมี: เข้าใจธุรกิจ + พื้นฐาน AI/Tech พอสื่อสารกับทีม Engineer ได้ + การเจรจาต่อรอง\nเวลาที่ใช้ต่อสัปดาห์โดยประมาณ: Strategy/Budget 40% · Governance/Ethics 20% · Change Mgmt 20% · Roadmap/UX 20%"},{"no":2,"title":"AI Engineer / Builder","rate":2,"jd":"หน้าที่หลัก: สร้างและดูแลระบบ AI ทั้งหมดตั้งแต่ต้นจนใช้งานได้จริง\nงานที่ต้องทำจริง:\n\nML Engineer: เลือก Model ที่เหมาะสม (Llama, Typhoon2, GPT-4o ฯลฯ), Fine-tune ถ้าจำเป็น, ทดสอบความแม่นยำ\nBackend Dev: เขียน API, ตั้งค่า Gateway (LiteLLM), เชื่อมต่อระบบ AI กับแอปที่มีอยู่ของบริษัท\nInfra: ติดตั้ง GPU Server, ตั้งค่า Docker/Network, ดูแล Storage และ Backup\nResearch: ก่อนเริ่ม Use Case ใหม่ ต้องประเมินว่าข้อมูลที่มีพอทำได้หรือไม่ และ approach แบบไหนเหมาะสม (RAG vs Fine-tune vs Prompt engineering)\nSolution Design: ออกแบบ Architecture ทั้งระบบ เขียน System Prompt และวาง User Flow\n\nทักษะที่ต้องมี: Python, การใช้ LLM API, พื้นฐาน DevOps/Docker, ความเข้าใจ Machine Learning concept, เขียน Prompt ได้ดี\nเวลาที่ใช้ต่อสัปดาห์โดยประมาณ: Build/Deploy 50% · Infra maintenance 20% · Research ก่อนเริ่ม Use Case ใหม่ 20% · Solution design 10%\nข้อควรระวัง: เป็นตำแหน่งที่งานหนักที่สุดในทีม ถ้ามี Use Case มากกว่า 2 เรื่องพร้อมกัน จะกลายเป็นคอขวด"},{"no":3,"title":"AI Ops / Trainer","rate":1,"jd":"หน้าที่หลัก: ดูแลคุณภาพระบบหลัง Deploy และสอนพนักงานให้ใช้งานได้จริง\nงานที่ต้องทำจริง:\n\nQA/Monitoring: ตรวจสอบว่า AI ตอบถูกต้องหรือไม่ เช็ค Model drift (โมเดลเริ่มตอบแปลกไปจากที่ตั้งใจ), ดู Log การใช้งานทุกวัน\nTraining: สอนพนักงานในแต่ละแผนกให้ใช้ระบบ AI เป็น เขียนคู่มือการใช้งาน จัด Workshop สั้น ๆ\nรับ Feedback จากผู้ใช้งานจริง ส่งกลับไปให้ AI Engineer ปรับปรุง\nตรวจสอบ Uptime ของระบบ (ระบบล่มหรือช้าผิดปกติหรือไม่)\n\nทักษะที่ต้องมี: ความละเอียดในการตรวจสอบ, ทักษะการสอน/อธิบาย, พื้นฐานการอ่าน Log หรือ Dashboard\nเวลาที่ใช้ต่อสัปดาห์โดยประมาณ: Monitoring/QA 50% · Training/Support ผู้ใช้ 50%"}]},{"name":"TEAM Infrastructure","members":[{"no":1,"title":"Cloud & Infrastructure","rate":"na\n(BY PLM)","jd":"1.Compute & GPU Management จัดหาและบริหาร GPU/TPU สำหรับ model training และ inference, เลือก instance type ที่เหมาะกับแต่ละ workload เช่น training ใช้ GPU สูง แต่ inference ใช้ CPU ได้, ทำ auto-scaling เมื่อ traffic เพิ่มขึ้นและลด cost เมื่อ idle และดูแล spot/preemptible instances เพื่อประหยัดค่าใช้จ่าย\n2.Storage & Data Infrastructure ออกแบบและดูแล data lake สำหรับเก็บ training data, จัดการ object storage เช่น S3, GCS สำหรับ model artifacts, ดูแล database สำหรับ feature store และ metadata และวางระบบ backup และ disaster recovery\n3.Network & Security ออกแบบ network architecture ให้ AI systems ปลอดภัย, จัดการ VPC, subnet, firewall rules, ดูแล API gateway และ load balancer สำหรับ AI endpoints และทำ encryption ทั้ง data at rest และ data in transit\n4.Cost Management ติดตามและควบคุมค่าใช้จ่าย cloud ให้อยู่ในงบ, ทำ cost allocation แยกตามโครงการ, หา opportunities ในการ optimize เช่น reserved instances และ rightsizing และรายงาน cloud spend ต่อ Head of AI Unit และ Budget & Portfolio Owner"},{"no":2,"title":"Observability & Monitoring","rate":"na\n(BY PLM)","jd":"1.Infrastructure Monitoring ติดตาม CPU, Memory, GPU utilization, Disk I/O และ Network traffic แบบ real-time, แจ้งเตือนเมื่อ resource ใกล้เต็มก่อนที่ระบบจะ crash และทำ capacity planning ว่าต้องเพิ่ม resource เมื่อไร\n2.Model Performance Monitoring ติดตาม accuracy, precision, recall และ F1 score ของ model ใน production อย่างต่อเนื่อง, ตรวจจับ Model Drift เมื่อ performance ลดลงจากค่าปกติ และ trigger alert ให้ ML Engineer มา investigate และ retrain\n3.Data Drift Detection เปรียบเทียบ distribution ของข้อมูลที่เข้ามาจริงกับข้อมูลที่ใช้ train, ตรวจจับ Feature Drift เมื่อค่าของ input features เปลี่ยนไปอย่างมีนัยสำคัญ และแจ้งเตือนทีม Data Governance เมื่อพบความผิดปกติของข้อมูล\n4.Application Monitoring ติดตาม API latency, throughput และ error rate ของทุก AI endpoint, ทำ distributed tracing ติดตาม request ตั้งแต่ต้นจนจบว่าใช้เวลาที่ขั้นตอนไหนมากที่สุด, สร้าง SLO (Service Level Objectives) และ SLA dashboard ให้ Operations และ Head of AI Unit และตรวจจับ anomaly เช่น traffic spike หรือ unusual error patterns\n5.Alerting & Incident Response ออกแบบ alert rules ที่ฉลาด ไม่ดังเกินไปจน alert fatigue แต่ไม่เงียบเกินไปจนพลาด incident, จัดลำดับความสร้างแรงของ alert ตั้งแต่ Info, Warning, Critical และ Page, ส่ง alert ผ่านช่องทางที่เหมาะสม เช่น Slack, PagerDuty, Email ตามระดับความรุนแรง และสร้าง runbook สำหรับแต่ละ alert ให้ทีม on-call รู้ว่าต้องทำอะไร\n6.Dashboard & Reporting สร้าง dashboard หลายระดับ ได้แก่ Technical dashboard สำหรับ Engineering ดูรายละเอียด, Operations dashboard สำหรับ Ops ดู uptime และ incident และ Executive dashboard สำหรับ Head of AI Unit รายงาน C-Suite, ทำ weekly และ monthly report สรุป system health และ trend"}]},{"name":"Team กำหนด Policy และประเมินความเสี่ยง","members":[{"no":1,"title":"Governance & Ethics  ","rate":"na\n(BY QMR )","jd":"หน้าที่หลัก 4 ด้าน\n1. ตรวจสอบความเสี่ยงก่อนอนุมัติ Use Case (Gate ตอนเริ่ม)ก่อนเสนอ Use Case ให้ผู้บริหารอนุมัติงบ ต้องเช็คว่า:\nข้อมูลที่จะใช้มีข้อมูลส่วนบุคคล (PDPA) หรือไม่ — ถ้ามี ต้องผ่านความยินยอมจากเจ้าของข้อมูลหรือไม่ Use Case นี้มีโอกาสสร้าง Bias ต่อกลุ่มคนใดกลุ่มหนึ่งหรือไม่ (เช่น AI คัดกรองใบสมัครงานที่อาจเลือกปฏิบัติ) ข้อมูลที่ใช้เทรน/ทดสอบเป็นของบริษัทจริง หรือมีปัญหาเรื่อง Copyright\n\n2. ตรวจสอบ Model ก่อนปล่อยใช้งานจริง (Gate ตอนจะ Deploy) ก่อนเอาระบบไปให้พนักงานใช้งานจริง ต้องทดสอบว่า: AI ตอบคำถามที่ละเอียดอ่อนอย่างไร (เช่น ถามเรื่องเงินเดือน, ข้อมูลส่วนตัวลูกค้า) มี Output ที่เป็นอันตรายหรือไม่เหมาะสมหลุดออกมาหรือไม่ (ทดสอบด้วยคำถามแปลก ๆ) ระบบมีการป้องกันไม่ให้คนนอกดึงข้อมูลลับออกไปได้หรือไม่\n\n3. ดูแล Data Privacy ตลอดการใช้งานกำหนดว่าใครเข้าถึงข้อมูลอะไรได้บ้าง (Access control) ตรวจสอบว่า Log การสนทนาเก็บไว้นานแค่ไหน ใครดูได้ ถ้าใช้ Cloud AI (ChatGPT, Claude) ต้องมั่นใจว่าไม่ส่งข้อมูลลับของบริษัทออกไปโดยไม่ตั้งใจ\n\n4. ตรวจสอบต่อเนื่องหลัง Go-live (Audit เป็นรอบ) ทุก 3 เดือน สุ่มตรวจว่า AI ที่ใช้งานจริงยังตอบถูกต้องตาม policy\nติดตามว่ามีพนักงานร้องเรียนเรื่อง AI ตอบผิดหรือมีปัญหาหรือไม่ ปรับปรุง Checklist ตามกฎหมายใหม่ (เช่น PDPA มีการปรับปรุง)"},{"no":2,"title":"Change Mgmt\n(บริหารความเปลี่ยนแปลง)","rate":"na\n(AMD,GM,ผจกฝ่าย ทุกคน)","jd":"1. Change Strategy & Planning วิเคราะห์ผลกระทบของ AI ต่อแต่ละฝ่ายและแต่ละบทบาทงาน, ออกแบบ change journey map ตั้งแต่ awareness จนถึง adoption, กำหนด change milestones และ success metrics ก่อนเริ่ม rollout และทำ stakeholder analysis ว่าใคร champion, ใคร neutral และใคร resistant\n2.Communication & Engagement สร้าง communication plan ที่สื่อสารเรื่อง AI อย่างโปร่งใสและไม่ทำให้คนกลัว, ออกแบบ messaging ที่เน้นว่า AI ช่วยเสริมงานคน ไม่ใช่แทนที่, จัดทำ FAQ สำหรับพนักงานเกี่ยวกับ AI และ job security และสื่อสารผ่านช่องทางที่เหมาะสมกับแต่ละกลุ่ม เช่น town hall, newsletter, intranet\n3. Resistance Management ระบุและเข้าใจสาเหตุของการต่อต้าน AI ในแต่ละกลุ่ม, ออกแบบแนวทางจัดการ resistance แบบ empathy-based ไม่ใช่บังคับ, ทำ one-on-one sessions กับกลุ่มที่ resistant สูงและสร้าง quick wins ให้คนเห็นประโยชน์ของ AI จากประสบการณ์จริง\n4. AI Champion Network สร้างและบริหารเครือข่าย AI Champions ในทุกฝ่าย ซึ่งเป็นพนักงานที่ enthusiastic เรื่อง AI, อบรม Champions ให้เป็น first line of support และ role model สำหรับเพื่อนร่วมงาน, จัด community of practice ให้ Champions แลกเปลี่ยนประสบการณ์และ best practices และใช้ Champions เป็น feedback channel กลับมาที่ AI Unit\n5. Adoption Measurement & Sustaining วัด adoption rate รายเดือนแยกตามฝ่ายและกลุ่มพนักงาน, ระบุฝ่ายที่ adoption ต่ำและลงไปช่วยเป็นพิเศษ, ออกแบบ reinforcement mechanisms เช่น recognition program สำหรับทีมที่ใช้ AI ได้ดี และทำให้ AI adoption เป็นส่วนหนึ่งของ performance review"}]},{"name":"TEAM Business Unit Champions — ตัวแทนฝ่ายธุรกิจ\n(AMD,GM,ผจกฝ่าย ทุกคน)","note":"Business Unit Champion คือ \"ตัวแทน AI ประจำฝ่าย\" ที่ทำหน้าที่เชื่อมระหว่าง AI Unit กับฝ่ายธุรกิจของตัวเองครับ ไม่ใช่ AI expert เต็มตัว แต่เป็นคนในฝ่ายที่เข้าใจทั้งงานของตัวเองและศักยภาพของ AI\nใครควรเป็น Business Unit Champion\nไม่ใช่ตำแหน่งใหม่ แต่เป็น role เพิ่มเติมให้กับพนักงานที่มีอยู่แล้วครับ คุณสมบัติที่ดีได้แก่ เป็นคนที่ enthusiastic เรื่อง AI และอยากเรียนรู้, มีความน่าเชื่อถือในฝ่ายของตัวเอง เพื่อนร่วมงานฟัง, เข้าใจ business process ของฝ่ายตัวเองอย่างลึกซึ้ง, มีทักษะการสื่อสารที่ดีและสามารถอธิบาย AI ให้คนอื่นเข้าใจได้ และได้รับการสนับสนุนจากผู้จัดการฝ่ายให้มีเวลาทำ Champion role โดยปกติใช้เวลาประมาณ 20-30% ของเวลางานสำหรับ Champion activities ส่วนที่เหลือยังทำงานปกติในฝ่ายของตัวเอง\n\nหน้าที่หลัก 6 ด้าน\n1.Use Case Discovery ค้นหาและระบุ pain points ในฝ่ายที่ AI สามารถช่วยแก้ได้, สังเกตงาน manual ที่ซ้ำซาก ใช้เวลานาน หรือ error-prone ที่เหมาะกับ AI, รวบรวม ideas จากเพื่อนร่วมงานในฝ่ายและประเมินเบื้องต้นว่า feasible แค่ไหน และส่ง use cases ที่ผ่านการกรองแล้วให้ Product Owner และ AI Strategy พิจารณา\n2. AI Adoption Facilitation เป็น first line of support เมื่อเพื่อนร่วมงานในฝ่ายมีปัญหาการใช้ AI tools, สาธิตและแนะนำการใช้ AI ในบริบทงานจริงของฝ่าย, จัด mini workshops หรือ sharing sessions ภายในฝ่ายเพื่อแบ่งปัน tips และ best practices และช่วยเพื่อนร่วมงานที่ยังลังเลให้เริ่มต้นใช้ AI ได้อย่างมั่นใจ\n3. Requirements Translation แปลงความต้องการของฝ่ายให้เป็น AI requirements ที่ชัดเจน, อธิบาย business context ให้ AI Unit เข้าใจว่าทำไมโจทย์นี้ถึงสำคัญ, ตรวจสอบว่า AI solutions ที่ AI Unit พัฒนาตรงตามความต้องการจริงหรือไม่ และทำ user acceptance testing ก่อน rollout เพื่อให้มั่นใจว่าใช้งานได้จริงในบริบทของฝ่าย\n4. Feedback Loop รวบรวม feedback จากผู้ใช้ในฝ่ายเกี่ยวกับ AI tools และ solutions, แยกแยะว่าปัญหาเกิดจาก technology, training หรือ process และส่ง feedback ที่ถูกต้องไปยังทีมที่รับผิดชอบ, ติดตามว่า feedback ที่ส่งไปได้รับการแก้ไขหรือไม่ และรายงานสถานะ AI adoption ของฝ่ายต่อ AI Adoption & Training รายเดือน\n5. Change Advocacy เป็น role model ในการใช้ AI อย่างมีประสิทธิภาพในงานประจำ, สร้างความมั่นใจให้เพื่อนร่วมงานว่า AI ช่วยงานได้จริงโดยไม่ใช่การแทนที่คน, จัดการ rumors และข้อกังวลเกี่ยวกับ AI ในฝ่ายอย่างตรงไปตรงมา และเชื่อมโยง AI capabilities กับ KPI และเป้าหมายของฝ่ายให้ชัดเจน\n6. Community Participation เข้าร่วม AI Champion Network meetings รายเดือนเพื่อแลกเปลี่ยนประสบการณ์, แบ่งปัน success stories และ lessons learned กับ Champions จากฝ่ายอื่น, เรียนรู้ AI updates และ new tools จาก AI Unit และนำกลับไปถ่ายทอดในฝ่าย และเข้าร่วม AI training programs เพื่อพัฒนาทักษะตัวเองอย่างต่อเนื่อง\n\nChampion ในแต่ละฝ่าย ดูแลอะไรเป็นพิเศษ\nFinance Champion ดูแล AI use cases ด้านการเงิน เช่น automated financial reporting, invoice processing, fraud detection และ financial forecasting\n\nHR Champion ดูแล AI use cases ด้าน HR เช่น resume screening, employee sentiment analysis, learning recommendation และ HR chatbot\n\nOperations Champion ดูแล AI use cases ด้านปฏิบัติการ เช่น predictive maintenance, process automation, supply chain optimization และ quality control\n\nMarketing Champion ดูแล AI use cases ด้าน marketing เช่น content generation, customer segmentation, campaign optimization และ sentiment analysis และ Champions จากฝ่ายอื่นๆ ตามโครงสร้างองค์กร เช่น Legal, IT, Customer Service และ Sales\n\nJourney ของ Business Unit Champion\nเริ่มจาก Awareness เดือนที่ 1-2 คือรับการอบรม AI fundamentals และ Champion role, ต่อด้วย Learning เดือนที่ 2-3 คือเรียน AI tools ที่เกี่ยวข้องกับฝ่ายตัวเอง, ต่อด้วย Practice เดือนที่ 3-4 คือเริ่มใช้ AI ในงานตัวเองและช่วยเพื่อนร่วมงาน, ต่อด้วย Facilitate เดือนที่ 4-6 คือจัด sharing sessions และรวบรวม use cases และ ต่อด้วย Lead เดือนที่ 6 เป็นต้นไป คือเป็น AI leader ของฝ่ายอย่างเต็มตัว","members":[]}]};
+
+  function splitHeadingBody(text){
+    var m = text.match(/^([A-Za-z0-9 &\/\-.,()]+?)(?=[\u0E00-\u0E7F])/);
+    if(m && m[1].trim().length > 1){
+      var head = m[1].trim();
+      var body = text.slice(m[0].length).trim();
+      return { head: head, body: body };
+    }
+    return { head: '', body: text };
+  }
+
+  function renderJD(text){
+    if(!text || !String(text).trim()) return '<p class="jd-empty">- ไม่มีข้อมูล -</p>';
+    var lines = String(text).split(/\n/).map(function(l){ return l.trim(); }).filter(Boolean);
+    var html2 = '';
+    var buffer = [];
+    function flushBullets(){
+      if(buffer.length){
+        html2 += '<ul class="jd-bullets">' + buffer.map(function(b){ return '<li>' + escapeHtml(b) + '</li>'; }).join('') + '</ul>';
+        buffer = [];
+      }
+    }
+    lines.forEach(function(line){
+      var numMatch = line.match(/^(\d+)\.\s*(.*)$/);
+      var labelMatch = !numMatch && line.match(/^([^\n:\uFF1A]{2,40})[:\uFF1A]\s*(.+)$/);
+      if(numMatch && numMatch[2]){
+        flushBullets();
+        var hb = splitHeadingBody(numMatch[2]);
+        html2 += '<div class="jd-step"><span class="jd-num">' + numMatch[1] + '</span><div class="jd-step-body">' +
+          (hb.head ? '<strong>' + escapeHtml(hb.head) + '</strong> ' : '') + escapeHtml(hb.body) + '</div></div>';
+      } else if(labelMatch){
+        flushBullets();
+        html2 += '<p class="jd-label"><strong>' + escapeHtml(labelMatch[1]) + ':</strong> ' + escapeHtml(labelMatch[2]) + '</p>';
+      } else if(line.length <= 40){
+        flushBullets();
+        html2 += '<p class="jd-heading">' + escapeHtml(line) + '</p>';
+      } else {
+        buffer.push(line);
+      }
+    });
+    flushBullets();
+    return html2;
+  }
+
+  function openOrgRole(teamName, role){
+    document.getElementById('org-role-content').innerHTML =
+      '<div class="jd-head"><h2>' + escapeHtml(String(role.title || '').replace(/\n/g,' ')) + '</h2>' +
+      '<div class="jd-meta">' + escapeHtml(teamName) + (role.rate ? ' &middot; อัตรา ' + escapeHtml(String(role.rate).replace(/\n/g,' ')) : '') + '</div></div>' +
+      renderJD(role.jd);
+    document.getElementById('org-role-modal').classList.add('open');
+  }
+
+  function renderOrgPage(){
+    var wrap = document.getElementById('org-groups');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    ORG_DATA.teams.forEach(function(team, teamIdx){
+      var teamEl = document.createElement('div');
+      teamEl.className = 'org-team';
+      teamEl.id = 'org-team-' + teamIdx;
+      if(team.members && team.members.length){
+        var head = document.createElement('div');
+        head.className = 'org-team-head';
+        head.innerHTML = '<span>' + escapeHtml(team.name) + '</span><span class="count">' + team.members.length + ' ตำแหน่ง</span>';
+        teamEl.appendChild(head);
+        var rolesEl = document.createElement('div');
+        rolesEl.className = 'org-roles';
+        team.members.forEach(function(m){
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'org-role';
+          btn.innerHTML = '<span class="r-title">' + escapeHtml(String(m.title || '').replace(/\n/g,' ')) + '</span>' +
+            '<span class="r-rate">อัตรา ' + escapeHtml(String(m.rate || '-').replace(/\n/g,' ')) + '</span>';
+          btn.addEventListener('click', function(){ openOrgRole(team.name, m); });
+          rolesEl.appendChild(btn);
+        });
+        teamEl.appendChild(rolesEl);
+      } else {
+        var head2 = document.createElement('div');
+        head2.className = 'org-team-head';
+        head2.innerHTML = '<span>' + escapeHtml(team.name) + '</span>';
+        teamEl.appendChild(head2);
+        var noteBtn = document.createElement('button');
+        noteBtn.type = 'button';
+        noteBtn.className = 'org-role';
+        noteBtn.style.width = '100%';
+        noteBtn.innerHTML = '<span class="r-title">อ่านรายละเอียดบทบาทและ Journey ของ Champion</span><span class="r-rate">กดเพื่อดูฉบับเต็ม</span>';
+        noteBtn.addEventListener('click', function(){ openOrgRole(team.name, { title: team.name, jd: team.note }); });
+        teamEl.appendChild(noteBtn);
+      }
+      wrap.appendChild(teamEl);
+    });
+  }
+
+  function switchTab(tab){
+    ['usecases','org','flow'].forEach(function(t){
+      document.getElementById('view-' + t).hidden = (t !== tab);
+      document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+      document.getElementById('tab-' + t).setAttribute('aria-selected', String(t === tab));
+    });
+  }
+  document.getElementById('tab-usecases').addEventListener('click', function(){ switchTab('usecases'); });
+  document.getElementById('tab-org').addEventListener('click', function(){ switchTab('org'); });
+  document.getElementById('tab-flow').addEventListener('click', function(){ switchTab('flow'); });
+  document.getElementById('org-role-close-btn').addEventListener('click', function(){
+    document.getElementById('org-role-modal').classList.remove('open');
+  });
+  renderOrgPage();
+
+  document.querySelectorAll('.dg-clickable').forEach(function(node){
+    node.addEventListener('click', function(){
+      var idx = node.getAttribute('data-team-idx');
+      var target = document.getElementById('org-team-' + idx);
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('flash');
+      setTimeout(function(){ target.classList.remove('flash'); }, 900);
+    });
+  });
+
+  document.querySelectorAll('.flow-jump').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-target'));
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('flash');
+      setTimeout(function(){ target.classList.remove('flash'); }, 900);
+    });
+  });
+
   (async function init(){
     useCases = await loadData();
+    if(!useCases || useCases.length === 0){
+      useCases = SAMPLE_DATA.map(function(u){ return Object.assign({}, u); });
+      await saveData();
+    }
     renderList();
   })();
 </script>
+
 </body>
 </html>
