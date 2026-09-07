@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Use Case Prioritization Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#13294B;
+    --navy-light:#1E3A66;
+    --teal:#0F6E56;
+    --teal-light:#E1F5EE;
+    --bg:#F6F5F1;
+    --card:#FFFFFF;
+    --border:#E3E1DA;
+    --text:#1F2430;
+    --text-muted:#6B7280;
+    --high:#1D9E75;
+    --high-bg:#E1F5EE;
+    --med:#BA7517;
+    --med-bg:#FAEEDA;
+    --low:#6B6A63;
+    --low-bg:#EDECE6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter', -apple-system, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  .app{max-width:920px; margin:0 auto; padding:32px 20px 32px;}
+  #app-footer{margin-top:24px; width:100%;}
+  #app-footer img{display:block; width:100%; height:auto;}
+  .doc-footer-bar{margin-top:24px; background:#E3631C; color:#fff; padding:10px 16px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:13px;}
+  .doc-footer-bar .brand{font-weight:700;}
+  .doc-footer-bar .brand small{font-weight:400; font-size:9px; opacity:.9;}
+  .header{display:flex; align-items:center; gap:14px; margin-bottom:28px;}
+  .logo{
+    width:42px; height:42px; border-radius:10px; background:var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:15px; flex-shrink:0;
+  }
+  .header h1{font-size:21px; font-weight:700; margin:0; color:var(--navy);}
+  .header p{font-size:13px; color:var(--text-muted); margin:2px 0 0;}
+
+  .summary{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;}
+  .stat{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 16px;}
+  .stat .label{font-size:12px; color:var(--text-muted); margin:0 0 4px;}
+  .stat .value{font-size:22px; font-weight:700; margin:0; color:var(--navy);}
+
+  .toolbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:18px;}
+  .toolbar select{
+    height:36px; border:1px solid var(--border); border-radius:8px; background:#fff;
+    padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;
+  }
+  .spacer{flex:1;}
+
+  button{
+    font-family:inherit; cursor:pointer; border-radius:8px; font-size:13px;
+    transition:background .15s, opacity .15s;
+  }
+  .btn-primary{
+    background:var(--navy); color:#fff; border:none; height:38px; padding:0 16px; font-weight:600;
+  }
+  .btn-primary:hover{background:var(--navy-light);}
+  .btn-secondary{
+    background:#fff; color:var(--text); border:1px solid var(--border); height:36px; padding:0 14px; font-weight:500;
+  }
+  .btn-secondary:hover{background:var(--bg);}
+  .btn-ghost{
+    background:transparent; border:none; color:var(--text-muted); padding:4px 8px; font-weight:500;
+  }
+  .btn-ghost:hover{color:var(--text);}
+  .btn-danger{color:#A32D2D;}
+
+  .panel{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px; margin-bottom:24px; display:none;
+  }
+  .panel.open{display:block;}
+  .panel h2{font-size:15px; font-weight:600; margin:0 0 16px; color:var(--navy);}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:13px; font-weight:500; margin-bottom:5px; color:var(--text);}
+  .field input[type=text], .field textarea{
+    width:100%; border:1px solid var(--border); border-radius:8px; padding:8px 10px;
+    font-size:13px; font-family:inherit; color:var(--text); resize:vertical;
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .slider-row{margin-bottom:18px;}
+  .slider-row .top{display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;}
+  .slider-row .top .w{color:var(--text-muted);}
+  .slider-row .top .v{font-weight:600; color:var(--navy);}
+  .slider-row input[type=range]{width:100%;}
+  .slider-hint{font-size:11px; color:var(--text-muted); margin-top:2px;}
+  .slider-desc{font-size:12px; color:var(--teal); background:var(--teal-light); border-radius:6px; padding:7px 10px; margin-top:6px; line-height:1.5;}
+  .error-msg{color:#A32D2D; font-size:12px; margin:-6px 0 10px; display:none;}
+  .form-actions{display:flex; gap:10px; margin-top:16px;}
+
+  .empty{
+    text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px;
+    background:var(--card); border:1px dashed var(--border); border-radius:14px;
+  }
+
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;
+  }
+  .card .info{flex:1; min-width:0;}
+  .card .name{font-size:14px; font-weight:600; margin:0 0 2px;}
+  .card .dept{font-size:12px; color:var(--text-muted); margin:0;}
+  .card .problem{font-size:12px; color:var(--text-muted); margin:6px 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .badge{font-size:12px; font-weight:600; padding:4px 10px; border-radius:8px; white-space:nowrap;}
+  .badge.high{background:var(--high-bg); color:var(--high);}
+  .badge.med{background:var(--med-bg); color:var(--med);}
+  .badge.low{background:var(--low-bg); color:var(--low);}
+  .badge.ai{background:var(--teal-light); color:var(--teal);}
+  .score{font-size:15px; font-weight:700; min-width:38px; text-align:right; color:var(--navy);}
+  .card-actions{display:flex; gap:2px; flex-shrink:0;}
+  .confirm-row{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);}
+
+  .chart-section{margin-top:28px;}
+  .chart-section h2{font-size:15px; font-weight:600; margin:0 0 12px; color:var(--navy);}
+  .chart-wrapper{position:relative; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px;}
+
+  .note{font-size:12px; color:var(--text-muted); margin-top:24px; line-height:1.6;}
+  .status{font-size:12px; color:var(--teal); height:16px; margin-top:8px;}
+
+  .modal-overlay{position:fixed; inset:0; background:rgba(20,20,20,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; z-index:1000; overflow-y:auto;}
+  .modal-overlay.open{display:flex;}
+  .doc-card{background:#fff; max-width:760px; width:100%; border-radius:14px; padding:36px 40px; border:1px solid var(--border);}
+  .doc-card h2{font-size:20px; color:var(--navy); margin:0 0 4px; font-weight:700;}
+  .doc-sub{font-size:12px; color:var(--text-muted); margin:0 0 20px;}
+  .doc-section{margin-bottom:20px;}
+  .doc-section h3{font-size:14px; color:var(--teal); margin:0 0 8px; font-weight:600; border-bottom:1px solid var(--border); padding-bottom:4px;}
+  .doc-table{width:100%; border-collapse:collapse; font-size:13px;}
+  .doc-table th, .doc-table td{border:1px solid var(--border); padding:6px 10px; text-align:left;}
+  .doc-table th{background:var(--teal-light); color:var(--teal); font-weight:600;}
+  .doc-text{font-size:13px; line-height:1.7; white-space:pre-wrap; color:var(--text); margin:0;}
+  .doc-actions{display:flex; gap:10px;}
+  .doc-grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .doc-grid2 .box{border:1px solid var(--border); border-radius:8px; padding:10px 12px;}
+  .doc-grid2 .lbl{font-size:11px; color:var(--text-muted); margin:0 0 8px;}
+  .doc-grid2 .ln{border-bottom:1px solid var(--border); padding:4px 0; font-size:12px;}
+  .flow-list{list-style:none; counter-reset:flowstep; margin:0; padding:0;}
+  .flow-list li{counter-increment:flowstep; position:relative; padding:0 0 14px 40px; font-size:13px; color:var(--text); line-height:1.5;}
+  .flow-list li:before{content:counter(flowstep); position:absolute; left:0; top:0; width:24px; height:24px; border-radius:50%; background:var(--teal); color:#fff; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center;}
+  .flow-list li:after{content:''; position:absolute; left:11px; top:26px; bottom:0; width:2px; background:var(--border);}
+  .flow-list li:last-child{padding-bottom:0;}
+  .flow-list li:last-child:after{display:none;}
+
+  .gantt{margin-top:8px;}
+  .gantt-row{display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:12px;}
+  .gantt-label{width:200px; flex-shrink:0; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .gantt-track{flex:1; background:var(--bg); border-radius:4px; height:20px; position:relative;}
+  .gantt-bar{position:absolute; top:0; height:20px; border-radius:4px; background:var(--teal); opacity:.85;}
+  .gantt-axis{display:flex; gap:0; margin:4px 0 0 210px; font-size:11px; color:var(--text-muted);}
+  .gantt-axis span{flex:1; text-align:center;}
+  .plan-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:8px 0 4px;}
+  .plan-stat{background:var(--teal-light); border:1px solid var(--border); border-radius:8px; padding:10px 12px;}
+  .plan-stat .lbl{font-size:11px; color:var(--text-muted); margin:0 0 4px;}
+  .plan-stat .val{font-size:18px; font-weight:700; color:var(--teal); margin:0;}
+  .plan-stat .sub{font-size:10px; color:var(--text-muted); margin:2px 0 0;}
+  .flow-diagram{display:flex; flex-direction:column; align-items:stretch; gap:0;}
+  .flow-node{display:flex; align-items:flex-start; gap:12px; background:var(--card); border:1px solid var(--border); border-left:3px solid var(--teal); border-radius:8px; padding:10px 14px;}
+  .flow-node-num{width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--teal); color:#fff; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center;}
+  .flow-node-title{font-size:13px; font-weight:600; margin:0; color:var(--text);}
+  .flow-node-note{font-size:12px; color:var(--text-muted); margin:2px 0 0;}
+  .flow-arrow{text-align:center; color:var(--teal); font-size:16px; line-height:1; margin:3px 0;}
+  .n8n-diagram{display:flex; flex-wrap:wrap; align-items:center; gap:4px;}
+  .n8n-node{background:#fff4ec; border:1px solid #E3631C; border-radius:8px; padding:8px 12px; min-width:120px;}
+  .n8n-node-name{font-size:12px; font-weight:600; margin:0; color:#13294B;}
+  .n8n-node-type{font-size:10px; color:#B7611F; margin:2px 0 0; font-family:monospace;}
+  .n8n-conn{color:#E3631C; font-weight:700; font-size:16px;}
+
+  @media print{
+    body *{visibility:hidden;}
+    body.printing-doc #doc-modal, body.printing-doc #doc-modal *{visibility:visible;}
+    body.printing-doc #doc-modal{position:absolute; left:0; top:0; width:100%; background:#fff; padding:0; margin:0; display:block !important;}
+    body.printing-plan #plan-modal, body.printing-plan #plan-modal *{visibility:visible;}
+    body.printing-plan #plan-modal{position:absolute; left:0; top:0; width:100%; background:#fff; padding:0; margin:0; display:block !important;}
+    body.printing-flow #flow-modal, body.printing-flow #flow-modal *{visibility:visible;}
+    body.printing-flow #flow-modal{position:absolute; left:0; top:0; width:100%; background:#fff; padding:0; margin:0; display:block !important;}
+    .doc-card{box-shadow:none; border:none; max-width:100%; margin:0; border-radius:0; padding:0;}
+    .no-print{display:none !important;}
+  }
+
+  @media (max-width:600px){
+    .summary{grid-template-columns:repeat(2,1fr);}
+    .plan-stats{grid-template-columns:repeat(2,1fr);}
+    .row2{grid-template-columns:1fr;}
+    .doc-grid2{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <img id="brand-logo" alt="Polymate" style="height:46px; width:auto; flex-shrink:0;">
+    <div>
+      <h1>AI use case prioritization tool</h1>
+      <p>บันทึก ให้คะแนน จัดลำดับความสำคัญ และออกเอกสารสรุปของ use case AI ในองค์กร — ในโปรแกรมเดียว</p>
+    </div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="open-add-btn">+ เพิ่ม use case ใหม่</button>
+    <select id="filter-priority">
+      <option value="all">ทุกระดับความสำคัญ</option>
+      <option value="high">ระดับสูง</option>
+      <option value="med">ระดับกลาง</option>
+      <option value="low">ระดับต่ำ</option>
+    </select>
+    <select id="sort-by">
+      <option value="score-desc">คะแนนมากไปน้อย</option>
+      <option value="score-asc">คะแนนน้อยไปมาก</option>
+      <option value="name">ชื่อ ก-ฮ</option>
+      <option value="dept">แผนก</option>
+    </select>
+    <div class="spacer"></div>
+    <button class="btn-secondary" id="export-btn">ส่งออก CSV</button>
+    <button class="btn-secondary btn-danger" id="clear-btn">ล้างทั้งหมด</button>
+  </div>
+
+  <details style="margin-bottom:18px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 14px;">
+    <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">ดูเกณฑ์การแนะนำประเภท AI ทั้งหมด</summary>
+    <div style="margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.9;">
+      <b style="color:var(--navy);">ตามชนิดข้อมูล/งาน</b><br>
+      ข้อความ / ภาษา &rarr; NLP และ LLM (แชทบอท, สรุปเอกสาร)<br>
+      รูปภาพ / วิดีโอ &rarr; Computer vision (ตรวจคุณภาพสินค้า, OCR)<br>
+      เสียง &rarr; Speech AI (แปลงเสียงเป็นข้อความ)<br>
+      ตัวเลข / time series &rarr; Predictive ML (พยากรณ์ยอดขาย)<br>
+      งานทำซ้ำ มีกฎตายตัว &rarr; RPA ผสาน AI (คีย์ข้อมูลอัตโนมัติ)<br>
+      ต้องการเนื้อหาใหม่ &rarr; Generative AI (สร้าง draft เนื้อหา/ภาพ)<br>
+      ต้องการแนะนำ/จับคู่ &rarr; Recommendation AI (แนะนำสินค้า, จับคู่งาน)<br>
+      <b style="color:var(--navy); display:inline-block; margin-top:8px;">งานเฉพาะทาง</b><br>
+      สร้างภาพจากคำสั่ง &rarr; Image generation (ภาพโฆษณา, ภาพสินค้า)<br>
+      ค้นหา/ถามตอบจากเอกสาร &rarr; Embedding / RAG (ถามตอบจากคลังเอกสารองค์กร)<br>
+      ผู้ช่วยความรู้ภายในองค์กร &rarr; Knowledge assistant (ช่วยพนักงานค้นข้อมูล)<br>
+      ปรับโมเดลเฉพาะองค์กร &rarr; Fine-tuning (ปรับโมเดลให้เข้าใจศัพท์เฉพาะ)<br>
+      ประมวลผลข้อมูลจำนวนมาก &rarr; Batch inference (จัดหมวด/วิเคราะห์ข้อมูลก้อนใหญ่)<br>
+      พยากรณ์ความต้องการสินค้า &rarr; Demand forecasting (วางแผนสต็อก/จัดซื้อ)<br>
+      คาดการณ์การซ่อมบำรุง &rarr; Predictive maintenance (เครื่องจักร, IoT)<br>
+      ตรวจจับความผิดปกติ/ทุจริต &rarr; Anomaly detection (fraud, ความปลอดภัย)<br>
+      งานอัตโนมัติหลายขั้นตอน &rarr; AI agent / automation (เชื่อมหลายระบบ)
+    </div>
+  </details>
+
+  <div class="panel" id="form-panel">
+    <h2 id="form-title">เพิ่ม use case ใหม่</h2>
+    <div class="row2">
+      <div class="field">
+        <label for="f-name">ชื่อ use case *</label>
+        <input type="text" id="f-name" placeholder="เช่น แชทบอทตอบคำถามลูกค้า">
+      </div>
+      <div class="field">
+        <label for="f-dept">แผนก / หน่วยงาน <span style="color:#A32D2D;">*</span></label>
+        <input type="text" id="f-dept" placeholder="เช่น ฝ่ายบริการลูกค้า">
+      </div>
+    </div>
+    <div class="error-msg" id="f-error">กรุณากรอกชื่อ use case</div>
+    <div class="field">
+      <label for="f-owner">ผู้รับผิดชอบ / เจ้าของ use case <span style="color:#A32D2D;">*</span></label>
+      <input type="text" id="f-owner" placeholder="ชื่อผู้รับผิดชอบ">
+    </div>
+    <div class="field">
+      <label for="f-problem">ปัญหาทางธุรกิจที่ต้องการแก้ไข <span style="color:#A32D2D;">*</span></label>
+      <textarea id="f-problem" rows="2" placeholder="อธิบายปัญหาหรือ pain point ปัจจุบัน"></textarea>
+    </div>
+    <div class="error-msg" id="basic-error">กรุณากรอก แผนก, ผู้รับผิดชอบ และ ปัญหาทางธุรกิจ ให้ครบ</div>
+    <div class="field">
+      <label for="f-solution">วิธีการเดิมที่ทำอยู่</label>
+      <textarea id="f-solution" rows="2" placeholder="อธิบายวิธีการ/ขั้นตอนที่ทำอยู่ในปัจจุบัน"></textarea>
+    </div>
+    <div class="field">
+      <label>แนบเอกสารที่ใช้ (วิธีการเดิมที่ทำอยู่)</label>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <input type="file" id="f-attach-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp" style="font-size:12px;">
+      </div>
+      <div class="slider-hint">รองรับ PDF, รูปภาพ, Word, Excel ขนาดไม่เกิน 10MB (เก็บฝังในโปรแกรม) — หากเกิน ให้กรอกลิงก์/ชื่ออ้างอิงด้านล่างแทน</div>
+      <div id="f-attach-status" class="status" style="height:auto; min-height:16px;"></div>
+      <input type="text" id="f-attach-ref" placeholder="ลิงก์หรือชื่ออ้างอิงเอกสาร (กรณีไฟล์เกิน 10MB หรือเก็บไว้ที่อื่น)" style="margin-top:6px;">
+    </div>
+    <div class="field">
+      <label for="f-output">Output ที่คาดหวัง</label>
+      <textarea id="f-output" rows="2" placeholder="ผลลัพธ์ที่ต้องการได้จากระบบ เช่น คำตอบอัตโนมัติ, รายงานสรุป, การแจ้งเตือน"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-aitype">ลักษณะของงาน/ข้อมูล (ใช้แนะนำประเภท AI)</label>
+      <div style="display:flex; gap:8px;">
+        <select id="f-aitype" style="flex:1; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
+          <option value="">ยังไม่ระบุ</option>
+          <optgroup label="ตามชนิดข้อมูล/งาน">
+            <option value="text">ข้อความ / ภาษา &rarr; NLP และ LLM</option>
+            <option value="vision">รูปภาพ / วิดีโอ &rarr; Computer vision</option>
+            <option value="audio">เสียง &rarr; Speech AI</option>
+            <option value="numeric">ตัวเลข / time series &rarr; Predictive ML</option>
+            <option value="repetitive">งานทำซ้ำ มีกฎตายตัว &rarr; RPA ผสาน AI</option>
+            <option value="generative">ต้องการเนื้อหาใหม่ &rarr; Generative AI</option>
+            <option value="recommend">ต้องการแนะนำ/จับคู่ &rarr; Recommendation AI</option>
+          </optgroup>
+          <optgroup label="งานเฉพาะทาง">
+            <option value="imagegen">สร้างภาพจากคำสั่ง &rarr; Image generation</option>
+            <option value="rag">ค้นหา/ถามตอบจากเอกสาร &rarr; Embedding / RAG</option>
+            <option value="knowledge">ผู้ช่วยความรู้ภายในองค์กร &rarr; Knowledge assistant</option>
+            <option value="finetune">ปรับโมเดลเฉพาะองค์กร &rarr; Fine-tuning</option>
+            <option value="batch">ประมวลผลข้อมูลจำนวนมาก &rarr; Batch inference</option>
+            <option value="demand">พยากรณ์ความต้องการสินค้า &rarr; Demand forecasting</option>
+            <option value="maintenance">คาดการณ์การซ่อมบำรุง &rarr; Predictive maintenance</option>
+            <option value="anomaly">ตรวจจับความผิดปกติ/ทุจริต &rarr; Anomaly detection</option>
+            <option value="agent">งานอัตโนมัติหลายขั้นตอน &rarr; AI agent / automation</option>
+          </optgroup>
+        </select>
+        <button type="button" class="btn-secondary" id="analyze-btn">วิเคราะห์อัตโนมัติ</button>
+      </div>
+      <div class="status" id="analyze-status"></div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="f-users">จำนวน Users / วัน</label>
+        <input type="text" id="f-users" placeholder="เช่น 500 คน/วัน หรือ ~2,000 requests/วัน">
+      </div>
+      <div class="field">
+        <label for="f-language">ภาษาที่ต้องการ</label>
+        <select id="f-language" style="width:100%; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
+          <option value="">ยังไม่ระบุ</option>
+          <option value="Thai">Thai</option>
+          <option value="Eng.">Eng.</option>
+          <option value="Thai+Eng.">Thai+Eng.</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="f-datasensitivity">ระดับความสำคัญของข้อมูล</label>
+        <select id="f-datasensitivity" style="width:100%; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
+          <option value="">ยังไม่ระบุ</option>
+          <option value="สาธารณะ (Public)">สาธารณะ (Public)</option>
+          <option value="ภายในองค์กร (Internal)">ภายในองค์กร (Internal)</option>
+          <option value="ลับ (Confidential)">ลับ (Confidential)</option>
+          <option value="ลับมาก (Highly Confidential)">ลับมาก (Highly Confidential)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-latency">Latency ที่รับได้</label>
+        <select id="f-latency" style="width:100%; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
+          <option value="">ยังไม่ระบุ</option>
+          <option value="ทันที (&lt; 1 วินาที)">ทันที (&lt; 1 วินาที)</option>
+          <option value="เร็ว (1-3 วินาที)">เร็ว (1-3 วินาที)</option>
+          <option value="ปานกลาง (3-10 วินาที)">ปานกลาง (3-10 วินาที)</option>
+          <option value="ยอมรับได้ (10-30 วินาที)">ยอมรับได้ (10-30 วินาที)</option>
+          <option value="แบบกลุ่ม/ไม่เร่งด่วน (Batch)">แบบกลุ่ม/ไม่เร่งด่วน (Batch)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-availability">Availability ที่ต้องการ</label>
+      <select id="f-availability" style="width:100%; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
+        <option value="">ยังไม่ระบุ</option>
+        <option value="ตลอดเวลา 24x7 (99.9%+)">ตลอดเวลา 24x7 (99.9%+)</option>
+        <option value="เกือบตลอดเวลา 24x7 (99.5%)">เกือบตลอดเวลา 24x7 (99.5%)</option>
+        <option value="เวลาทำการ 8x5 (จันทร์-ศุกร์)">เวลาทำการ 8x5 (จันทร์-ศุกร์)</option>
+        <option value="เวลาทำการขยาย 12x6">เวลาทำการขยาย 12x6</option>
+        <option value="ใช้งานเป็นครั้งคราว (ไม่กำหนด SLA)">ใช้งานเป็นครั้งคราว (ไม่กำหนด SLA)</option>
+      </select>
+    </div>
+
+    <details id="qwp-details" open style="margin:4px 0 4px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">การอ้างอิงกระบวนการคุณภาพ (QWP / Control / KQI) <span style="color:#A32D2D;">*จำเป็น</span></summary>
+      <div style="margin-top:14px;">
+        <div class="field">
+          <label for="f-qwp">ระบุ รหัสเอกสาร และ ชื่อ QWP (Quality Work Procedure) ของบริษัท <span style="color:#A32D2D;">*</span></label>
+          <input type="text" id="f-qwp" placeholder="เช่น รหัส/ชื่อเอกสาร QWP ที่อ้างอิง">
+        </div>
+        <div class="field">
+          <label for="f-refstep">ระบุ ขั้นตอนการทำงานที่อ้างอิง QWP (Quality Work Procedure) <span style="color:#A32D2D;">*</span></label>
+          <textarea id="f-refstep" rows="2" placeholder="ขั้นตอนใน QWP ที่ use case นี้เกี่ยวข้อง"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-control">ระบุ Control Item ของขั้นตอนการทำงานที่อ้างอิง QWP (Quality Work Procedure) <span style="color:#A32D2D;">*</span></label>
+          <textarea id="f-control" rows="2" placeholder="จุดควบคุม/Control point ของขั้นตอนที่อ้างถึง"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-kqi2">kQI / QI ของขั้นตอนการทำงานที่อ้างถึง <span style="color:#A32D2D;">*</span></label>
+          <textarea id="f-kqi2" rows="2" placeholder="Key Quality Indicator / Quality Indicator ของขั้นตอนนั้น"></textarea>
+        </div>
+        <div class="error-msg" id="qwp-error">กรุณากรอกข้อมูลในกลุ่มการอ้างอิงกระบวนการคุณภาพ (QWP / Control / KQI) ให้ครบทุกช่อง</div>
+      </div>
+    </details>
+
+    <div class="slider-row">
+      <div class="top"><label for="f-impact">ผลกระทบทางธุรกิจ <span class="w">(น้ำหนัก 35%)</span></label><span class="v" id="f-impact-out">3</span></div>
+      <input type="range" id="f-impact" min="1" max="5" step="1" value="3">
+      <div class="slider-hint">1 = ผลกระทบน้อยมาก &nbsp;→&nbsp; 5 = ผลกระทบสูงมากต่อธุรกิจ</div>
+      <div class="slider-desc" id="f-impact-desc"></div>
+    </div>
+    <div class="slider-row">
+      <div class="top"><label for="f-feasibility">ความเป็นไปได้ทางเทคนิค <span class="w">(น้ำหนัก 25%)</span></label><span class="v" id="f-feasibility-out">3</span></div>
+      <input type="range" id="f-feasibility" min="1" max="5" step="1" value="3">
+      <div class="slider-hint">1 = ทำได้ยากมาก &nbsp;→&nbsp; 5 = ทำได้ง่าย เทคโนโลยีพร้อม</div>
+      <div class="slider-desc" id="f-feasibility-desc"></div>
+    </div>
+    <div class="slider-row">
+      <div class="top"><label for="f-data">ความพร้อมของข้อมูล <span class="w">(น้ำหนัก 25%)</span></label><span class="v" id="f-data-out">3</span></div>
+      <input type="range" id="f-data" min="1" max="5" step="1" value="3">
+      <div class="slider-hint">1 = แทบไม่มีข้อมูล &nbsp;→&nbsp; 5 = ข้อมูลพร้อม สะอาด ครบถ้วน</div>
+      <div class="slider-desc" id="f-data-desc"></div>
+    </div>
+    <div class="slider-row">
+      <div class="top"><label for="f-risk">ความเสี่ยง / ความซับซ้อน <span class="w">(น้ำหนัก 15%, ยิ่งสูงยิ่งเสี่ยง)</span></label><span class="v" id="f-risk-out">3</span></div>
+      <input type="range" id="f-risk" min="1" max="5" step="1" value="3">
+      <div class="slider-hint">1 = เสี่ยง/ซับซ้อนน้อยมาก &nbsp;→&nbsp; 5 = เสี่ยง/ซับซ้อนสูงมาก</div>
+      <div class="slider-desc" id="f-risk-desc"></div>
+    </div>
+
+    <details style="margin:16px 0 4px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">Spec, ความเสี่ยง, ทรัพยากร และ kQI (ไม่บังคับ, ระบบคำนวณอัตโนมัติ)</summary>
+      <div style="margin-top:14px;">
+        <button type="button" class="btn-secondary" id="autofill-btn" style="margin-bottom:14px;">เติม Spec แนะนำตามประเภท AI อัตโนมัติ</button>
+        <div class="status" id="autofill-status" style="margin-top:-8px; margin-bottom:8px;"></div>
+        <div class="field">
+          <label for="f-hardware">Spec Hardware ที่ใช้ทำ AI</label>
+          <textarea id="f-hardware" rows="3" placeholder="เช่น GPU, CPU, RAM, VRAM หรือการใช้ cloud/API"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-risks">ความเสี่ยงและการลดความเสี่ยง</label>
+          <textarea id="f-risks" rows="3" placeholder="เช่น ความเสี่ยงด้านข้อมูล และแนวทางลดความเสี่ยง"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-resources">ทรัพยากรและประมาณการ (บุคคล, เทคโนโลยี, งบประมาณ, ระยะเวลา)</label>
+          <textarea id="f-resources" rows="4"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-kpi">ตัวชี้วัดความสำเร็จ (KQI)</label>
+          <textarea id="f-kpi" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-roi">ผลตอบแทนการลงทุน (ROI)</label>
+          <textarea id="f-roi" rows="3" placeholder="ประมาณการ ROI และระยะคืนทุน"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-recommendation">ข้อเสนอแนะและขั้นตอนต่อไป</label>
+          <textarea id="f-recommendation" rows="2"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-preparedby">ผู้จัดทำ</label>
+            <input type="text" id="f-preparedby" placeholder="ชื่อผู้จัดทำเอกสาร">
+          </div>
+          <div class="field">
+            <label for="f-approver">ผู้พิจารณา / อนุมัติ</label>
+            <input type="text" id="f-approver" placeholder="ชื่อผู้อนุมัติ (ไม่บังคับ)">
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="form-actions">
+      <button class="btn-primary" id="save-btn">บันทึก</button>
+      <button class="btn-secondary" id="cancel-btn">ยกเลิก</button>
+    </div>
+    <div class="status" id="status-msg" aria-live="polite"></div>
+  </div>
+
+  <div id="list-container"></div>
+
+  <div class="chart-section" id="chart-section" style="display:none;">
+    <h2>เปรียบเทียบคะแนนความสำคัญ</h2>
+    <div class="chart-wrapper">
+      <div style="position:relative; height:160px;" id="chart-box">
+        <canvas id="score-chart" role="img" aria-label="กราฟแท่งแนวนอนแสดงคะแนนความสำคัญของแต่ละ use case"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">
+    สูตรคะแนน: (ผลกระทบทางธุรกิจ × 0.35) + (ความเป็นไปได้ทางเทคนิค × 0.25) + (ความพร้อมของข้อมูล × 0.25) + ((6 − ความเสี่ยง) × 0.15) แล้วคูณ 20 เพื่อแปลงเป็นคะแนนเต็ม 100 — คะแนน ≥75 = ระดับสูง, 50–74 = ระดับกลาง, ต่ำกว่า 50 = ระดับต่ำ<br>
+    กดปุ่ม "เอกสาร" บนการ์ดแต่ละ use case เพื่อดูเอกสารสรุปฉบับเต็ม (รวม Spec Hardware, ความเสี่ยง, ทรัพยากร, KQI และ ROI) แล้วเลือกดาวน์โหลดเป็นไฟล์ Word หรือพิมพ์/บันทึกเป็น PDF ได้ทันที<br>
+    กดปุ่ม "แผนงาน" เพื่อแปลง Flow ขั้นตอนการทำ AI เป็นแผนงานละเอียด (กิจกรรม ช่วงเวลา ผู้รับผิดชอบ สิ่งส่งมอบ และไทม์ไลน์ Gantt) โดยระบบกระจายระยะเวลาตามที่ระบุในช่อง "ทรัพยากรและประมาณการ" ให้อัตโนมัติ<br>
+    ในฟอร์ม กดปุ่ม "เติม Spec แนะนำตามประเภท AI อัตโนมัติ" เพื่อให้ระบบเติม Spec hardware ความเสี่ยง ทรัพยากร KQI และ ROI ที่เหมาะกับประเภท AI นั้นให้ แล้วปรับแก้ได้ตามจริง<br>
+    ข้อมูลจะถูกบันทึกไว้ในเครื่อง/บัญชีที่ใช้งานเครื่องมือนี้เท่านั้น
+  </p>
+
+</div>
+
+<footer id="app-footer">
+  <img id="footer-banner" alt="Polymate IT Solutions — Designed for your identity" style="display:block; width:100%; height:auto;">
+</footer>
+
+<div class="modal-overlay" id="doc-modal">
+  <div class="doc-card">
+    <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
+      <button class="btn-secondary" id="doc-word-btn">ดาวน์โหลด Word</button>
+      <button class="btn-secondary" id="doc-print-btn">พิมพ์ / บันทึกเป็น PDF</button>
+      <button class="btn-secondary" id="doc-close-btn">ปิด</button>
+    </div>
+    <div id="doc-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="plan-modal">
+  <div class="doc-card">
+    <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
+      <button class="btn-secondary" id="plan-word-btn">ดาวน์โหลด Word</button>
+      <button class="btn-secondary" id="plan-print-btn">พิมพ์ / บันทึกเป็น PDF</button>
+      <button class="btn-secondary" id="plan-close-btn">ปิด</button>
+    </div>
+    <div id="plan-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="flow-modal">
+  <div class="doc-card">
+    <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
+      <button class="btn-secondary" id="flow-json-btn">ดาวน์โหลด n8n JSON</button>
+      <button class="btn-secondary" id="flow-print-btn">พิมพ์ / บันทึกเป็น PDF</button>
+      <button class="btn-secondary" id="flow-close-btn">ปิด</button>
+    </div>
+    <div id="flow-content"></div>
+  </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  var LOGO_MAIN_DATAURI = 'data:image/jpeg;base64,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';
+  var FOOTER_DATAURI = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABSBkADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDYooor8cP20KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACi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x8A7QjYHAHqfzqzpkMt78Gr63s4nnlh1FHkSNSzBdwOcDnpVH4Y2l1a/EDRzc200G9pCvmRld2EbpmtJVK08RhbtuNod7Xv+ZmqVGGHxVopSvPor25fyNbwST/wui85PNxc5Ofesbxp4s1O91C+060umtdKV2hS1iUKhUHBzxyScnNbHgn/ktF5/183P864TVP8AkKXn/XzL/wChtWGJr1KeF5YO15yv+B0YahTqYvmmr2hC34/idl4nP/CQ/DvS9fX57zTG+xXhzklf4WJ/L8WNR/DpE0jSdX8XTj5rWI29oDkbpXHY/kKZ8KrqGW/vfDl63+i6vAYhnosgBKn+f5CpPiLt0TR9K8HwuGa1T7Rdsp4eVumR+taxacFj3ulb/t9aL8LS+RlJNTeX9G7/APbj1f43j8ziZGeSRpJHLuxLMx6sT1JptFIThST0AzXz59EkLRXReIvCGqaHotlqt41u0N1gBUfLISu4Z49PSudrWtRqUZctRWZlRr068eem7oKkeaZ5RK80jSDGHZyWGOnPWo6Kyu0aWQ53d3Lu7Ox5LMck/iabRRQAUUUUDCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD6N+Fv/IgaT/1yb/0Nq1da1vStFg87Ur6K3B+6rHLN9FHJ/CvOvDlx4mtvBVlHeX1l4d0qNOLqQbp5FJyNqngdfrVCw1K0e+ZfCOhXWu6kThtS1D58H1GeB+lfoNPM/ZUKdOKs7LffbpFav8F5n5vUyr22Iq1JO65nttv1k9F+L8jU8RrqHjHV9N1OGzOmaRp8gkN3fHy/MGQSQDzjjin6tcaroHjq68U22mtqekXcCI0tswcgADnjp/KrFt4D1fW5lu/GetS3HO4WkDYRfbPT8hWr/wAIR/Zp87wtq11pco5MbN5sL/7ymslhcTUvV5Wm2ne65rpWXu7Wt0bv5mrxeFp2o86a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cSXFzK800jbndzksfU1It7eLp7aet1KLRpPNaDd8hfGN2PXFV6Kz5pXbvuackbJW2L+jazqmjzNNpl9Nasww2w8MPcd6lvPEWuXepRajcapcvdwgiKXdgxg9QvpWXRVqvVUeRSdu1zN0KTlzuKv3srlq21K/ttQOoW95PFdsxYzK2HJPU596hjSa7uljQNLPM+AO7MT/ADJqOlVmRgysVYHIIOCDUc7eknoXyJaxWp3HgfwtqFlra6vr9lcafp+mg3EjzjZvYfdVfU5wfw965TxBqUur63d6lNndcSlwM/dHYflSXurapewLBeajd3ES9ElmZh+RNUq6q+IpukqNJNRvd33b/wCActDD1FVdas05NWVtkv8Agvf5BRRRXGdpautRv7u2gtbm8nmggGIY3fKp9BVWiinKTk7t3JjFRVoqwUUUUigooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigDp9C8baxp1stlcGLUrADb9nul3AD0B7V1PhvXNBaZn0HUpPDN5KQXtrgb7WVv6V5fRXoUMzrUrX95La+69HuvvPMxGVUK17Llb3ts/VbP7rn0PD4ovdOVR4i0xoYT0vrM+dbt7nHK/jWrP4l0GDTv7Qk1ezFsRkOJQc/Qda+fNA8T63obf8S++kWLvC/zRkem0/wBKra9qr6xffbJbKxtZCuGFrD5at7kZPNe8uJnCnorvs/8ANb/cn5nz8uFYzq+87Luv8ne33teR6X4n+LMWHt9Cs/Mzx59wMD8F/wAa8wOp341CW/juXguJWLO0J2ZJ9hxVOivn8XmWIxclKpLbbpY+jwWV4bBxcaUd976tjpHeWRpJHZ3Y5ZmOST60+3ubm3DCC4li3ddjlc/lUVFcSbTud7imrASSSSck9TRRRSGT2l3dWb77W5mgb1jcrT73UL+9GLu9uJx6SSEiqtFVzyty30I9nHm5rah7960La4vNSmttOutSlFu0qjMshKR9t3PpWfRRGTi/IJwUl5/keqaPceE/AEV3dW2sf2vqksXlqkWNqjOcHHAGR1rzC8uJbu7mup3LyzOXdj3JOTUVFdWKxjrxjTUVGMdkvP13OTCYFUJSqSk5Tlu35dNNkWrDUdQsA4sr24tg+C3lPtzj1qG4mmuJnmnleWVzlnY5JNR0VyucmuVvQ7FCKfMlqbVvda+2gSyxajcLp8DJbvH52AN/QY9Kdf6DeaRp9tqw1GwKy/NbmC4Bd8HBKj2PWs+HUbiLSLjS1EfkTypK5K/NuXpg+lOvtUubzTdP0+YRiGwR0hKqQxDHJ3HPPSun2lNw95tu2muzv+VvxOT2dVT91JRb103Vvzv+Boadb694paWFtQaaO1QzO1zP8qDpmm6RceJLW6l07Q728coTlbOQlDjuPaqOi6nNpN39qt4onlAwpcuNvOeNrKfzq+PFOo/b9Su2htGOpAC4j8sqhwQRjawI5HrV06lO0ZSk1Lq/L+vX9CKlKreUYwTj0Xn6f8N28x0D+Jr24vdQbULsXOnRF5WllIkQEhSB+dUb5da1DbdXq3lziDzRJJlsRZxuz/dzVmfxNqU1zqtxIIGk1SMR3B2HgAgjbzx90dc1InirUF0gab9nsioszZCUxt5gi3btud2OvtRKVGV05y6/N30/CwRhXg01CPT5K2v43Ftn8U6Jp9rPb3V7Y2l7zCUlwrc46dqg1O11zUNbmtZ2uNTvYvldlPmcD39KhutZubnTtPspIoNun5EEgU78E5wecEZ9qtJ4n1Aahqd48VrIdTx9pjZWCHDZGMMCOfehzpSSg5S5dPy1/H8AVOtFuahHm1/PT8PPcbpF14oglks9LuNTjeL78UTHKfUdqfNeeLNTnlsJbnVbmWPPmwliSo75FMk8TanJeandkxCXUkCTlVIwAQRt546Drmnx+KtTTX7nWttu1xcgCVCreWwAAwV3cjgdTTVSnZR9pK1/w1/4H3+QnSq3cvZxvb8dOv3/AHeZhsrKxVgQQcEGkqS5lM9xJMURDIxYqgwoz2A9Kjrgdr6HoK9tQooooGFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/9k=';
+  (function(){
+    var lg = document.getElementById('brand-logo'); if(lg) lg.src = LOGO_MAIN_DATAURI;
+    var fb = document.getElementById('footer-banner'); if(fb) fb.src = FOOTER_DATAURI;
+  })();
+  var STORAGE_KEY = 'ai_usecase_program_data';
+  var hasClaudeStorage = (typeof window.storage !== 'undefined' && window.storage !== null);
+  var useCases = [];
+  var editingId = null;
+  var currentDocId = null;
+  var currentAttachment = null;
+
+  // ===== Claude AI integration =====
+  function ucContextText(uc){
+    var cat = getCategory(uc.aiType);
+    var lines = [];
+    lines.push('ปัญหาทางธุรกิจที่ต้องการแก้ไข: ' + (uc.problem || '-'));
+    lines.push('วิธีการเดิมที่ทำอยู่: ' + (uc.solution || '-'));
+    lines.push('Output ที่คาดหวัง: ' + (uc.output || '-'));
+    lines.push('ลักษณะงาน/ประเภท AI: ' + (cat ? (cat.label + ' (' + cat.aiType + ')') : 'ยังไม่ระบุ'));
+    lines.push('Control Item ของขั้นตอน (QWP): ' + (uc.control || '-'));
+    lines.push('kQI / QI ของขั้นตอนที่อ้างถึง: ' + (uc.kqi || '-'));
+    if(uc.attachment){
+      lines.push('เอกสารแนบ (วิธีการเดิม): ' + uc.attachment.name + (isClaudeReadable(uc.attachment) ? ' (แนบเนื้อหามาด้วย)' : ' (เป็นไฟล์ ' + (uc.attachment.type||'') + ' — อ่านเนื้อหาโดยตรงไม่ได้ ใช้เป็นบริบท)'));
+    } else if(uc.attachRef){
+      lines.push('เอกสารอ้างอิง (วิธีการเดิม): ' + uc.attachRef);
+    }
+    return lines.join('\n');
+  }
+
+  function isClaudeReadable(att){
+    if(!att || !att.type) return false;
+    return att.type === 'application/pdf' || att.type.indexOf('image/') === 0;
+  }
+
+  function ucContentBlocks(uc, promptText){
+    var blocks = [];
+    if(uc.attachment && isClaudeReadable(uc.attachment) && uc.attachment.data){
+      var b64 = String(uc.attachment.data).split(',')[1] || '';
+      if(uc.attachment.type === 'application/pdf'){
+        blocks.push({ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } });
+      } else {
+        blocks.push({ type:'image', source:{ type:'base64', media_type:uc.attachment.type, data:b64 } });
+      }
+    }
+    blocks.push({ type:'text', text: promptText });
+    return blocks;
+  }
+
+  async function callClaude(systemPrompt, userBlocks){
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: [ { role: 'user', content: userBlocks } ]
+      })
+    });
+    if(!resp.ok){ throw new Error('API error ' + resp.status); }
+    var data = await resp.json();
+    var text = (data.content || []).map(function(c){ return c.type === 'text' ? c.text : ''; }).filter(Boolean).join('\n');
+    return text;
+  }
+
+  function parseJsonLoose(text){
+    if(!text) return null;
+    var t = text.replace(/```json/gi,'').replace(/```/g,'').trim();
+    var s = t.indexOf('{'), e = t.lastIndexOf('}');
+    if(s !== -1 && e !== -1 && e > s){ t = t.slice(s, e+1); }
+    try{ return JSON.parse(t); }catch(err){ return null; }
+  }
+  var chart = null;
+
+  function genId(){ return 'uc_' + Date.now() + '_' + Math.floor(Math.random()*10000); }
+
+  var AI_CATEGORIES = [
+    { key:'text', label:'ข้อความ / ภาษา', aiType:'NLP และ LLM', keywords:['แชท','แชทบอท','ตอบคำถาม','ลูกค้า','อีเมล','เอกสาร','สรุป','ข้อความ','ภาษา','แปลภาษา','แปล','สนทนา','คำถาม','chat','email','text','nlp','llm','faq'],
+      hardware:'เรียกใช้ผ่าน LLM API (เช่น Anthropic, OpenAI) ไม่ต้องมี GPU เอง หรือถ้ารันภายในองค์กร: GPU NVIDIA A10/L40S 24-48GB VRAM 1-2 ตัว, RAM 32-64GB',
+      risks:'ความเสี่ยง: โมเดลตอบผิด/หลอน (hallucination), ข้อมูลลูกค้ารั่วไหล\nการลดความเสี่ยง: ใช้ RAG อ้างอิงเอกสารจริง, มี human review, เข้ารหัสและจำกัดสิทธิ์การเข้าถึงข้อมูล',
+      resources:'บุคคล: ทีม dev 1-2 คน, ผู้เชี่ยวชาญด้านเนื้อหา 1 คน\nเทคโนโลยี: LLM API หรือ open-source LLM, vector database\nงบประมาณ: เริ่มต้น 100,000-500,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'ลดเวลาตอบคำถามเฉลี่ย, สัดส่วนคำถามที่ตอบได้อัตโนมัติ (%), คะแนนความพึงพอใจลูกค้า (CSAT)',
+      roi:'ประหยัดเวลา/ค่าแรงทีมบริการลูกค้า เช่น ลดภาระตอบซ้ำ 30-50%\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน (ขึ้นกับปริมาณคำถาม)\nสูตร: ROI = (มูลค่าเวลาที่ประหยัด/ปี - ต้นทุนรวม/ปี) / ต้นทุนรวม/ปี x 100' },
+    { key:'vision', label:'รูปภาพ / วิดีโอ', aiType:'Computer vision', keywords:['ภาพ','รูปภาพ','วิดีโอ','กล้อง','ตรวจสอบ','สแกน','ocr','ใบหน้า','ตรวจจับ','คุณภาพสินค้า','นับสต็อก','ภาพถ่าย','image','video','camera','vision','scan'],
+      hardware:'GPU ระดับองค์กร NVIDIA RTX A4000/L4 16-24GB VRAM, RAM 32-64GB สำหรับ inference; ถ้าใช้หน้างาน real-time ใช้ edge device เช่น NVIDIA Jetson',
+      risks:'ความเสี่ยง: ความแม่นยำต่ำในสภาพแสง/มุมกล้องที่ต่างจาก data ฝึก, ข้อมูลภาพไม่พอ\nการลดความเสี่ยง: เก็บภาพหลากหลายเงื่อนไข, ตั้งเกณฑ์ความเชื่อมั่น และให้คนตรวจซ้ำกรณีคลุมเครือ',
+      resources:'บุคคล: ML engineer 1-2 คน, ผู้ติดป้ายข้อมูล (labeling)\nเทคโนโลยี: GPU, กล้อง/เซ็นเซอร์, แพลตฟอร์ม annotation\nงบประมาณ: 300,000-1,500,000 บาท\nระยะเวลา: 2-4 เดือน',
+      kqi:'ความแม่นยำในการตรวจจับ (precision/recall), อัตราการตรวจพบของเสีย, เวลาที่ประหยัดได้เทียบกับคนตรวจ',
+      roi:'ลดของเสียหลุดรอดและแรงงานตรวจสอบ ช่วยลดต้นทุนคุณภาพ\nคืนทุนโดยทั่วไปภายใน 8-18 เดือน (ขึ้นกับปริมาณการผลิต)\nสูตร: ROI = (มูลค่าของเสียที่ลด + ค่าแรงที่ประหยัด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'audio', label:'เสียง', aiType:'Speech AI', keywords:['เสียง','พูด','คอลเซ็นเตอร์','ถอดเสียง','โทรศัพท์','ไมโครโฟน','audio','voice','speech','call center'],
+      hardware:'เรียกใช้ผ่าน Speech-to-Text API หรือรันภายในองค์กรด้วย GPU NVIDIA L4/A10 16-24GB VRAM, RAM 32GB',
+      risks:'ความเสี่ยง: ถอดเสียงผิดในสำเนียง/เสียงรบกวน, ความเป็นส่วนตัวของบทสนทนา\nการลดความเสี่ยง: ปรับโมเดลด้วยเสียงจริงในองค์กร, แจ้งและขอความยินยอมในการบันทึกเสียง',
+      resources:'บุคคล: dev 1-2 คน\nเทคโนโลยี: Speech-to-Text API หรือ open-source model, ระบบจัดเก็บเสียง\nงบประมาณ: 150,000-600,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'อัตราความถูกต้องในการถอดเสียง (WER), เวลาที่ลดลงในการสรุปสายโทร, ปริมาณสายที่ประมวลผลได้',
+      roi:'ลดเวลาสรุป/บันทึกสายและเพิ่มความเร็วบริการ\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (ค่าแรงที่ประหยัด/ปี - ต้นทุนรวม/ปี) / ต้นทุนรวม/ปี x 100' },
+    { key:'numeric', label:'ตัวเลข / time series', aiType:'Predictive ML', keywords:['พยากรณ์','ทำนาย','ยอดขาย','แนวโน้ม','สต๊อก','คลังสินค้า','ความเสี่ยง','ผิดปกติ','การเงิน','งบ','forecast','predict','sales','trend','anomaly','churn'],
+      hardware:'CPU ทั่วไป (Intel/AMD multi-core) ไม่จำเป็นต้องมี GPU, RAM 16-32GB เพียงพอสำหรับโมเดล ML ทั่วไป',
+      risks:'ความเสี่ยง: ข้อมูลในอดีตไม่สะท้อนอนาคต (เช่นเหตุการณ์ผิดปกติ), ข้อมูลไม่สมบูรณ์\nการลดความเสี่ยง: ทบทวนและฝึกโมเดลใหม่เป็นระยะ, ตรวจสอบคุณภาพข้อมูลก่อนใช้',
+      resources:'บุคคล: data scientist 1 คน, data engineer 1 คน\nเทคโนโลยี: คลังข้อมูล/ฐานข้อมูล, เครื่องมือ ML (Python)\nงบประมาณ: 100,000-400,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'ค่าความคลาดเคลื่อนของการพยากรณ์ (MAPE/RMSE), การลดลงของสินค้าค้างสต็อก, มูลค่าที่ประหยัด/เพิ่มได้',
+      roi:'ลดสินค้าค้างสต็อก/ของขาด และตัดสินใจแม่นขึ้น\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (มูลค่าที่ประหยัด/เพิ่ม - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'repetitive', label:'งานทำซ้ำ มีกฎตายตัว', aiType:'RPA ผสาน AI', keywords:['คีย์ข้อมูล','กรอกข้อมูล','อนุมัติ','ทำซ้ำ','อัตโนมัติ','workflow','automate','รายงาน','ใบสั่งซื้อ','invoice','rpa','กระบวนการ'],
+      hardware:'CPU ทั่วไป/เซิร์ฟเวอร์ขนาดเล็ก หรือ VM บน cloud, RAM 8-16GB; ส่วน AI (เช่น OCR) อาจเรียกผ่าน API',
+      risks:'ความเสี่ยง: กระบวนการเปลี่ยน ทำให้ bot ทำงานผิดพลาด, ขาดการกำกับดูแล\nการลดความเสี่ยง: ออกแบบให้แจ้งเตือนเมื่อพบกรณีนอกกฎ, มีผู้ดูแลตรวจสอบผลเป็นระยะ',
+      resources:'บุคคล: RPA developer 1 คน, business analyst 1 คน\nเทคโนโลยี: แพลตฟอร์ม RPA (เช่น UiPath, Power Automate), OCR API\nงบประมาณ: 100,000-500,000 บาท\nระยะเวลา: 1-2 เดือน',
+      kqi:'จำนวนชั่วโมงคนที่ประหยัดได้ต่อเดือน, อัตราความผิดพลาดที่ลดลง, จำนวนรายการที่ประมวลผลอัตโนมัติ',
+      roi:'ลดชั่วโมงทำงานซ้ำและข้อผิดพลาด คืนทุนเร็วที่สุดกลุ่มหนึ่ง\nคืนทุนโดยทั่วไปภายใน 3-9 เดือน\nสูตร: ROI = (ชั่วโมงคนที่ประหยัด x ค่าแรง - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'generative', label:'ต้องการเนื้อหาใหม่', aiType:'Generative AI', keywords:['สร้างเนื้อหา','ออกแบบ','สร้างภาพ','draft','ร่าง','โฆษณา','สร้างโค้ด','เขียนบทความ','generate','content','design','copywriting'],
+      hardware:'เรียกใช้ผ่าน Generative AI API เป็นทางเลือกที่คุ้มที่สุด; ถ้ารันภายในองค์กร (เช่น สร้างภาพ) ต้องใช้ GPU NVIDIA A10/L40S/A100 24-80GB VRAM',
+      risks:'ความเสี่ยง: เนื้อหาผิดข้อเท็จจริงหรือละเมิดลิขสิทธิ์, แบรนด์ไม่สม่ำเสมอ\nการลดความเสี่ยง: ให้คนตรวจและอนุมัติก่อนเผยแพร่, กำหนด guideline และ prompt มาตรฐาน',
+      resources:'บุคคล: dev 1 คน, ทีมครีเอทีฟ/คอนเทนต์ตรวจสอบ\nเทคโนโลยี: Generative AI API หรือ open-source model, GPU (กรณีรันเอง)\nงบประมาณ: 100,000-800,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'เวลาที่ลดลงในการผลิตเนื้อหา, จำนวนชิ้นงานที่ผลิตได้ต่อเดือน, อัตราการนำไปใช้จริงโดยไม่ต้องแก้มาก',
+      roi:'ลดเวลาและต้นทุนการผลิตเนื้อหา เพิ่มปริมาณงาน\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (ต้นทุนผลิตเนื้อหาที่ประหยัด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'recommend', label:'ต้องการแนะนำ/จับคู่', aiType:'Recommendation AI', keywords:['แนะนำ','จับคู่','เลือกสินค้า','personalize','matching','recommend','สินค้าที่เกี่ยวข้อง','เหมาะกับ'],
+      hardware:'CPU/เซิร์ฟเวอร์ทั่วไปสำหรับโมเดลทั่วไป, RAM 16-32GB; กรณีข้อมูลขนาดใหญ่มากอาจเพิ่ม GPU เพื่อเร่งการฝึก',
+      risks:'ความเสี่ยง: แนะนำซ้ำเดิม (filter bubble), ข้อมูลพฤติกรรมไม่พอสำหรับผู้ใช้ใหม่ (cold start)\nการลดความเสี่ยง: ผสมการแนะนำตามความนิยม, เก็บ feedback เพื่อปรับโมเดลต่อเนื่อง',
+      resources:'บุคคล: data scientist 1 คน, data engineer 1 คน\nเทคโนโลยี: ฐานข้อมูลพฤติกรรมผู้ใช้, ระบบ recommendation, เครื่องมือ ML\nงบประมาณ: 200,000-800,000 บาท\nระยะเวลา: 2-4 เดือน',
+      kqi:'อัตราการคลิก (CTR) จากการแนะนำ, อัตราการซื้อ/แปลงผล (conversion), มูลค่าเฉลี่ยต่อคำสั่งซื้อที่เพิ่มขึ้น',
+      roi:'เพิ่มยอดขาย/conversion จากการแนะนำที่ตรงใจ\nคืนทุนโดยทั่วไปภายใน 6-15 เดือน\nสูตร: ROI = (กำไรส่วนเพิ่มจากยอดขาย - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'imagegen', label:'สร้างภาพจากคำสั่ง', aiType:'Image generation', keywords:['สร้างภาพ','generate ภาพ','ภาพโฆษณา','ภาพสินค้า','ออกแบบภาพ','รูปประกอบ','image generation','text-to-image','diffusion','midjourney','stable diffusion','ภาพ ai'],
+      hardware:'เรียกใช้ผ่าน Image generation API เป็นทางเลือกที่คุ้มสุด; ถ้ารันเองต้องใช้ GPU NVIDIA L40S/A100 24-80GB VRAM, RAM 32-64GB',
+      risks:'ความเสี่ยง: ภาพละเมิดลิขสิทธิ์/เครื่องหมายการค้า, ภาพไม่ตรงแบรนด์, เนื้อหาไม่เหมาะสม\nการลดความเสี่ยง: ตรวจและอนุมัติก่อนใช้, กำหนด prompt และสไตล์มาตรฐาน, หลีกเลี่ยงการอ้างอิงผลงานจริง',
+      resources:'บุคคล: dev 1 คน, นักออกแบบ/ครีเอทีฟตรวจสอบ\nเทคโนโลยี: Image generation API หรือ open-source model, GPU (กรณีรันเอง)\nงบประมาณ: 100,000-600,000 บาท\nระยะเวลา: 1-2 เดือน',
+      kqi:'เวลาและต้นทุนที่ลดลงในการผลิตภาพ, จำนวนภาพที่ผลิตได้ต่อเดือน, อัตราการนำไปใช้จริง',
+      roi:'ลดต้นทุนจ้างผลิตภาพ/ถ่ายภาพ และผลิตได้เร็วขึ้น\nคืนทุนโดยทั่วไปภายใน 4-10 เดือน\nสูตร: ROI = (ต้นทุนผลิตภาพที่ประหยัด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'rag', label:'ค้นหา/ถามตอบจากเอกสาร', aiType:'Embedding / RAG', keywords:['rag','retrieval','ถามตอบจากเอกสาร','ค้นหาเอกสาร','คลังเอกสาร','knowledge base','semantic search','embedding','vector','ค้นหาความหมาย','อ้างอิงเอกสาร'],
+      hardware:'LLM API + vector database (เช่น Pinecone, pgvector, Qdrant); ถ้ารัน embedding เองใช้ GPU NVIDIA L4/A10 16-24GB VRAM, RAM 32GB',
+      risks:'ความเสี่ยง: ตอบจากเอกสารที่ล้าสมัย, ดึงข้อมูลไม่ตรง, สิทธิ์เข้าถึงเอกสารปนกัน\nการลดความเสี่ยง: อัปเดต index สม่ำเสมอ, แสดงแหล่งอ้างอิง, จำกัดสิทธิ์ตามผู้ใช้',
+      resources:'บุคคล: dev/ML engineer 1-2 คน\nเทคโนโลยี: LLM API, vector database, pipeline จัดการเอกสาร\nงบประมาณ: 150,000-700,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'อัตราการตอบที่ถูกต้องและมีแหล่งอ้างอิง, เวลาที่ลดลงในการค้นหาข้อมูล, สัดส่วนคำถามที่ตอบได้',
+      roi:'ลดเวลาค้นหาข้อมูลของพนักงาน เพิ่มผลิตภาพ\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (ชั่วโมงค้นหาที่ประหยัด x ค่าแรง - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'knowledge', label:'ผู้ช่วยความรู้ภายในองค์กร', aiType:'Knowledge assistant', keywords:['ผู้ช่วย','knowledge assistant','ผู้ช่วยความรู้','ช่วยพนักงาน','copilot','ผู้ช่วยภายใน','ถามข้อมูลภายใน','คู่มือพนักงาน','help desk ภายใน','internal assistant'],
+      hardware:'LLM API + vector database (สถาปัตยกรรมแบบ RAG); ถ้ารันภายในองค์กรใช้ GPU NVIDIA A10/L40S 24-48GB VRAM, RAM 32-64GB',
+      risks:'ความเสี่ยง: ตอบผิด/หลอน, รั่วไหลข้อมูลลับภายใน, พึ่งพา AI มากเกินไป\nการลดความเสี่ยง: อ้างอิงเอกสารจริง (RAG), จำกัดสิทธิ์ตามบทบาท, มีช่องทางยืนยันกับผู้เชี่ยวชาญ',
+      resources:'บุคคล: dev 1-2 คน, ผู้ดูแลเนื้อหา/องค์ความรู้\nเทคโนโลยี: LLM API, vector database, ระบบจัดการสิทธิ์\nงบประมาณ: 200,000-900,000 บาท\nระยะเวลา: 2-4 เดือน',
+      kqi:'เวลาที่พนักงานใช้ค้นข้อมูลลดลง, จำนวนคำถามที่ตอบได้เอง, คะแนนความพึงพอใจของพนักงาน',
+      roi:'ลดเวลาพนักงานหาข้อมูล/อบรม และลดภาระ help desk\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (ค่าแรงที่ประหยัด/ปี - ต้นทุนรวม/ปี) / ต้นทุนรวม/ปี x 100' },
+    { key:'finetune', label:'ปรับโมเดลเฉพาะองค์กร', aiType:'Fine-tuning', keywords:['fine-tune','fine tuning','ปรับโมเดล','เทรนโมเดล','ฝึกโมเดลเฉพาะ','train model','โมเดลเฉพาะองค์กร','ศัพท์เฉพาะ','domain-specific'],
+      hardware:'GPU แรงสูง NVIDIA A100/H100 80GB VRAM 1 ตัวขึ้นไป (หรือเช่า cloud GPU เป็นช่วง), RAM 64GB+; การ fine-tune เบา (LoRA) อาจใช้ A10/L40S ได้',
+      risks:'ความเสี่ยง: ข้อมูลฝึกไม่พอ/ไม่สะอาด ทำให้โมเดลแย่ลง, ต้นทุนสูง, ข้อมูลลับรั่วเข้าโมเดล\nการลดความเสี่ยง: ทดลอง prompt/RAG ก่อนตัดสินใจ fine-tune, ตรวจคุณภาพชุดข้อมูล, ประเมินผลก่อน-หลัง',
+      resources:'บุคคล: ML engineer 1-2 คน, ผู้เชี่ยวชาญข้อมูล\nเทคโนโลยี: GPU แรงสูงหรือ cloud, ชุดข้อมูลคุณภาพ, แพลตฟอร์มเทรน\nงบประมาณ: 300,000-2,000,000 บาท\nระยะเวลา: 2-5 เดือน',
+      kqi:'ความแม่นยำที่เพิ่มขึ้นเทียบกับโมเดลพื้นฐาน, การลดลงของการแก้ไขโดยคน, ต้นทุนต่อการเรียกใช้',
+      roi:'เพิ่มความแม่นยำเฉพาะงาน ลดการแก้ไขโดยคน แต่ต้นทุนเริ่มต้นสูง\nคืนทุนโดยทั่วไปภายใน 12-24 เดือน (ควรเทียบกับการใช้ prompt/RAG ก่อน)\nสูตร: ROI = (มูลค่าความแม่นยำที่เพิ่ม - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'batch', label:'ประมวลผลข้อมูลจำนวนมาก', aiType:'Batch inference', keywords:['batch','ประมวลผลจำนวนมาก','ข้อมูลก้อนใหญ่','จัดหมวดข้อมูล','วิเคราะห์ข้อมูลจำนวนมาก','bulk','offline processing','ประมวลผลเป็นชุด','pipeline ข้อมูล'],
+      hardware:'GPU สำหรับงาน deep learning หรือ CPU cluster สำหรับ ML ทั่วไป; ใช้ cloud แบบ on-demand/spot เพื่อประหยัด, จัดคิวงานด้วย batch scheduler',
+      risks:'ความเสี่ยง: ต้นทุนพุ่งถ้าข้อมูลมาก, งานค้างคิว, ผลลัพธ์ล่าช้าไม่ทันใช้\nการลดความเสี่ยง: ตั้ง schedule นอกเวลาพีค, ใช้ spot instance, แบ่งงานเป็นชุดย่อยและมี monitoring',
+      resources:'บุคคล: data/ML engineer 1-2 คน\nเทคโนโลยี: cloud compute, batch scheduler/queue, ระบบจัดเก็บข้อมูล\nงบประมาณ: 100,000-600,000 บาท (แปรตามปริมาณ)\nระยะเวลา: 1-3 เดือน',
+      kqi:'ปริมาณข้อมูลที่ประมวลผลได้ต่อรอบ, ต้นทุนต่อรายการ, เวลาที่ใช้ต่อรอบประมวลผล',
+      roi:'ประมวลผลข้อมูลปริมาณมากแทนแรงงานคน ลดต้นทุนต่อรายการ\nคืนทุนโดยทั่วไปภายใน 4-10 เดือน\nสูตร: ROI = (ค่าแรงประมวลผลที่ประหยัด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'demand', label:'พยากรณ์ความต้องการสินค้า', aiType:'Demand forecasting', keywords:['demand forecast','พยากรณ์ความต้องการ','วางแผนสต็อก','วางแผนจัดซื้อ','planning สินค้า','คาดการณ์ยอด','พยากรณ์ดีมานด์','supply chain','สต็อกล่วงหน้า'],
+      hardware:'CPU ทั่วไป (multi-core) เพียงพอสำหรับโมเดล time series ส่วนใหญ่, RAM 16-32GB; ข้อมูลหลายสาขา/SKU จำนวนมากอาจเพิ่ม GPU',
+      risks:'ความเสี่ยง: เหตุการณ์ผิดปกติ (โปรโมชัน, วิกฤต) ทำให้พยากรณ์คลาด, ข้อมูลขายไม่ครบ\nการลดความเสี่ยง: รวมปัจจัยภายนอก (เทศกาล/โปรโมชัน), ฝึกโมเดลใหม่เป็นรอบ, มีช่วงความเชื่อมั่น',
+      resources:'บุคคล: data scientist 1 คน, ทีมวางแผน/จัดซื้อ\nเทคโนโลยี: ข้อมูลขายย้อนหลัง, เครื่องมือ forecasting (Python/ML)\nงบประมาณ: 150,000-600,000 บาท\nระยะเวลา: 1-3 เดือน',
+      kqi:'ความแม่นยำของการพยากรณ์ (MAPE), การลดสินค้าค้างสต็อกและของขาด (stockout), เงินทุนจมในสต็อกที่ลดลง',
+      roi:'ลดเงินทุนจมในสต็อกและของขาด เพิ่มประสิทธิภาพ supply chain\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (เงินทุนจม/ของขาดที่ลด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'maintenance', label:'คาดการณ์การซ่อมบำรุง', aiType:'Predictive maintenance', keywords:['predictive maintenance','ซ่อมบำรุง','บำรุงรักษา','เครื่องจักรเสีย','iot sensor','เซ็นเซอร์','ทำนายการเสีย','downtime','คาดการณ์เครื่องจักร','สั่นสะเทือน'],
+      hardware:'CPU/เซิร์ฟเวอร์สำหรับวิเคราะห์ข้อมูลเซ็นเซอร์, RAM 16-32GB; ประมวลผลที่หน้างานใช้ edge device (เช่น NVIDIA Jetson) เชื่อมเซ็นเซอร์ IoT',
+      risks:'ความเสี่ยง: ข้อมูลเซ็นเซอร์ไม่พอ/ไม่ครบ, แจ้งเตือนผิดพลาด (false alarm), ตัวอย่างการเสียจริงมีน้อย\nการลดความเสี่ยง: เก็บข้อมูลให้นานพอ, ปรับเกณฑ์แจ้งเตือน, ผสานความรู้ช่างผู้เชี่ยวชาญ',
+      resources:'บุคคล: data scientist 1 คน, วิศวกร/ช่างเทคนิค\nเทคโนโลยี: เซ็นเซอร์ IoT, ระบบเก็บข้อมูลเครื่องจักร, edge device\nงบประมาณ: 300,000-1,500,000 บาท\nระยะเวลา: 3-6 เดือน',
+      kqi:'การลดลงของ downtime ที่ไม่ได้วางแผน, อายุการใช้งานเครื่องจักรที่เพิ่มขึ้น, ต้นทุนซ่อมบำรุงที่ลดลง',
+      roi:'ลด downtime ที่ไม่ได้วางแผนและยืดอายุเครื่องจักร\nคืนทุนโดยทั่วไปภายใน 12-24 เดือน\nสูตร: ROI = (มูลค่า downtime ที่ลด + ค่าซ่อมที่ประหยัด - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'anomaly', label:'ตรวจจับความผิดปกติ/ทุจริต', aiType:'Anomaly detection', keywords:['anomaly','ตรวจจับความผิดปกติ','ทุจริต','fraud','ผิดปกติ','โกง','ความปลอดภัย','ผิดสังเกต','outlier','ธุรกรรมผิดปกติ'],
+      hardware:'CPU ทั่วไปสำหรับงานส่วนใหญ่, RAM 16-32GB; งาน real-time ปริมาณสูงอาจใช้ระบบ streaming และเพิ่ม GPU',
+      risks:'ความเสี่ยง: แจ้งเตือนผิดพลาดมากเกินไป (false positive) ทำให้ทีมล้า, พลาดเคสจริง\nการลดความเสี่ยง: ปรับเกณฑ์ความไว, จัดลำดับความเสี่ยง, ให้คนตรวจสอบเคสที่คะแนนสูง',
+      resources:'บุคคล: data scientist 1 คน, ทีมความเสี่ยง/ตรวจสอบ\nเทคโนโลยี: ข้อมูลธุรกรรม/log, เครื่องมือ ML, ระบบแจ้งเตือน\nงบประมาณ: 150,000-700,000 บาท\nระยะเวลา: 2-4 เดือน',
+      kqi:'อัตราการตรวจพบเคสจริง (recall), อัตราแจ้งเตือนผิดพลาด (false positive), มูลค่าความเสียหายที่ป้องกันได้',
+      roi:'ลดความเสียหายจากทุจริต/ความผิดปกติที่ตรวจพบได้เร็วขึ้น\nคืนทุนโดยทั่วไปภายใน 6-12 เดือน\nสูตร: ROI = (มูลค่าความเสียหายที่ป้องกันได้ - ต้นทุนรวม) / ต้นทุนรวม x 100' },
+    { key:'agent', label:'งานอัตโนมัติหลายขั้นตอน', aiType:'AI agent / automation', keywords:['ai agent','agent','อัตโนมัติหลายขั้นตอน','เชื่อมหลายระบบ','workflow อัตโนมัติ','orchestrate','ตัวแทนอัตโนมัติ','automation','ทำงานแทน','multi-step'],
+      hardware:'LLM API เป็นแกนหลัก + เซิร์ฟเวอร์/cloud สำหรับ orchestration และเชื่อม API ระบบต่าง ๆ, RAM 16-32GB',
+      risks:'ความเสี่ยง: agent ทำงานผิดพลาดเป็นลูกโซ่, ทำ action ที่ไม่ตั้งใจ, ความปลอดภัยของสิทธิ์เข้าถึงระบบ\nการลดความเสี่ยง: จำกัดขอบเขตสิทธิ์, ใส่ขั้นตอนยืนยันก่อน action สำคัญ, มี log และ monitoring',
+      resources:'บุคคล: dev/ML engineer 1-2 คน\nเทคโนโลยี: LLM API, framework สำหรับ agent, การเชื่อม API/ระบบภายใน\nงบประมาณ: 200,000-1,000,000 บาท\nระยะเวลา: 2-4 เดือน',
+      kqi:'สัดส่วนงานที่ทำสำเร็จอัตโนมัติแบบ end-to-end, เวลาที่ประหยัดต่อกระบวนการ, อัตราข้อผิดพลาดที่ต้องคนแก้',
+      roi:'ลดแรงงานในงานหลายขั้นตอน เพิ่มความเร็ว end-to-end\nคืนทุนโดยทั่วไปภายใน 6-15 เดือน\nสูตร: ROI = (ค่าแรงที่ประหยัด/ปี - ต้นทุนรวม/ปี) / ต้นทุนรวม/ปี x 100' }
+  ];
+
+  var GENERIC_FLOW = ['กำหนดปัญหาและ KPI','เก็บและทำความสะอาดข้อมูล','เลือกประเภท AI และ hardware','พัฒนา/เทรนโมเดล','ทดสอบและประเมินผล','นำร่อง (pilot) กลุ่มเล็ก','ใช้งานจริงและขยายผล','ดูแลและปรับปรุงต่อเนื่อง (monitor + retrain)'];
+
+  var AI_FLOWS = {
+    text: ['กำหนดเป้าหมายและขอบเขตคำถามที่ต้องการให้ตอบ','รวบรวมเอกสาร/บทสนทนา และจัดระเบียบข้อมูล','เลือก LLM (API หรือ open-source) และออกแบบ prompt','ต่อ RAG อ้างอิงเอกสารจริงเพื่อลดการตอบมั่ว','ทดสอบความถูกต้องและน้ำเสียงคำตอบ','นำร่องกับผู้ใช้กลุ่มเล็ก + เก็บ feedback','เปิดใช้งานจริงพร้อมระบบ logging','ติดตามคุณภาพคำตอบและปรับ prompt/เอกสารต่อเนื่อง'],
+    vision: ['กำหนดสิ่งที่ต้องตรวจจับและเกณฑ์ผ่าน/ไม่ผ่าน','ถ่ายภาพ/วิดีโอให้ครอบคลุมหลายเงื่อนไข','ติดป้ายข้อมูลภาพ (labeling/annotation)','เทรนโมเดล vision และปรับจูน','วัด precision/recall กับชุดทดสอบ','นำร่องที่หน้างานจริงกับกล้องตัวอย่าง','ติดตั้งใช้งาน (อาจใช้ edge device)','ติดตามความแม่นยำและเก็บภาพใหม่มาเทรนซ้ำ'],
+    audio: ['กำหนดงานเสียง (ถอดเสียง/สรุปสาย/สั่งงาน)','รวบรวมไฟล์เสียงจริงและขอความยินยอม','เลือก Speech-to-Text API หรือ model','ปรับโมเดลให้เข้ากับสำเนียง/ศัพท์เฉพาะ','วัดความถูกต้อง (WER) กับเสียงทดสอบ','นำร่องกับสายโทรจริงจำนวนหนึ่ง','เปิดใช้งานและเชื่อมระบบบันทึกเสียง','ติดตามคุณภาพและปรับโมเดลตามเสียงใหม่'],
+    numeric: ['กำหนดตัวแปรที่ต้องการพยากรณ์และช่วงเวลา','รวบรวมข้อมูลย้อนหลังและตรวจความครบถ้วน','ทำ feature และเลือกอัลกอริทึม ML','เทรนโมเดลและจูนพารามิเตอร์','วัดความคลาดเคลื่อน (MAPE/RMSE)','ทดลองใช้กับการตัดสินใจจริงรอบเล็ก','นำเข้าระบบรายงาน/แดชบอร์ด','ทบทวนและเทรนโมเดลใหม่เป็นรอบ'],
+    repetitive: ['ทำแผนผังกระบวนการเดิมที่ทำซ้ำ','ระบุจุดที่ใช้กฎตายตัวและจุดที่ต้องใช้ AI','สร้าง bot RPA + ต่อ AI (เช่น OCR) ตามต้องการ','ทดสอบกับเคสจริงและกรณีนอกกฎ','ตั้งระบบแจ้งเตือนเมื่อพบกรณีผิดปกติ','นำร่องกับงานปริมาณหนึ่งก่อน','เปิดใช้งานเต็มรูปแบบ','ตรวจสอบผลเป็นระยะและปรับ rule เมื่อกระบวนการเปลี่ยน'],
+    generative: ['กำหนดประเภทเนื้อหาและสไตล์/แบรนด์ไกด์','เตรียมตัวอย่างและ prompt มาตรฐาน','เลือก Generative AI (API หรือรันเอง)','สร้างเนื้อหาตัวอย่างและปรับ prompt','ให้คนตรวจคุณภาพและความถูกต้อง','นำร่องผลิตจริงกับทีมเล็ก','เปิดใช้งานพร้อมขั้นตอนอนุมัติก่อนเผยแพร่','เก็บ feedback และปรับ prompt/แนวทางต่อเนื่อง'],
+    recommend: ['กำหนดเป้าหมายการแนะนำ (ยอดขาย/การมีส่วนร่วม)','รวบรวมข้อมูลพฤติกรรมและสินค้า/เนื้อหา','สร้างโมเดล recommendation','ทดสอบคุณภาพการแนะนำแบบออฟไลน์','ทำ A/B test กับผู้ใช้จริงบางส่วน','นำร่องและวัด CTR/conversion','เปิดใช้งานเต็มและผสมการแนะนำตามความนิยม','เก็บ feedback ปรับโมเดลและแก้ปัญหา cold start'],
+    imagegen: ['กำหนดประเภทภาพและการใช้งาน (โฆษณา/สินค้า)','เตรียม prompt และสไตล์ภาพมาตรฐาน','เลือก Image generation (API หรือรันเอง)','สร้างภาพตัวอย่างและปรับ prompt/seed','ให้นักออกแบบตรวจคุณภาพและลิขสิทธิ์','นำร่องผลิตภาพจริงชุดเล็ก','เปิดใช้งานพร้อมขั้นตอนอนุมัติก่อนใช้','ติดตามคุณภาพและปรับแนวทางการสร้างภาพ'],
+    rag: ['กำหนดชุดเอกสารและคำถามที่ต้องตอบ','รวบรวมและแบ่งเอกสารเป็นชิ้น (chunking)','สร้าง embedding และเก็บใน vector database','ต่อ LLM ให้ดึงเอกสารมาตอบพร้อมอ้างอิง','ทดสอบความถูกต้องและความเกี่ยวข้อง','นำร่องกับผู้ใช้กลุ่มเล็ก','เปิดใช้งานพร้อมจัดการสิทธิ์เข้าถึงเอกสาร','อัปเดต index เอกสารและปรับปรุงต่อเนื่อง'],
+    knowledge: ['กำหนดขอบเขตองค์ความรู้และผู้ใช้','รวบรวมคู่มือ/นโยบาย/ฐานความรู้ภายใน','สร้างระบบ RAG (embedding + vector database)','ต่อ LLM เป็นผู้ช่วยพร้อมอ้างอิงแหล่งที่มา','ทดสอบความถูกต้องและจัดการสิทธิ์ตามบทบาท','นำร่องกับพนักงานกลุ่มเล็ก','เปิดใช้งานทั้งองค์กร','ติดตามการใช้งานและอัปเดตองค์ความรู้สม่ำเสมอ'],
+    finetune: ['ยืนยันว่าจำเป็นต้อง fine-tune (ลอง prompt/RAG ก่อน)','เตรียมชุดข้อมูลคุณภาพและตรวจความสะอาด','เลือกโมเดลฐานและวิธี fine-tune (เช่น LoRA)','เทรนบน GPU แรงสูงหรือ cloud','ประเมินผลเทียบโมเดลฐานก่อน-หลัง','นำร่องใช้งานจริงรอบเล็ก','นำโมเดลขึ้นใช้งาน (deploy)','ติดตามผลและเทรนซ้ำเมื่อข้อมูลเปลี่ยน'],
+    batch: ['กำหนดงานและปริมาณข้อมูลที่ต้องประมวลผล','เตรียม pipeline ดึงและจัดเก็บข้อมูล','เลือกโมเดลและตั้งค่า batch/queue','ทดสอบกับข้อมูลชุดย่อยก่อน','ประเมินผลลัพธ์และต้นทุนต่อรายการ','ตั้ง schedule รันนอกเวลาพีค (เช่น spot instance)','เปิดใช้งานประมวลผลเต็มรูปแบบ','ติดตามต้นทุน เวลา และคุณภาพผลลัพธ์'],
+    demand: ['กำหนดสินค้า/สาขาและช่วงเวลาที่จะพยากรณ์','รวบรวมข้อมูลขายย้อนหลังและปัจจัยภายนอก','สร้างโมเดล time series/forecasting','เทรนและจูนโดยรวมเทศกาล/โปรโมชัน','วัดความแม่นยำ (MAPE) กับข้อมูลจริง','นำร่องใช้กับการวางแผนสต็อกรอบเล็ก','เชื่อมเข้าระบบวางแผน/จัดซื้อ','ทบทวนและเทรนโมเดลใหม่เป็นรอบ'],
+    maintenance: ['ระบุเครื่องจักรและรูปแบบการเสียที่ต้องการทำนาย','ติดตั้งเซ็นเซอร์ IoT และเก็บข้อมูล','รวบรวมข้อมูลสภาพเครื่องและประวัติการเสีย','สร้างโมเดลทำนายและตั้งเกณฑ์แจ้งเตือน','วัดความแม่นยำและปรับลด false alarm','นำร่องกับเครื่องจักรบางตัว','ติดตั้งใช้งาน (อาจใช้ edge device หน้างาน)','ติดตามผลและปรับโมเดลตามข้อมูลใหม่'],
+    anomaly: ['กำหนดสิ่งที่ถือว่าผิดปกติและผลกระทบ','รวบรวมข้อมูลธุรกรรม/log ย้อนหลัง','สร้างโมเดลตรวจจับความผิดปกติ','ตั้งเกณฑ์ความไวและจัดลำดับความเสี่ยง','ทดสอบ recall และอัตรา false positive','นำร่องให้ทีมตรวจสอบเคสที่คะแนนสูง','เปิดใช้งานพร้อมระบบแจ้งเตือน','ปรับเกณฑ์และเทรนโมเดลตาม feedback'],
+    agent: ['กำหนดกระบวนการและขอบเขตที่ให้ agent ทำ','ระบุระบบ/API ที่ต้องเชื่อมและสิทธิ์ที่จำเป็น','ออกแบบ agent และขั้นตอนการทำงาน','ใส่ขั้นตอนยืนยันก่อน action สำคัญ','ทดสอบ end-to-end และกรณีผิดพลาด','นำร่องกับงานจริงขอบเขตจำกัด','เปิดใช้งานพร้อม log และ monitoring','ติดตามอัตราสำเร็จและปรับปรุง agent']
+  };
+
+  function getFlow(key){
+    return (key && AI_FLOWS[key]) ? AI_FLOWS[key] : GENERIC_FLOW;
+  }
+
+  function parseTotalWeeks(uc){
+    var txt = (uc.resources || '');
+    var m = txt.match(/ระยะเวลา[:：]?\s*([0-9]+)\s*[-–]\s*([0-9]+)\s*(เดือน|สัปดาห์|week|month)/i);
+    if(m){
+      var lo = parseInt(m[1],10), hi = parseInt(m[2],10);
+      var unit = m[3].toLowerCase();
+      var months = (lo+hi)/2;
+      if(unit.indexOf('สัปดาห์')!==-1 || unit.indexOf('week')!==-1){ return Math.max(4, Math.round((lo+hi)/2)); }
+      return Math.max(4, Math.round(months*4.33));
+    }
+    var m2 = txt.match(/ระยะเวลา[:：]?\s*([0-9]+)\s*(เดือน|สัปดาห์|week|month)/i);
+    if(m2){
+      var v = parseInt(m2[1],10), u2 = m2[2].toLowerCase();
+      if(u2.indexOf('สัปดาห์')!==-1 || u2.indexOf('week')!==-1){ return Math.max(4, v); }
+      return Math.max(4, Math.round(v*4.33));
+    }
+    return 12;
+  }
+
+  function parseTeamSize(uc){
+    var txt = (uc.resources || '');
+    var nums = [];
+    var re = /([0-9]+)\s*คน/g, mm;
+    while((mm = re.exec(txt)) !== null){ nums.push(parseInt(mm[1],10)); }
+    if(nums.length===0) return 3;
+    var sum = nums.reduce(function(a,b){ return a+b; }, 0);
+    return Math.max(2, sum);
+  }
+
+  function parseBudget(uc){
+    var txt = (uc.resources || '');
+    var m = txt.match(/งบประมาณ[^0-9]*([0-9][0-9,\.]*)\s*[-–]\s*([0-9][0-9,\.]*)/);
+    function toNum(s){ return parseInt(String(s).replace(/[,\.]/g,''),10); }
+    if(m){ return Math.round((toNum(m[1])+toNum(m[2]))/2); }
+    var m2 = txt.match(/งบประมาณ[^0-9]*([0-9][0-9,\.]*)/);
+    if(m2){ return toNum(m2[1]); }
+    return null;
+  }
+
+  // per-phase metadata: weight (time), effort intensity (people involved fraction), stage, milestone
+  function phaseMeta(i, n){
+    // weights for time distribution
+    var weight, intensity, stage, milestone;
+    if(i===0){ weight=0.8; intensity=0.4; stage='ระยะเริ่มต้น'; milestone='อนุมัติขอบเขตและเป้าหมายโครงการ'; }
+    else if(i===1){ weight=1.6; intensity=0.7; stage='ระยะเตรียมการ'; milestone='ข้อมูลพร้อมใช้งาน'; }
+    else if(i===2){ weight=1.0; intensity=0.6; stage='ระยะเตรียมการ'; milestone=''; }
+    else if(i===3){ weight=2.0; intensity=1.0; stage='ระยะพัฒนา'; milestone='โมเดล/ระบบเวอร์ชันแรกพร้อมทดสอบ'; }
+    else if(i===4){ weight=1.2; intensity=0.7; stage='ระยะพัฒนา'; milestone='ผลทดสอบผ่านเกณฑ์ที่กำหนด'; }
+    else if(i===n-1){ weight=1.4; intensity=0.6; stage='ระยะดูแลต่อเนื่อง'; milestone='ส่งมอบและเริ่มดูแลระบบ'; }
+    else if(i===n-2){ weight=1.1; intensity=0.8; stage='ระยะนำไปใช้'; milestone='ขึ้นใช้งานจริง (Go-live)'; }
+    else { weight=1.0; intensity=0.6; stage='ระยะนำไปใช้'; milestone='นำร่องสำเร็จ'; }
+    return { weight: weight, intensity: intensity, stage: stage, milestone: milestone };
+  }
+
+  function buildPlan(uc){
+    var steps = getFlow(uc.aiType);
+    var n = steps.length;
+    var metas = steps.map(function(s,i){ return phaseMeta(i, n); });
+    var totalW = metas.reduce(function(a,m){ return a+m.weight; },0);
+    var totalWeeks = parseTotalWeeks(uc);
+    var teamSize = parseTeamSize(uc);
+    var budget = parseBudget(uc);
+
+    var phases = [];
+    var cursor = 0;
+    var totalManDays = 0;
+    for(var i=0;i<n;i++){
+      var dur = Math.max(1, Math.round(metas[i].weight/totalW*totalWeeks));
+      // person-days = working days in phase (5/wk) x people involved (team x intensity, min 1)
+      var peopleInvolved = Math.max(1, Math.round(teamSize * metas[i].intensity));
+      var manDays = dur * 5 * peopleInvolved;
+      totalManDays += manDays;
+      phases.push({
+        no: i+1,
+        name: steps[i],
+        startWeek: cursor+1,
+        durWeeks: dur,
+        endWeek: cursor+dur,
+        stage: metas[i].stage,
+        people: peopleInvolved,
+        manDays: manDays,
+        milestone: metas[i].milestone,
+        deliverable: phaseDeliverable(steps[i], uc.aiType, i, n),
+        role: phaseRole(i, n)
+      });
+      cursor += dur;
+    }
+    var grandTotal = cursor;
+    // distribute budget across phases proportional to man-days
+    if(budget){
+      phases.forEach(function(ph){ ph.cost = Math.round(budget * ph.manDays/totalManDays); });
+    }
+    var milestones = phases.filter(function(p){ return p.milestone; });
+    return {
+      phases: phases,
+      totalWeeks: grandTotal,
+      totalManDays: totalManDays,
+      teamSize: teamSize,
+      budget: budget,
+      milestones: milestones,
+      owner: uc.owner || ''
+    };
+  }
+
+  function fmtMoney(n){
+    if(n===null || n===undefined) return null;
+    return n.toLocaleString('en-US') + ' บาท';
+  }
+
+  var PHASE_ROLE = ['เจ้าของโครงการ / ฝ่ายธุรกิจ','Data engineer','Tech lead / สถาปนิก','ML / AI engineer','QA / ผู้ทดสอบ','เจ้าของโครงการ + ผู้ใช้นำร่อง','DevOps / IT','ผู้ดูแลระบบ / MLOps'];
+  function phaseRole(idx, total){
+    if(idx===0) return PHASE_ROLE[0];
+    if(idx===total-1) return PHASE_ROLE[7];
+    if(idx===total-2) return PHASE_ROLE[6];
+    return PHASE_ROLE[Math.min(idx, PHASE_ROLE.length-3)];
+  }
+  var PHASE_DELIVERABLE = [
+    'เอกสารขอบเขตโครงการ (Scope) + เป้าหมายและ KQI ที่ตกลงร่วมกัน',
+    'ชุดข้อมูลที่เก็บและทำความสะอาดแล้ว + เอกสารพจนานุกรมข้อมูล (data dictionary)',
+    'เอกสารสถาปัตยกรรม + รายการเทคโนโลยี/hardware ที่เลือก',
+    'โมเดล/ระบบเวอร์ชันทดลอง (prototype) + บันทึกการทดลอง',
+    'รายงานผลทดสอบและตัวชี้วัดความแม่นยำเทียบกับเกณฑ์',
+    'รายงานผลการนำร่อง (pilot) + ข้อเสนอปรับปรุงก่อนขยายผล',
+    'ระบบที่ขึ้นใช้งานจริง + คู่มือผู้ใช้และเอกสารส่งมอบ',
+    'แผนดูแลระบบ (monitoring + retrain) + รายงานสถานะรอบแรก'
+  ];
+  function phaseDeliverable(name, aiType, idx, total){
+    if(idx===0) return PHASE_DELIVERABLE[0];
+    if(idx===1) return PHASE_DELIVERABLE[1];
+    if(idx===2) return PHASE_DELIVERABLE[2];
+    if(idx===3) return PHASE_DELIVERABLE[3];
+    if(idx===4) return PHASE_DELIVERABLE[4];
+    if(idx===total-1) return PHASE_DELIVERABLE[7];
+    if(idx===total-2) return PHASE_DELIVERABLE[6];
+    return PHASE_DELIVERABLE[5];
+  }
+
+  function getCategory(key){
+    return AI_CATEGORIES.find(function(c){ return c.key===key; }) || null;
+  }
+
+  function detectAiType(text){
+    var lower = String(text||'').toLowerCase();
+    var best = null, bestCount = 0, bestMatched = [];
+    AI_CATEGORIES.forEach(function(cat){
+      var matched = cat.keywords.filter(function(kw){ return lower.indexOf(kw.toLowerCase())!==-1; });
+      if(matched.length >= bestCount && matched.length > 0){ bestCount = matched.length; best = cat; bestMatched = matched; }
+    });
+    if(!best) return null;
+    return { key: best.key, matched: bestMatched };
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function fillOrDash(v){
+    return (v && String(v).trim()) ? escapeHtml(v) : '<span style="color:var(--text-muted);">-</span>';
+  }
+
+  function nl2br(v, dashStyle){
+    if(!v || !String(v).trim()) return '<span style="'+(dashStyle||'color:var(--text-muted);')+'">-</span>';
+    return escapeHtml(v).replace(/\n/g, '<br>');
+  }
+
+  async function loadData(){
+    if(hasClaudeStorage){
+      try{
+        var r = await window.storage.get(STORAGE_KEY, false);
+        return r && r.value ? JSON.parse(r.value) : [];
+      }catch(e){ return []; }
+    }
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+
+  async function saveData(){
+    var json = JSON.stringify(useCases);
+    if(hasClaudeStorage){
+      try{ var r = await window.storage.set(STORAGE_KEY, json, false); return !!r; }catch(e){ return false; }
+    } else {
+      try{ localStorage.setItem(STORAGE_KEY, json); return true; }catch(e){ return false; }
+    }
+  }
+
+  function computeScore(uc){
+    var raw = uc.impact*0.35 + uc.feasibility*0.25 + uc.data*0.25 + (6-uc.risk)*0.15;
+    return Math.round(raw*20);
+  }
+
+  function priorityInfo(score){
+    if(score>=75) return {key:'high', label:'สูง', hex:'#1D9E75'};
+    if(score>=50) return {key:'med', label:'กลาง', hex:'#BA7517'};
+    return {key:'low', label:'ต่ำ', hex:'#6B6A63'};
+  }
+
+  function renderSummary(){
+    var total = useCases.length;
+    var high = useCases.filter(function(u){ return priorityInfo(computeScore(u)).key==='high'; }).length;
+    var med = useCases.filter(function(u){ return priorityInfo(computeScore(u)).key==='med'; }).length;
+    var avg = total ? Math.round(useCases.reduce(function(s,u){ return s+computeScore(u); },0)/total) : 0;
+    document.getElementById('summary').innerHTML =
+      '<div class="stat"><p class="label">Use case ทั้งหมด</p><p class="value">'+total+'</p></div>'+
+      '<div class="stat"><p class="label">ระดับสูง</p><p class="value" style="color:#1D9E75;">'+high+'</p></div>'+
+      '<div class="stat"><p class="label">ระดับกลาง</p><p class="value" style="color:#BA7517;">'+med+'</p></div>'+
+      '<div class="stat"><p class="label">คะแนนเฉลี่ย</p><p class="value">'+avg+'</p></div>';
+  }
+
+  function getFilteredSorted(){
+    var filter = document.getElementById('filter-priority').value;
+    var sortBy = document.getElementById('sort-by').value;
+    var list = useCases.filter(function(u){
+      if(filter==='all') return true;
+      return priorityInfo(computeScore(u)).key===filter;
+    });
+    list = list.slice().sort(function(a,b){
+      if(sortBy==='score-desc') return computeScore(b)-computeScore(a);
+      if(sortBy==='score-asc') return computeScore(a)-computeScore(b);
+      if(sortBy==='name') return a.name.localeCompare(b.name);
+      if(sortBy==='dept') return (a.dept||'').localeCompare(b.dept||'');
+      return 0;
+    });
+    return list;
+  }
+
+  function renderList(){
+    var container = document.getElementById('list-container');
+    var list = getFilteredSorted();
+    if(useCases.length===0){
+      container.innerHTML = '<div class="empty">ยังไม่มี use case ในระบบ กดปุ่ม "เพิ่ม use case ใหม่" เพื่อเริ่มต้น</div>';
+      document.getElementById('chart-section').style.display = 'none';
+      renderSummary();
+      return;
+    }
+    if(list.length===0){
+      container.innerHTML = '<div class="empty">ไม่พบ use case ที่ตรงกับตัวกรองนี้</div>';
+    } else {
+      container.innerHTML = list.map(function(uc){
+        var score = computeScore(uc);
+        var p = priorityInfo(score);
+        var cat = getCategory(uc.aiType);
+        return '<div class="card" data-id="'+uc.id+'">'
+          + '<div class="info">'
+          + '<p class="name">'+escapeHtml(uc.name)+'</p>'
+          + '<p class="dept">'+escapeHtml(uc.dept||'ไม่ระบุแผนก')+(uc.owner?' · '+escapeHtml(uc.owner):'')+'</p>'
+          + (uc.problem ? '<p class="problem">'+escapeHtml(uc.problem)+'</p>' : '')
+          + '</div>'
+          + (cat ? '<span class="badge ai">'+escapeHtml(cat.aiType)+'</span>' : '')
+          + '<span class="badge '+p.key+'">'+p.label+'</span>'
+          + '<span class="score">'+score+'</span>'
+          + '<div class="card-actions">'
+          + '<button class="btn-ghost doc-btn" data-id="'+uc.id+'" aria-label="ดูเอกสาร">เอกสาร</button>'
+          + '<button class="btn-ghost plan-btn" data-id="'+uc.id+'" aria-label="ดูแผนงาน">แผนงาน</button>'
+          + '<button class="btn-ghost flow-btn" data-id="'+uc.id+'" aria-label="ดู Flow และ n8n">Flow+n8n</button>'
+          + '<button class="btn-ghost edit-btn" data-id="'+uc.id+'" aria-label="แก้ไข">แก้ไข</button>'
+          + '<button class="btn-ghost btn-danger delete-btn" data-id="'+uc.id+'" aria-label="ลบ">ลบ</button>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    }
+    renderSummary();
+    renderChart(list);
+    bindCardEvents();
+  }
+
+  function renderChart(list){
+    var section = document.getElementById('chart-section');
+    var box = document.getElementById('chart-box');
+    var canvas = document.getElementById('score-chart');
+    if(!list || list.length===0){ section.style.display='none'; if(chart){try{chart.destroy();}catch(e){} chart=null;} return; }
+    try{
+      if(typeof Chart === 'undefined'){ throw new Error('Chart.js not available'); }
+      section.style.display='block';
+      box.style.height = Math.max(160, list.length*36+60) + 'px';
+      var sorted = list.slice().sort(function(a,b){ return computeScore(a)-computeScore(b); });
+      var labels = sorted.map(function(u){ return u.name; });
+      var data = sorted.map(function(u){ return computeScore(u); });
+      var colors = data.map(function(s){ return priorityInfo(s).hex; });
+      if(chart){ try{chart.destroy();}catch(e){} }
+      chart = new Chart(canvas, {
+        type:'bar',
+        data:{ labels:labels, datasets:[{ label:'คะแนน', data:data, backgroundColor:colors }] },
+        options:{
+          indexAxis:'y',
+          responsive:true,
+          maintainAspectRatio:false,
+          scales:{ x:{ min:0, max:100 } },
+          plugins:{ legend:{ display:false } }
+        }
+      });
+    }catch(e){
+      section.style.display='none';
+    }
+  }
+
+  function bindCardEvents(){
+    document.querySelectorAll('.doc-btn').forEach(function(btn){
+      btn.onclick = function(){ openDoc(btn.getAttribute('data-id')); };
+    });
+    document.querySelectorAll('.plan-btn').forEach(function(btn){
+      btn.onclick = function(){ openPlan(btn.getAttribute('data-id')); };
+    });
+    document.querySelectorAll('.flow-btn').forEach(function(btn){
+      btn.onclick = function(){ openFlow(btn.getAttribute('data-id')); };
+    });
+    document.querySelectorAll('.edit-btn').forEach(function(btn){
+      btn.onclick = function(){ openEdit(btn.getAttribute('data-id')); };
+    });
+    document.querySelectorAll('.delete-btn').forEach(function(btn){
+      btn.onclick = function(){ askDelete(btn); };
+    });
+  }
+
+  function wordHeader(){
+    return '<table style="width:100%; border-collapse:collapse; margin-bottom:14px;"><tr>'
+      + '<td style="border:none; border-bottom:2px solid #E3631C; padding-bottom:8px;">'
+      + '<img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:42px; width:auto;">'
+      + '</td></tr></table>';
+  }
+  function wordFooter(){
+    return '<table style="width:100%; border-collapse:collapse; margin-top:24px; background-color:#E3631C;"><tr>'
+      + '<td style="border:none; padding:10px 14px; color:#ffffff; font-family:Arial,sans-serif; font-size:11pt;">'
+      + '&ldquo; Designed for your identity. &rdquo;'
+      + '</td>'
+      + '<td style="border:none; padding:10px 14px; color:#ffffff; font-family:Arial,sans-serif; font-size:11pt; text-align:right; font-weight:bold;">'
+      + 'Polymate <span style="font-weight:normal; font-size:8pt;">IT Solutions</span>'
+      + '</td></tr></table>';
+  }
+
+  function buildDocBody(uc){
+    var score = computeScore(uc);
+    var p = priorityInfo(score);
+    var cat = getCategory(uc.aiType);
+    var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
+    return ''
+      + '<div style="border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:16px;"><img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:40px; width:auto;"></div>'
+      + '<h2>'+escapeHtml(uc.name)+'</h2>'
+      + '<p class="doc-sub">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
+      + '<div class="doc-section"><h3>1. ข้อมูลทั่วไป</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">แผนก / หน่วยงาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
+      + '<tr><th>ผู้รับผิดชอบ</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>2. ปัญหาทางธุรกิจ</h3><p class="doc-text">'+fillOrDash(uc.problem)+'</p></div>'
+      + '<div class="doc-section"><h3>3. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">Output ที่คาดหวัง</th><td>'+nl2br(uc.output)+'</td></tr>'
+      + '<tr><th>จำนวน Users / วัน</th><td>'+fillOrDash(uc.users)+'</td></tr>'
+      + '<tr><th>ภาษาที่ต้องการ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
+      + '<tr><th>ระดับความสำคัญของข้อมูล</th><td>'+fillOrDash(uc.dataSensitivity)+'</td></tr>'
+      + '<tr><th>Latency ที่รับได้</th><td>'+fillOrDash(uc.latency)+'</td></tr>'
+      + '<tr><th>Availability ที่ต้องการ</th><td>'+fillOrDash(uc.availability)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>4. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">ข้อมูลอ้างอิงจาก QWP</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
+      + '<tr><th>ขั้นตอนการทำงานที่อ้างอิง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
+      + '<tr><th>Control Item ของขั้นตอน</th><td>'+nl2br(uc.control)+'</td></tr>'
+      + '<tr><th>KQI / QI ของขั้นตอนที่อ้างถึง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>5. วิธีการเดิมที่ทำอยู่</h3><p class="doc-text">'+fillOrDash(uc.solution)+'</p>'
+      + ((uc.attachment || uc.attachRef) ? '<p class="doc-text" style="margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? '<a href="'+uc.attachment.data+'" download="'+escapeHtml(uc.attachment.name)+'">'+escapeHtml(uc.attachment.name)+'</a>' : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
+      + (cat ? '<p class="doc-text" style="margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '</div>'
+      + '<div class="doc-section"><h3>6. Spec Hardware ที่ใช้ทำ AI</h3><p class="doc-text">'+nl2br(uc.hardware)+'</p></div>'
+      + '<div class="doc-section"><h3>7. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
+      + '<div class="doc-section"><h3>8. การประเมินและให้คะแนน</h3>'
+      + '<table class="doc-table"><tr><th>เกณฑ์</th><th>น้ำหนัก</th><th>คะแนน (1-5)</th></tr>'
+      + '<tr><td>ผลกระทบทางธุรกิจ</td><td>35%</td><td>'+uc.impact+'</td></tr>'
+      + '<tr><td>ความเป็นไปได้ทางเทคนิค</td><td>25%</td><td>'+uc.feasibility+'</td></tr>'
+      + '<tr><td>ความพร้อมของข้อมูล</td><td>25%</td><td>'+uc.data+'</td></tr>'
+      + '<tr><td>ความเสี่ยง / ความซับซ้อน</td><td>15%</td><td>'+uc.risk+'</td></tr>'
+      + '</table>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
+      + '</div>'
+      + '<div class="doc-section"><h3>9. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
+      + '<div class="doc-section"><h3>10. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
+      + '<div class="doc-section"><h3>11. ตัวชี้วัดความสำเร็จ (KQI)</h3><p class="doc-text">'+nl2br(uc.kpi)+'</p></div>'
+      + '<div class="doc-section"><h3>12. ผลตอบแทนการลงทุน (ROI)</h3><p class="doc-text">'+nl2br(uc.roi)+'</p></div>'
+      + '<div class="doc-section"><h3>13. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p class="doc-text">'+nl2br(uc.recommendation)+'</p></div>'
+      + '<div class="doc-section"><h3>14. การอนุมัติ</h3><div class="doc-grid2">'
+      + '<div class="box"><p class="lbl">ผู้จัดทำ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</div><div class="ln">วันที่: '+today+'</div><div class="ln">ลงชื่อ:</div></div>'
+      + '<div class="box"><p class="lbl">ผู้พิจารณา / อนุมัติ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</div><div class="ln">วันที่:</div><div class="ln">ลงชื่อ:</div></div>'
+      + '</div></div>'
+      + '<div class="doc-footer-bar"><span>&ldquo; Designed for your identity. &rdquo;</span><span class="brand">Polymate <small>IT Solutions</small></span></div>';
+  }
+
+  function openDoc(id){
+    var uc = useCases.find(function(u){ return u.id===id; });
+    if(!uc) return;
+    currentDocId = id;
+    document.getElementById('doc-content').innerHTML = buildDocBody(uc);
+    document.getElementById('doc-modal').classList.add('open');
+  }
+
+  function closeDoc(){
+    document.getElementById('doc-modal').classList.remove('open');
+  }
+
+  function buildPlanBody(uc){
+    var cat = getCategory(uc.aiType);
+    var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
+    var plan = buildPlan(uc);
+    var total = plan.totalWeeks;
+    var hasCost = plan.budget !== null;
+    var rows = plan.phases.map(function(ph, i){
+      return '<tr>'
+        + '<td style="text-align:center;">'+ph.no+'</td>'
+        + '<td>'+escapeHtml(ph.name)+'<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">'+escapeHtml(ph.stage)+'</div></td>'
+        + '<td style="text-align:center;">สัปดาห์ '+ph.startWeek+'–'+ph.endWeek+'<div style="font-size:11px; color:var(--text-muted);">'+ph.durWeeks+' สัปดาห์</div></td>'
+        + '<td style="text-align:center;">'+ph.people+' คน<div style="font-size:11px; color:var(--text-muted);">'+ph.manDays+' man-days</div></td>'
+        + (hasCost ? '<td style="text-align:right;">'+ph.cost.toLocaleString('en-US')+'</td>' : '')
+        + '<td>'+escapeHtml(ph.role)+'</td>'
+        + '<td>'+escapeHtml(ph.deliverable)+'</td>'
+        + '</tr>';
+    }).join('');
+    var gantt = plan.phases.map(function(ph, i){
+      var leftPct = ((ph.startWeek-1)/total*100).toFixed(2);
+      var widthPct = (ph.durWeeks/total*100).toFixed(2);
+      return '<div class="gantt-row">'
+        + '<div class="gantt-label">'+ph.no+'. '+escapeHtml(ph.name)+'</div>'
+        + '<div class="gantt-track"><div class="gantt-bar" style="left:'+leftPct+'%; width:'+widthPct+'%;"></div></div>'
+        + '</div>';
+    }).join('');
+    var months = Math.ceil(total/4.33);
+    var axis = '';
+    for(var mo=1; mo<=months; mo++){ axis += '<span>เดือน '+mo+'</span>'; }
+    var milestoneRows = plan.milestones.map(function(m){
+      return '<tr><td style="text-align:center;">สิ้นสัปดาห์ '+m.endWeek+'</td><td>'+escapeHtml(m.milestone)+'</td><td>'+escapeHtml(m.name)+'</td></tr>';
+    }).join('');
+    var statCards = ''
+      + '<div class="plan-stat"><p class="lbl">ระยะเวลารวม</p><p class="val">'+total+' สัปดาห์</p><p class="sub">~'+months+' เดือน</p></div>'
+      + '<div class="plan-stat"><p class="lbl">จำนวนเฟส</p><p class="val">'+plan.phases.length+'</p><p class="sub">'+plan.milestones.length+' milestones</p></div>'
+      + '<div class="plan-stat"><p class="lbl">แรงงานรวม</p><p class="val">'+plan.totalManDays+'</p><p class="sub">man-days (ทีม '+plan.teamSize+' คน)</p></div>'
+      + (hasCost ? '<div class="plan-stat"><p class="lbl">งบประมาณ</p><p class="val">'+Math.round(plan.budget/1000).toLocaleString('en-US')+'K</p><p class="sub">'+plan.budget.toLocaleString('en-US')+' บาท</p></div>' : '<div class="plan-stat"><p class="lbl">งบประมาณ</p><p class="val">-</p><p class="sub">ไม่ได้ระบุ</p></div>');
+    var aiPlan = uc.aiPlan || null;
+    var sourceBadge = aiPlan
+      ? '<span style="font-size:12px; background:var(--teal-light); color:var(--teal); padding:3px 10px; border-radius:6px;">มีคำแนะนำเพิ่มเติมจาก AI Claude</span>'
+      : '<span style="font-size:12px; background:var(--bg); color:var(--text-muted); padding:3px 10px; border-radius:6px;">ยังไม่ได้วิเคราะห์ด้วย AI</span>';
+    var aiBar = '<div class="no-print" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;">'
+      + '<button class="btn-primary" id="plan-ai-btn">วิเคราะห์ด้วย AI Claude</button>'
+      + sourceBadge
+      + '<span class="status" id="plan-ai-status" style="height:auto;"></span></div>';
+    var aiSection = '';
+    if(aiPlan){
+      var risksList = (aiPlan.risks||[]).map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+      var recsList = (aiPlan.recommendations||[]).map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+      var phaseNotes = (aiPlan.phaseNotes||[]).map(function(p){ return '<tr><td>'+escapeHtml(p.phase||'')+'</td><td>'+escapeHtml(p.note||'')+'</td></tr>'; }).join('');
+      aiSection = '<div class="doc-section"><h3>คำแนะนำจาก AI Claude</h3>'
+        + (aiPlan.summary ? '<p class="doc-text" style="margin-bottom:10px;">'+escapeHtml(aiPlan.summary)+'</p>' : '')
+        + (recsList ? '<p class="doc-text" style="margin:8px 0 4px;"><b>ข้อเสนอแนะ:</b></p><ul style="margin:0 0 8px; padding-left:20px; font-size:13px; line-height:1.7;">'+recsList+'</ul>' : '')
+        + (risksList ? '<p class="doc-text" style="margin:8px 0 4px;"><b>ความเสี่ยงของแผน:</b></p><ul style="margin:0 0 8px; padding-left:20px; font-size:13px; line-height:1.7;">'+risksList+'</ul>' : '')
+        + (phaseNotes ? '<table class="doc-table" style="margin-top:8px;"><tr><th style="width:30%">เฟส</th><th>ข้อสังเกตจาก AI</th></tr>'+phaseNotes+'</table>' : '')
+        + '</div>';
+    }
+    return ''
+      + '<div style="border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:16px;"><img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:40px; width:auto;"></div>'
+      + '<h2>'+escapeHtml(uc.name)+'</h2>'
+      + '<p class="doc-sub">แผนงานการพัฒนา AI &middot; จัดทำเมื่อ '+today+(cat ? ' &middot; '+escapeHtml(cat.aiType) : '')+'</p>'
+      + aiBar
+      + '<div class="plan-stats">'+statCards+'</div>'
+      + '<div class="doc-section"><h3>ภาพรวมแผนงาน</h3>'
+      + '<p class="doc-text">แผนนี้แบ่งงานเป็น '+plan.phases.length+' เฟสตามขั้นตอนการทำ AI รวม '+total+' สัปดาห์ (~'+months+' เดือน) ใช้แรงงานประมาณ '+plan.totalManDays+' man-days จากทีม '+plan.teamSize+' คน'
+      + (hasCost ? ' งบประมาณรวมประมาณ '+plan.budget.toLocaleString('en-US')+' บาท กระจายตามปริมาณงานแต่ละเฟส' : '')
+      + ' โดยกระจายเวลาและแรงงานให้เฟสที่ใช้ความพยายามมาก (เตรียมข้อมูล, พัฒนาโมเดล) มากกว่าเฟสอื่น ปรับได้โดยแก้ช่อง "ทรัพยากรและประมาณการ" ใน use case (จำนวนคน, งบประมาณ, ระยะเวลา)</p></div>'
+      + aiSection
+      + '<div class="doc-section"><h3>ตารางแผนงานละเอียด</h3>'
+      + '<table class="doc-table"><tr><th style="width:5%">#</th><th>กิจกรรม / ระยะ</th><th style="width:15%">ช่วงเวลา</th><th style="width:13%">แรงงาน</th>'+(hasCost ? '<th style="width:12%">งบ (บาท)</th>' : '')+'<th style="width:16%">ผู้รับผิดชอบ</th><th>สิ่งส่งมอบ</th></tr>'
+      + rows + '</table></div>'
+      + '<div class="doc-section"><h3>จุดส่งมอบสำคัญ (Milestones)</h3>'
+      + '<table class="doc-table"><tr><th style="width:18%">กำหนด</th><th>Milestone</th><th style="width:30%">เฟสที่เกี่ยวข้อง</th></tr>'+milestoneRows+'</table></div>'
+      + '<div class="doc-section"><h3>ไทม์ไลน์ (Gantt)</h3><div class="gantt">'+gantt+'<div class="gantt-axis">'+axis+'</div></div></div>'
+      + '<div class="doc-section"><h3>หมายเหตุ</h3><p class="doc-text">ผู้รับผิดชอบ แรงงาน (man-days) และงบประมาณเป็นค่าประมาณการเริ่มต้นที่คำนวณจากข้อมูลในช่อง "ทรัพยากรและประมาณการ" ควรทบทวนกับทีมจริงก่อนใช้งาน / man-days = วันทำงาน (5 วัน/สัปดาห์) × จำนวนคนที่เกี่ยวข้องในเฟสนั้น</p></div>'
+      + '<div class="doc-footer-bar"><span>&ldquo; Designed for your identity. &rdquo;</span><span class="brand">Polymate <small>IT Solutions</small></span></div>';
+  }
+
+  function bindPlanAnalyzeBtn(){
+    var btn = document.getElementById('plan-ai-btn');
+    if(btn) btn.onclick = function(){ analyzePlanAI(); };
+  }
+
+  async function analyzePlanAI(){
+    var uc = useCases.find(function(u){ return u.id===currentDocId; });
+    if(!uc) return;
+    var statusEl = document.getElementById('plan-ai-status');
+    var btn = document.getElementById('plan-ai-btn');
+    if(btn){ btn.disabled = true; }
+    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์แผนงานด้วย AI Claude...'; }
+    var plan = buildPlan(uc);
+    var phaseSummary = plan.phases.map(function(p){ return p.no+'. '+p.name+' ('+p.durWeeks+' สัปดาห์, '+p.people+' คน, '+p.manDays+' man-days)'; }).join('\n');
+    var systemPrompt = 'คุณเป็นผู้จัดการโครงการ AI ที่มีประสบการณ์ ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown';
+    var instruction = 'นี่คือแผนงานพัฒนา AI สำหรับ use case หนึ่ง ช่วยวิเคราะห์และให้คำแนะนำเพื่อให้แผนสมจริงและสำเร็จมากขึ้น (พิจารณาเอกสารแนบถ้ามี)\n\n'
+      + ucContextText(uc) + '\n\n'
+      + 'ระยะเวลารวม '+plan.totalWeeks+' สัปดาห์, ทีม '+plan.teamSize+' คน, รวม '+plan.totalManDays+' man-days' + (plan.budget?(', งบ '+plan.budget+' บาท'):'') + '\n'
+      + 'เฟสงาน:\n' + phaseSummary + '\n\n'
+      + 'ตอบกลับเป็น JSON เท่านั้น โครงสร้าง:\n'
+      + '{"summary":"สรุปภาพรวมและความเหมาะสมของแผน 1-2 ประโยค",'
+      + '"recommendations":["ข้อเสนอแนะเพื่อให้แผนดีขึ้น"],'
+      + '"risks":["ความเสี่ยงของแผนงานนี้"],'
+      + '"phaseNotes":[{"phase":"ชื่อเฟส","note":"ข้อสังเกต/คำแนะนำเฉพาะเฟส"}]}\n'
+      + 'recommendations และ risks อย่างละ 3-5 ข้อ, phaseNotes เฉพาะเฟสที่มีข้อสังเกตสำคัญ ตอบเป็นภาษาไทย';
+    try {
+      var text = await callClaude(systemPrompt, ucContentBlocks(uc, instruction));
+      var parsed = parseJsonLoose(text);
+      if(!parsed) throw new Error('bad shape');
+      uc.aiPlan = { summary: parsed.summary||'', recommendations: parsed.recommendations||[], risks: parsed.risks||[], phaseNotes: parsed.phaseNotes||[], at: new Date().toISOString() };
+      await saveData();
+      document.getElementById('plan-content').innerHTML = buildPlanBody(uc);
+      bindPlanAnalyzeBtn();
+    } catch(e){
+      if(statusEl){
+        statusEl.style.color = '#A32D2D';
+        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ (ใช้ได้เฉพาะเมื่อเปิดในแอป Claude)';
+      }
+      if(btn){ btn.disabled = false; }
+    }
+  }
+
+  function openPlan(id){
+    var uc = useCases.find(function(u){ return u.id===id; });
+    if(!uc) return;
+    currentDocId = id;
+    document.getElementById('plan-content').innerHTML = buildPlanBody(uc);
+    bindPlanAnalyzeBtn();
+    document.getElementById('plan-modal').classList.add('open');
+  }
+
+  function closePlan(){
+    document.getElementById('plan-modal').classList.remove('open');
+  }
+
+  function buildPlanBodyInline(uc){
+    var cat = getCategory(uc.aiType);
+    var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
+    var plan = buildPlan(uc);
+    var total = plan.totalWeeks;
+    var TD = 'border:1px solid #CCCCCC; padding:6px 10px; text-align:left; font-size:11pt; font-family:Arial,sans-serif;';
+    var TDC = TD + 'text-align:center;';
+    var TH = TD + 'background-color:#E1F5EE; color:#085041; font-weight:bold;';
+    var H2 = 'color:#13294B; font-size:18pt; font-family:Arial,sans-serif; margin:0 0 4px;';
+    var SUB = 'color:#6B7280; font-size:10pt; font-family:Arial,sans-serif; margin:0 0 16px;';
+    var H3 = 'color:#0F6E56; font-size:13pt; font-family:Arial,sans-serif; border-bottom:1px solid #CCCCCC; padding-bottom:4px; margin:18px 0 8px;';
+    var TXT = 'font-size:11pt; font-family:Arial,sans-serif; line-height:1.6; color:#1F2430; margin:0;';
+    var TABLE = 'width:100%; border-collapse:collapse; margin-bottom:6px;';
+    var months = Math.ceil(total/4.33);
+    var hasCost = plan.budget !== null;
+    var rows = plan.phases.map(function(ph, i){
+      return '<tr>'
+        + '<td style="'+TDC+' width:5%;">'+ph.no+'</td>'
+        + '<td style="'+TD+'">'+escapeHtml(ph.name)+'<br><span style="font-size:9pt; color:#6B7280;">'+escapeHtml(ph.stage)+'</span></td>'
+        + '<td style="'+TDC+' width:14%;">สัปดาห์ '+ph.startWeek+'–'+ph.endWeek+'<br><span style="font-size:9pt; color:#6B7280;">'+ph.durWeeks+' สัปดาห์</span></td>'
+        + '<td style="'+TDC+' width:12%;">'+ph.people+' คน<br><span style="font-size:9pt; color:#6B7280;">'+ph.manDays+' man-days</span></td>'
+        + (hasCost ? '<td style="'+TDC+' width:12%;">'+ph.cost.toLocaleString('en-US')+'</td>' : '')
+        + '<td style="'+TD+' width:16%;">'+escapeHtml(ph.role)+'</td>'
+        + '<td style="'+TD+'">'+escapeHtml(ph.deliverable)+'</td>'
+        + '</tr>';
+    }).join('');
+    var milestoneRows = plan.milestones.map(function(m){
+      return '<tr><td style="'+TDC+' width:18%;">สิ้นสัปดาห์ '+m.endWeek+'</td><td style="'+TD+'">'+escapeHtml(m.milestone)+'</td><td style="'+TD+' width:30%;">'+escapeHtml(m.name)+'</td></tr>';
+    }).join('');
+    var summaryTable = '<table border="1" cellpadding="6" cellspacing="0" style="'+TABLE+'">'
+      + '<tr><td style="'+TH+'">ระยะเวลารวม</td><td style="'+TD+'">'+total+' สัปดาห์ (~'+months+' เดือน)</td>'
+      + '<td style="'+TH+'">จำนวนเฟส</td><td style="'+TD+'">'+plan.phases.length+' เฟส ('+plan.milestones.length+' milestones)</td></tr>'
+      + '<tr><td style="'+TH+'">แรงงานรวม</td><td style="'+TD+'">'+plan.totalManDays+' man-days</td>'
+      + '<td style="'+TH+'">ขนาดทีม</td><td style="'+TD+'">'+plan.teamSize+' คน</td></tr>'
+      + (hasCost ? '<tr><td style="'+TH+'">งบประมาณรวม</td><td style="'+TD+'" colspan="3">'+plan.budget.toLocaleString('en-US')+' บาท (กระจายตามปริมาณงานแต่ละเฟส)</td></tr>' : '')
+      + '</table>';
+    var aiP = uc.aiPlan || null;
+    var aiBlock = '';
+    if(aiP){
+      var recs = (aiP.recommendations||[]).map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+      var rks = (aiP.risks||[]).map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+      aiBlock = '<h3 style="'+H3+'">คำแนะนำจาก AI Claude</h3>'
+        + (aiP.summary ? '<p style="'+TXT+'">'+escapeHtml(aiP.summary)+'</p>' : '')
+        + (recs ? '<p style="'+TXT+' margin-top:6px;"><b>ข้อเสนอแนะ:</b></p><ul style="font-size:11pt; font-family:Arial,sans-serif;">'+recs+'</ul>' : '')
+        + (rks ? '<p style="'+TXT+' margin-top:6px;"><b>ความเสี่ยงของแผน:</b></p><ul style="font-size:11pt; font-family:Arial,sans-serif;">'+rks+'</ul>' : '');
+    }
+    return ''
+      + '<h2 style="'+H2+'">'+escapeHtml(uc.name)+'</h2>'
+      + '<p style="'+SUB+'">แผนงานการพัฒนา AI &middot; จัดทำเมื่อ '+today+(cat ? ' &middot; '+escapeHtml(cat.aiType) : '')+'</p>'
+      + '<h3 style="'+H3+'">สรุปภาพรวมแผนงาน</h3>'
+      + summaryTable
+      + aiBlock
+      + '<h3 style="'+H3+'">ตารางแผนงานละเอียด</h3>'
+      + '<table border="1" cellpadding="6" cellspacing="0" style="'+TABLE+'">'
+      + '<tr><td style="'+TH+'">#</td><td style="'+TH+'">กิจกรรม / ระยะ</td><td style="'+TH+'">ช่วงเวลา</td><td style="'+TH+'">แรงงาน</td>'+(hasCost ? '<td style="'+TH+'">งบ (บาท)</td>' : '')+'<td style="'+TH+'">ผู้รับผิดชอบ</td><td style="'+TH+'">สิ่งส่งมอบ</td></tr>'
+      + rows + '</table>'
+      + '<h3 style="'+H3+'">จุดส่งมอบสำคัญ (Milestones)</h3>'
+      + '<table border="1" cellpadding="6" cellspacing="0" style="'+TABLE+'">'
+      + '<tr><td style="'+TH+'">กำหนด</td><td style="'+TH+'">Milestone</td><td style="'+TH+'">เฟสที่เกี่ยวข้อง</td></tr>'
+      + milestoneRows + '</table>'
+      + '<h3 style="'+H3+'">หมายเหตุ</h3>'
+      + '<p style="'+TXT+' color:#6B7280;">ผู้รับผิดชอบ แรงงาน (man-days) และงบประมาณเป็นค่าประมาณการที่คำนวณจากช่อง "ทรัพยากรและประมาณการ" ควรทบทวนกับทีมจริงก่อนใช้งาน / man-days = วันทำงาน (5 วัน/สัปดาห์) × จำนวนคนที่เกี่ยวข้องในเฟสนั้น</p>';
+  }
+
+  function exportPlanWord(uc){
+    if(!uc) return;
+    var bodyHtml = wordHeader() + buildPlanBodyInline(uc) + wordFooter();
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+      + '<head><meta charset="utf-8"><title>แผนงาน '+escapeHtml(uc.name)+'</title>'
+      + '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
+      + '</head><body style="font-family:Arial,sans-serif;">'+bodyHtml+'</body></html>';
+    var blob = new Blob(['\ufeff', html], {type:'application/msword'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'แผนงาน_' + (uc.name || 'use_case').replace(/[\\\/:*?"<>|]/g,'_') + '.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // ===== Claude AI analysis helpers =====
+  function ucContextText(uc){
+    var cat = getCategory(uc.aiType);
+    var lines = [];
+    lines.push('ชื่อ use case: ' + (uc.name||'-'));
+    lines.push('ปัญหาทางธุรกิจที่ต้องการแก้ไข: ' + (uc.problem||'-'));
+    lines.push('วิธีการเดิมที่ทำอยู่: ' + (uc.solution||'-'));
+    lines.push('Output ที่คาดหวัง: ' + (uc.output||'-'));
+    lines.push('ลักษณะงาน/ประเภท AI: ' + (cat ? (cat.label+' ('+cat.aiType+')') : 'ยังไม่ระบุ'));
+    lines.push('Control Item ของขั้นตอน (QWP): ' + (uc.control||'-'));
+    lines.push('kQI/QI ของขั้นตอนที่อ้างถึง: ' + (uc.kqi||'-'));
+    if(uc.attachRef) lines.push('เอกสารอ้างอิง: ' + uc.attachRef);
+    if(uc.attachment && !isClaudeReadable(uc.attachment)) lines.push('ชื่อไฟล์แนบ: ' + uc.attachment.name + ' (ประเภทที่อ่านไม่ได้โดยตรง)');
+    return lines.join('\n');
+  }
+
+  function isClaudeReadable(att){
+    if(!att || !att.type) return false;
+    return att.type === 'application/pdf' || att.type.indexOf('image/') === 0;
+  }
+
+  // build content array (text + optional document/image) for the API
+  function ucContentBlocks(uc, instruction){
+    var blocks = [];
+    if(uc.attachment && isClaudeReadable(uc.attachment)){
+      var b64 = String(uc.attachment.data).split(',')[1] || '';
+      if(uc.attachment.type === 'application/pdf'){
+        blocks.push({ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } });
+      } else {
+        blocks.push({ type:'image', source:{ type:'base64', media_type:uc.attachment.type, data:b64 } });
+      }
+    }
+    blocks.push({ type:'text', text: instruction });
+    return blocks;
+  }
+
+  // ===== Flow การทำงาน + n8n =====
+  // per AI-type: the AI processing node type for n8n + workflow verb
+  var FLOW_PROFILE = {
+    text:       { aiNode:'OpenAI / LLM (Chat)', aiOp:'ส่งข้อความให้ LLM ประมวลผล/ตอบ', trigger:'webhook', extra:['ดึงข้อมูลอ้างอิง (RAG)'] },
+    vision:     { aiNode:'HTTP Request → Vision API', aiOp:'วิเคราะห์รูปภาพ/ตรวจจับวัตถุ', trigger:'webhook', extra:['รับไฟล์ภาพ'] },
+    audio:      { aiNode:'HTTP Request → Speech-to-Text', aiOp:'แปลงเสียงเป็นข้อความแล้ววิเคราะห์', trigger:'webhook', extra:['รับไฟล์เสียง'] },
+    numeric:    { aiNode:'Code / HTTP → Predict API', aiOp:'พยากรณ์จากข้อมูลตัวเลข', trigger:'schedule', extra:['ดึงข้อมูลจากฐานข้อมูล'] },
+    repetitive: { aiNode:'Code (rule) + HTTP', aiOp:'ทำงานอัตโนมัติตามกฎ + AI ช่วยจุดที่ต้องตัดสินใจ', trigger:'webhook', extra:[] },
+    generative: { aiNode:'OpenAI / LLM (Generate)', aiOp:'สร้างเนื้อหา/ภาพตาม prompt', trigger:'webhook', extra:[] },
+    recommend:  { aiNode:'Code / HTTP → Recommend API', aiOp:'คำนวณรายการแนะนำ', trigger:'webhook', extra:['ดึงข้อมูลผู้ใช้/สินค้า'] },
+    imagegen:   { aiNode:'HTTP → Image Generation API', aiOp:'สร้างภาพจาก prompt', trigger:'webhook', extra:[] },
+    rag:        { aiNode:'OpenAI + Vector Store', aiOp:'ค้นเอกสารด้วย embedding แล้วให้ LLM ตอบ', trigger:'webhook', extra:['สร้าง embedding ของคำถาม','ค้น Vector DB'] },
+    knowledge:  { aiNode:'OpenAI + Vector Store', aiOp:'ตอบจากคลังความรู้ภายใน (RAG)', trigger:'webhook', extra:['ค้น Vector DB','ตรวจสิทธิ์ผู้ใช้'] },
+    finetune:   { aiNode:'HTTP → Fine-tuned Model', aiOp:'เรียกโมเดลที่ fine-tune แล้ว', trigger:'webhook', extra:[] },
+    batch:      { aiNode:'Code (loop) + AI node', aiOp:'ประมวลผลข้อมูลทีละชุด (batch)', trigger:'schedule', extra:['ดึงข้อมูลชุดใหญ่','วนลูปแบ่งชุด'] },
+    demand:     { aiNode:'Code / HTTP → Forecast API', aiOp:'พยากรณ์ความต้องการ', trigger:'schedule', extra:['ดึงข้อมูลขายย้อนหลัง'] },
+    maintenance:{ aiNode:'Code / HTTP → Predict API', aiOp:'ทำนายการเสีย/ซ่อมบำรุงจากเซ็นเซอร์', trigger:'schedule', extra:['ดึงข้อมูลเซ็นเซอร์ IoT'] },
+    anomaly:    { aiNode:'Code / HTTP → Anomaly API', aiOp:'ตรวจจับความผิดปกติ', trigger:'schedule', extra:['ดึง log/ธุรกรรม'] },
+    agent:      { aiNode:'AI Agent (LLM + Tools)', aiOp:'ให้ agent ตัดสินใจและเรียกเครื่องมือหลายขั้น', trigger:'webhook', extra:['เชื่อมเครื่องมือ/API'] }
+  };
+
+  function buildWorkflow(uc){
+    var cat = getCategory(uc.aiType);
+    var prof = (uc.aiType && FLOW_PROFILE[uc.aiType]) ? FLOW_PROFILE[uc.aiType] : { aiNode:'AI / LLM node', aiOp:'ประมวลผลด้วย AI', trigger:'webhook', extra:[] };
+    var triggerLabel = prof.trigger === 'schedule' ? 'ตั้งเวลาทำงาน (Schedule)' : 'รับคำขอเข้ามา (Trigger/Webhook)';
+    // business workflow steps
+    var steps = [];
+    steps.push({ label: triggerLabel, note: 'จุดเริ่มงาน' });
+    steps.push({ label: 'รับ Input', note: uc.problem ? ('บริบท: '+uc.problem) : 'ข้อมูลนำเข้าจากผู้ใช้/ระบบ' });
+    if(uc.solution){ steps.push({ label: 'แทนที่ขั้นตอนเดิม', note: 'เดิม: '+uc.solution }); }
+    prof.extra.forEach(function(e){ steps.push({ label: e, note: 'ขั้นเตรียมข้อมูลก่อนเข้า AI' }); });
+    steps.push({ label: 'ประมวลผลด้วย AI', note: prof.aiOp + (cat ? ' ('+cat.aiType+')' : '') });
+    steps.push({ label: 'ตรวจสอบ/จัดรูปผลลัพธ์', note: 'ตรวจความถูกต้องและจัดรูปแบบ' });
+    steps.push({ label: 'ส่ง Output', note: uc.output ? ('ผลลัพธ์: '+uc.output) : 'ส่งผลลัพธ์กลับผู้ใช้/ระบบปลายทาง' });
+    return { steps: steps, profile: prof, triggerLabel: triggerLabel };
+  }
+
+  // Build an importable n8n workflow JSON
+  var N8N_TYPE_MAP = {
+    webhook:'n8n-nodes-base.webhook',
+    scheduletrigger:'n8n-nodes-base.scheduleTrigger',
+    schedule:'n8n-nodes-base.scheduleTrigger',
+    trigger:'n8n-nodes-base.manualTrigger',
+    manualtrigger:'n8n-nodes-base.manualTrigger',
+    openai:'@n8n/n8n-nodes-langchain.openAi',
+    llm:'@n8n/n8n-nodes-langchain.openAi',
+    aiagent:'@n8n/n8n-nodes-langchain.agent',
+    agent:'@n8n/n8n-nodes-langchain.agent',
+    httprequest:'n8n-nodes-base.httpRequest',
+    http:'n8n-nodes-base.httpRequest',
+    set:'n8n-nodes-base.set',
+    if:'n8n-nodes-base.if',
+    switch:'n8n-nodes-base.switch',
+    code:'n8n-nodes-base.code',
+    function:'n8n-nodes-base.code',
+    merge:'n8n-nodes-base.merge',
+    respondtowebhook:'n8n-nodes-base.respondToWebhook',
+    respond:'n8n-nodes-base.respondToWebhook',
+    noop:'n8n-nodes-base.noOp',
+    vectorstore:'@n8n/n8n-nodes-langchain.vectorStoreInMemory',
+    embeddings:'@n8n/n8n-nodes-langchain.embeddingsOpenAi',
+    postgres:'n8n-nodes-base.postgres',
+    mysql:'n8n-nodes-base.mySql',
+    googlesheets:'n8n-nodes-base.googleSheets',
+    emailsend:'n8n-nodes-base.emailSend',
+    email:'n8n-nodes-base.emailSend',
+    slack:'n8n-nodes-base.slack',
+    telegram:'n8n-nodes-base.telegram'
+  };
+  function mapN8nType(t){
+    var key = String(t||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    return N8N_TYPE_MAP[key] || 'n8n-nodes-base.noOp';
+  }
+
+  // Build an importable n8n workflow JSON
+  function buildN8nJson(uc){
+    var cat = getCategory(uc.aiType);
+
+    // If AI analysis is available, build from the AI node list
+    if(uc.aiFlow && uc.aiFlow.n8n && uc.aiFlow.n8n.length){
+      var aNodes = [], aConn = {}, ax = 250, aprev = null;
+      uc.aiFlow.n8n.forEach(function(nd, i){
+        var nm = (nd.name || ('Node '+(i+1))).toString();
+        var base = nm, k = 2;
+        while(aNodes.some(function(n){ return n.name===nm; })){ nm = base + ' ' + k; k++; }
+        var node = { parameters:{}, name: nm, type: mapN8nType(nd.type), typeVersion: 1, position: [ax, 300] };
+        aNodes.push(node);
+        if(aprev){ if(!aConn[aprev]) aConn[aprev] = { main:[[]] }; aConn[aprev].main[0].push({ node: nm, type:'main', index:0 }); }
+        aprev = nm; ax += 220;
+      });
+      return {
+        name: 'AI Workflow - ' + (uc.name || 'use case'),
+        nodes: aNodes,
+        connections: aConn,
+        active: false,
+        settings: { executionOrder: 'v1' },
+        meta: { generatedBy: 'AI Use Case Program (Claude AI)', aiType: (cat?cat.aiType:'') }
+      };
+    }
+
+    var wf = buildWorkflow(uc);
+    var prof = wf.profile;
+    var nodes = [];
+    var connections = {};
+    var x = 250, y = 300, dx = 220;
+    var prevName = null;
+    function addNode(name, type, params, typeVersion){
+      var node = {
+        parameters: params || {},
+        name: name,
+        type: type,
+        typeVersion: typeVersion || 1,
+        position: [x, y]
+      };
+      nodes.push(node);
+      if(prevName){
+        if(!connections[prevName]) connections[prevName] = { main: [[]] };
+        connections[prevName].main[0].push({ node: name, type: 'main', index: 0 });
+      }
+      prevName = name;
+      x += dx;
+      return node;
+    }
+    // 1) Trigger
+    if(prof.trigger === 'schedule'){
+      addNode('Schedule Trigger', 'n8n-nodes-base.scheduleTrigger', { rule: { interval: [{ field: 'days', daysInterval: 1 }] } }, 1.1);
+    } else {
+      addNode('Webhook', 'n8n-nodes-base.webhook', { httpMethod: 'POST', path: (uc.name||'usecase').toString().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40) || 'ai-usecase', responseMode: 'lastNode' }, 1.1);
+    }
+    // 2) prep / extra nodes
+    (prof.extra||[]).forEach(function(e){
+      addNode(e, 'n8n-nodes-base.noOp', { });
+    });
+    // 3) AI processing node
+    var aiParams, aiType, aiTV;
+    if(uc.aiType==='text' || uc.aiType==='generative' || uc.aiType==='rag' || uc.aiType==='knowledge' || uc.aiType==='agent'){
+      aiType = '@n8n/n8n-nodes-langchain.openAi';
+      aiTV = 1.3;
+      aiParams = { resource: 'chat', operation: 'message', modelId: 'gpt-4o-mini', messages: { values: [ { role: 'system', content: 'คุณเป็นผู้ช่วยสำหรับ use case: '+(uc.name||'') + (uc.output ? ('\nผลลัพธ์ที่ต้องการ: '+uc.output) : '') }, { role: 'user', content: '={{ $json.input }}' } ] } };
+    } else {
+      aiType = 'n8n-nodes-base.httpRequest';
+      aiTV = 4.2;
+      aiParams = { method: 'POST', url: 'https://YOUR-AI-ENDPOINT/predict', sendBody: true, bodyParameters: { parameters: [ { name: 'data', value: '={{ $json }}' } ] } };
+    }
+    addNode(prof.aiNode + ' (AI)', aiType, aiParams, aiTV);
+    // 4) format / respond
+    addNode('จัดรูปผลลัพธ์', 'n8n-nodes-base.set', { assignments: { assignments: [ { name: 'output', value: '={{ $json }}', type: 'string' } ] } }, 3.4);
+    if(prof.trigger !== 'schedule'){
+      addNode('ตอบกลับ (Respond)', 'n8n-nodes-base.respondToWebhook', { respondWith: 'json' }, 1.1);
+    } else {
+      addNode('บันทึก/ส่งต่อผลลัพธ์', 'n8n-nodes-base.noOp', { });
+    }
+    return {
+      name: 'AI Workflow - ' + (uc.name || 'use case'),
+      nodes: nodes,
+      connections: connections,
+      active: false,
+      settings: { executionOrder: 'v1' },
+      meta: { generatedBy: 'AI Use Case Program', aiType: (cat?cat.aiType:'') }
+    };
+  }
+
+  function openFlow(id){
+    var uc = useCases.find(function(u){ return u.id===id; });
+    if(!uc) return;
+    currentDocId = id;
+    document.getElementById('flow-content').innerHTML = buildFlowBody(uc);
+    bindFlowAnalyzeBtn();
+    document.getElementById('flow-modal').classList.add('open');
+  }
+  function closeFlow(){
+    document.getElementById('flow-modal').classList.remove('open');
+  }
+
+  function bindFlowAnalyzeBtn(){
+    var btn = document.getElementById('flow-ai-btn');
+    if(btn) btn.onclick = function(){ analyzeFlowAI(); };
+  }
+
+  async function analyzeFlowAI(){
+    var uc = useCases.find(function(u){ return u.id===currentDocId; });
+    if(!uc) return;
+    var statusEl = document.getElementById('flow-ai-status');
+    var btn = document.getElementById('flow-ai-btn');
+    if(btn){ btn.disabled = true; }
+    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์ด้วย AI Claude...'; }
+    var systemPrompt = 'คุณเป็นผู้เชี่ยวชาญด้านการออกแบบระบบ AI และ automation (n8n) ในองค์กร ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown';
+    var instruction = 'วิเคราะห์ข้อมูล use case ต่อไปนี้ (รวมเอกสารแนบถ้ามี) แล้วออกแบบ (1) Flow การทำงานเชิงธุรกิจ และ (2) โครงสร้าง workflow n8n ที่เหมาะสม\n\n'
+      + ucContextText(uc) + '\n\n'
+      + 'ตอบกลับเป็น JSON เท่านั้น โครงสร้าง:\n'
+      + '{"workflow":[{"label":"ชื่อขั้นตอนสั้นๆ ภาษาไทย","note":"คำอธิบายสั้นๆ"}],'
+      + '"n8n":[{"name":"ชื่อ node ภาษาไทยหรืออังกฤษ","type":"ประเภท n8n เช่น webhook, openAi, httpRequest, set, if, code, scheduleTrigger, respondToWebhook"}]}\n'
+      + 'workflow ควรมี 5-9 ขั้นตอน, n8n ควรมี 4-8 nodes โดยขั้นตอนต้องอิงปัญหา วิธีเดิม output และ control item/KQI ที่ให้มา';
+    try {
+      var text = await callClaude(systemPrompt, ucContentBlocks(uc, instruction));
+      var parsed = parseJsonLoose(text);
+      if(!parsed || !parsed.workflow || !parsed.n8n) throw new Error('bad shape');
+      uc.aiFlow = { workflow: parsed.workflow, n8n: parsed.n8n, at: new Date().toISOString() };
+      await saveData();
+      document.getElementById('flow-content').innerHTML = buildFlowBody(uc);
+      bindFlowAnalyzeBtn();
+    } catch(e){
+      if(statusEl){
+        statusEl.style.color = '#A32D2D';
+        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ (ใช้ได้เฉพาะเมื่อเปิดในแอป Claude) — แสดงผลแบบ template แทน';
+      }
+      if(btn){ btn.disabled = false; }
+    }
+  }
+
+  function buildFlowBody(uc){
+    var cat = getCategory(uc.aiType);
+    var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
+    var ai = uc.aiFlow || null;
+    var wf = buildWorkflow(uc);
+    var n8n = buildN8nJson(uc);
+    // choose source: AI if available, else template
+    var wfSteps = ai ? ai.workflow.map(function(s){ return { label: s.label||'', note: s.note||'' }; }) : wf.steps;
+    var n8nList = ai ? ai.n8n.map(function(nd){ return { name: nd.name||'', type: nd.type||'' }; }) : n8n.nodes.map(function(node){ return { name: node.name, type: node.type.replace('@n8n/n8n-nodes-langchain.','').replace('n8n-nodes-base.','') }; });
+    var flowSteps = wfSteps.map(function(s, i){
+      return '<div class="flow-node">'
+        + '<div class="flow-node-num">'+(i+1)+'</div>'
+        + '<div class="flow-node-body"><p class="flow-node-title">'+escapeHtml(s.label)+'</p>'
+        + (s.note ? '<p class="flow-node-note">'+escapeHtml(s.note)+'</p>' : '')
+        + '</div></div>'
+        + (i < wfSteps.length-1 ? '<div class="flow-arrow">↓</div>' : '');
+    }).join('');
+    var n8nNodes = n8nList.map(function(node, i){
+      return '<div class="n8n-node">'
+        + '<p class="n8n-node-name">'+escapeHtml(node.name)+'</p>'
+        + '<p class="n8n-node-type">'+escapeHtml(node.type)+'</p>'
+        + '</div>'
+        + (i < n8nList.length-1 ? '<div class="n8n-conn">→</div>' : '');
+    }).join('');
+    var inputsTable = '<table class="doc-table">'
+      + '<tr><th style="width:30%">ปัญหาทางธุรกิจ</th><td>'+fillOrDash(uc.problem)+'</td></tr>'
+      + '<tr><th>วิธีการเดิมที่ทำอยู่</th><td>'+fillOrDash(uc.solution)+'</td></tr>'
+      + '<tr><th>Output ที่คาดหวัง</th><td>'+fillOrDash(uc.output)+'</td></tr>'
+      + '<tr><th>ลักษณะงาน / ประเภท AI</th><td>'+(cat ? escapeHtml(cat.label)+' → '+escapeHtml(cat.aiType) : '<span style="color:var(--text-muted);">ยังไม่ระบุ</span>')+'</td></tr>'
+      + '<tr><th>Control Item (QWP)</th><td>'+fillOrDash(uc.control)+'</td></tr>'
+      + '<tr><th>kQI / QI ของขั้นตอน</th><td>'+fillOrDash(uc.kqi)+'</td></tr>'
+      + '<tr><th>เอกสารแนบ</th><td>'+((uc.attachment||uc.attachRef) ? (escapeHtml((uc.attachment?uc.attachment.name:'')+(uc.attachment&&uc.attachRef?' / ':'')+(uc.attachRef||''))) : '<span style="color:var(--text-muted);">-</span>')+'</td></tr>'
+      + '</table>';
+    var sourceBadge = ai
+      ? '<span style="font-size:12px; background:var(--teal-light); color:var(--teal); padding:3px 10px; border-radius:6px;">วิเคราะห์โดย AI Claude</span>'
+      : '<span style="font-size:12px; background:var(--bg); color:var(--text-muted); padding:3px 10px; border-radius:6px;">วิเคราะห์แบบ template</span>';
+    var aiBar = '<div class="no-print" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;">'
+      + '<button class="btn-primary" id="flow-ai-btn">วิเคราะห์ด้วย AI Claude</button>'
+      + sourceBadge
+      + '<span class="status" id="flow-ai-status" style="height:auto;"></span></div>';
+    return ''
+      + '<div style="border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:16px;"><img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:40px; width:auto;"></div>'
+      + '<h2>'+escapeHtml(uc.name)+'</h2>'
+      + '<p class="doc-sub">Flow การทำงาน + n8n &middot; วิเคราะห์เมื่อ '+today+'</p>'
+      + aiBar
+      + '<div class="doc-section"><h3>ข้อมูลที่ใช้วิเคราะห์</h3>'+inputsTable+'</div>'
+      + '<div class="doc-section"><h3>Flow การทำงาน (Business Workflow)</h3>'
+      + '<div class="flow-diagram">'+flowSteps+'</div></div>'
+      + '<div class="doc-section"><h3>Flow โปรแกรม n8n (Node Diagram)</h3>'
+      + '<p class="doc-text" style="margin-bottom:10px;">โครงสร้าง workflow สำหรับสร้างใน n8n — กดปุ่ม "ดาวน์โหลด n8n JSON" ด้านบนเพื่อนำไป import เข้า n8n ได้ทันที (เมนู Import from File)</p>'
+      + '<div class="n8n-diagram">'+n8nNodes+'</div></div>'
+      + '<div class="doc-section"><h3>หมายเหตุ</h3><p class="doc-text">'
+      + (ai ? 'Flow นี้วิเคราะห์โดย AI Claude จากข้อมูล use case และเอกสารแนบ ' : 'Flow นี้สร้างจาก template ตามประเภท AI (กดปุ่มด้านบนเพื่อวิเคราะห์ด้วย AI Claude เมื่อเปิดในแอป Claude) ')
+      + 'ควรปรับ node AI, endpoint, โมเดล และ credential ให้ตรงกับระบบจริงก่อนใช้งานใน n8n</p></div>'
+      + '<div class="doc-footer-bar"><span>&ldquo; Designed for your identity. &rdquo;</span><span class="brand">Polymate <small>IT Solutions</small></span></div>';
+  }
+
+  function exportN8nJson(uc){
+    if(!uc) return;
+    var json = JSON.stringify(buildN8nJson(uc), null, 2);
+    var blob = new Blob([json], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'n8n_' + (uc.name || 'use_case').replace(/[\\\/:*?"<>|]/g,'_') + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function buildDocBodyInline(uc){
+    var score = computeScore(uc);
+    var p = priorityInfo(score);
+    var cat = getCategory(uc.aiType);
+    var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
+    var TD = 'border:1px solid #CCCCCC; padding:6px 10px; text-align:left; font-size:11pt; font-family:Arial,sans-serif;';
+    var TH = TD + 'background-color:#E1F5EE; color:#085041; font-weight:bold;';
+    var H2 = 'color:#13294B; font-size:18pt; font-family:Arial,sans-serif; margin:0 0 4px;';
+    var SUB = 'color:#6B7280; font-size:10pt; font-family:Arial,sans-serif; margin:0 0 16px;';
+    var H3 = 'color:#0F6E56; font-size:13pt; font-family:Arial,sans-serif; border-bottom:1px solid #CCCCCC; padding-bottom:4px; margin:18px 0 8px;';
+    var TXT = 'font-size:11pt; font-family:Arial,sans-serif; line-height:1.6; color:#1F2430; margin:0;';
+    var TABLE = 'width:100%; border-collapse:collapse; margin-bottom:6px;';
+    function tbl(rows){
+      return '<table border="1" cellpadding="6" cellspacing="0" style="'+TABLE+'">'+rows+'</table>';
+    }
+    function row2(label, value, isHeader){
+      var s1 = isHeader ? TH : TD;
+      return '<tr><td style="'+s1+' width:34%;">'+escapeHtml(label)+'</td><td style="'+TD+'">'+value+'</td></tr>';
+    }
+    return ''
+      + '<h2 style="'+H2+'">'+escapeHtml(uc.name)+'</h2>'
+      + '<p style="'+SUB+'">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
+      + '<h3 style="'+H3+'">1. ข้อมูลทั่วไป</h3>'
+      + tbl(row2('แผนก / หน่วยงาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ', fillOrDash(uc.owner), true))
+      + '<h3 style="'+H3+'">2. ปัญหาทางธุรกิจ</h3>'
+      + '<p style="'+TXT+'">'+fillOrDash(uc.problem)+'</p>'
+      + '<h3 style="'+H3+'">3. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + tbl(
+          row2('Output ที่คาดหวัง', nl2br(uc.output,'color:#6B7280;'), true)
+          + row2('จำนวน Users / วัน', fillOrDash(uc.users), true)
+          + row2('ภาษาที่ต้องการ', fillOrDash(uc.language), true)
+          + row2('ระดับความสำคัญของข้อมูล', fillOrDash(uc.dataSensitivity), true)
+          + row2('Latency ที่รับได้', fillOrDash(uc.latency), true)
+          + row2('Availability ที่ต้องการ', fillOrDash(uc.availability), true)
+        )
+      + '<h3 style="'+H3+'">4. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + tbl(
+          row2('ข้อมูลอ้างอิงจาก QWP', fillOrDash(uc.qwp), true)
+          + row2('ขั้นตอนการทำงานที่อ้างอิง', nl2br(uc.refStep,'color:#6B7280;'), true)
+          + row2('Control Item ของขั้นตอน', nl2br(uc.control,'color:#6B7280;'), true)
+          + row2('KQI / QI ของขั้นตอนที่อ้างถึง', nl2br(uc.kqi,'color:#6B7280;'), true)
+        )
+      + '<h3 style="'+H3+'">5. วิธีการเดิมที่ทำอยู่</h3>'
+      + '<p style="'+TXT+'">'+fillOrDash(uc.solution)+'</p>'
+      + ((uc.attachment || uc.attachRef) ? '<p style="'+TXT+' margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? escapeHtml(uc.attachment.name) : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
+      + (cat ? '<p style="'+TXT+' margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '<h3 style="'+H3+'">6. Spec Hardware ที่ใช้ทำ AI</h3><p style="'+TXT+'">'+nl2br(uc.hardware,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">7. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''))
+      + '<h3 style="'+H3+'">8. การประเมินและให้คะแนน</h3>'
+      + tbl(
+          '<tr><td style="'+TH+'">เกณฑ์</td><td style="'+TH+'">น้ำหนัก</td><td style="'+TH+'">คะแนน (1-5)</td></tr>'
+          + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+uc.impact+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความเป็นไปได้ทางเทคนิค</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+uc.feasibility+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความพร้อมของข้อมูล</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+uc.data+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความเสี่ยง / ความซับซ้อน</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+uc.risk+'</td></tr>'
+        )
+      + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
+      + '<h3 style="'+H3+'">9. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">10. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">11. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">12. ผลตอบแทนการลงทุน (ROI)</h3><p style="'+TXT+'">'+nl2br(uc.roi,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">13. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p style="'+TXT+'">'+nl2br(uc.recommendation,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">14. การอนุมัติ</h3>'
+      + tbl(
+          '<tr><td style="'+TH+' width:50%;">ผู้จัดทำ</td><td style="'+TH+' width:50%;">ผู้พิจารณา / อนุมัติ</td></tr>'
+          + '<tr><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</td><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</td></tr>'
+          + '<tr><td style="'+TD+'">วันที่: '+today+'</td><td style="'+TD+'">วันที่:</td></tr>'
+          + '<tr><td style="'+TD+'">ลงชื่อ:</td><td style="'+TD+'">ลงชื่อ:</td></tr>'
+        );
+  }
+
+  function exportDocWord(uc){
+    if(!uc) return;
+    var bodyHtml = wordHeader() + buildDocBodyInline(uc) + wordFooter();
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+      + '<head><meta charset="utf-8"><title>'+escapeHtml(uc.name)+'</title>'
+      + '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
+      + '</head><body style="font-family:Arial,sans-serif;">'+bodyHtml+'</body></html>';
+    var blob = new Blob(['\ufeff', html], {type:'application/msword'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = (uc.name || 'use_case').replace(/[\\\/:*?"<>|]/g,'_') + '.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function askDelete(btn){
+    var card = btn.closest('.card');
+    var id = btn.getAttribute('data-id');
+    var actions = card.querySelector('.card-actions');
+    var original = actions.innerHTML;
+    actions.innerHTML = '<div class="confirm-row">ลบ?'
+      + '<button class="btn-ghost btn-danger" id="confirm-yes">ใช่</button>'
+      + '<button class="btn-ghost" id="confirm-no">ไม่</button></div>';
+    document.getElementById('confirm-yes').onclick = function(){
+      useCases = useCases.filter(function(u){ return u.id!==id; });
+      saveData();
+      renderList();
+    };
+    document.getElementById('confirm-no').onclick = function(){
+      actions.innerHTML = original;
+      bindCardEvents();
+    };
+  }
+
+  function openAdd(){
+    editingId = null;
+    document.getElementById('form-title').textContent = 'เพิ่ม use case ใหม่';
+    document.getElementById('f-name').value='';
+    document.getElementById('f-dept').value='';
+    document.getElementById('f-owner').value='';
+    document.getElementById('f-problem').value='';
+    document.getElementById('f-solution').value='';
+    document.getElementById('f-aitype').value='';
+    document.getElementById('analyze-status').textContent='';
+    document.getElementById('f-hardware').value='';
+    document.getElementById('autofill-status').textContent='';
+    document.getElementById('f-risks').value='';
+    document.getElementById('f-resources').value='';
+    document.getElementById('f-kpi').value='';
+    document.getElementById('f-roi').value='';
+    document.getElementById('f-recommendation').value='';
+    document.getElementById('f-preparedby').value='';
+    document.getElementById('f-approver').value='';
+    document.getElementById('f-output').value='';
+    document.getElementById('f-users').value='';
+    document.getElementById('f-language').value='';
+    document.getElementById('f-datasensitivity').value='';
+    document.getElementById('f-latency').value='';
+    document.getElementById('f-availability').value='';
+    document.getElementById('f-qwp').value='';
+    document.getElementById('f-refstep').value='';
+    document.getElementById('f-control').value='';
+    document.getElementById('f-kqi2').value='';
+    document.getElementById('qwp-error').style.display='none';
+    document.getElementById('basic-error').style.display='none';
+    document.getElementById('f-attach-file').value='';
+    document.getElementById('f-attach-ref').value='';
+    document.getElementById('f-attach-status').textContent='';
+    currentAttachment = null;
+    setSliders(3,3,3,3);
+    document.getElementById('f-error').style.display='none';
+    document.getElementById('status-msg').textContent='';
+    document.getElementById('form-panel').classList.add('open');
+    document.getElementById('f-name').focus();
+  }
+
+  function openEdit(id){
+    var uc = useCases.find(function(u){ return u.id===id; });
+    if(!uc) return;
+    editingId = id;
+    document.getElementById('form-title').textContent = 'แก้ไข use case';
+    document.getElementById('f-name').value = uc.name;
+    document.getElementById('f-dept').value = uc.dept||'';
+    document.getElementById('f-owner').value = uc.owner||'';
+    document.getElementById('f-problem').value = uc.problem||'';
+    document.getElementById('f-solution').value = uc.solution||'';
+    document.getElementById('f-aitype').value = uc.aiType||'';
+    document.getElementById('analyze-status').textContent='';
+    document.getElementById('autofill-status').textContent='';
+    document.getElementById('f-hardware').value = uc.hardware||'';
+    document.getElementById('f-risks').value = uc.risks||'';
+    document.getElementById('f-resources').value = uc.resources||'';
+    document.getElementById('f-kpi').value = uc.kpi||'';
+    document.getElementById('f-roi').value = uc.roi||'';
+    document.getElementById('f-recommendation').value = uc.recommendation||'';
+    document.getElementById('f-preparedby').value = uc.preparedBy||'';
+    document.getElementById('f-approver').value = uc.approver||'';
+    document.getElementById('f-output').value = uc.output||'';
+    document.getElementById('f-users').value = uc.users||'';
+    document.getElementById('f-language').value = uc.language||'';
+    document.getElementById('f-datasensitivity').value = uc.dataSensitivity||'';
+    document.getElementById('f-latency').value = uc.latency||'';
+    document.getElementById('f-availability').value = uc.availability||'';
+    document.getElementById('f-qwp').value = uc.qwp||'';
+    document.getElementById('f-refstep').value = uc.refStep||'';
+    document.getElementById('f-control').value = uc.control||'';
+    document.getElementById('f-kqi2').value = uc.kqi||'';
+    document.getElementById('qwp-error').style.display='none';
+    document.getElementById('basic-error').style.display='none';
+    document.getElementById('f-attach-file').value='';
+    document.getElementById('f-attach-ref').value = uc.attachRef||'';
+    currentAttachment = uc.attachment || null;
+    document.getElementById('f-attach-status').style.color = 'var(--teal)';
+    document.getElementById('f-attach-status').textContent = currentAttachment ? ('ไฟล์แนบปัจจุบัน: ' + currentAttachment.name + ' (เลือกไฟล์ใหม่เพื่อแทนที่)') : '';
+    setSliders(uc.impact, uc.feasibility, uc.data, uc.risk);
+    document.getElementById('f-error').style.display='none';
+    document.getElementById('status-msg').textContent='';
+    document.getElementById('form-panel').classList.add('open');
+    document.getElementById('form-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  var SLIDER_LEVELS = {
+    impact: {
+      title: 'ผลกระทบทางธุรกิจ',
+      levels: {
+        1: 'น้อยมาก — ช่วยงานเล็ก ๆ ภายในทีมเดียว แทบไม่กระทบรายได้ ต้นทุน หรือลูกค้า ถึงไม่ทำก็แทบไม่ต่าง',
+        2: 'น้อย — ช่วยให้สะดวกขึ้นบ้าง ลดงานซ้ำเล็กน้อย แต่ยังวัดเป็นตัวเงินได้ยาก',
+        3: 'ปานกลาง — เห็นผลชัดในหน่วยงาน เช่น ประหยัดเวลา/ต้นทุนพอสมควร หรือเพิ่มความพึงพอใจลูกค้าได้บ้าง',
+        4: 'สูง — ส่งผลต่อตัวเลขสำคัญของธุรกิจอย่างชัดเจน เช่น เพิ่มยอดขาย ลดต้นทุน หรือยกระดับบริการหลายหน่วยงาน',
+        5: 'สูงมาก — เปลี่ยนเกมธุรกิจ กระทบรายได้/ต้นทุน/ความสามารถแข่งขันในระดับองค์กรอย่างมีนัยสำคัญ'
+      }
+    },
+    feasibility: {
+      title: 'ความเป็นไปได้ทางเทคนิค',
+      levels: {
+        1: 'ยากมาก — เทคโนโลยียังไม่พร้อม ทีมไม่มีความเชี่ยวชาญ ต้องวิจัย/ทดลองหนักก่อนเริ่มได้',
+        2: 'ยาก — พอมีแนวทาง แต่ซับซ้อน ต้องหาคนหรือเครื่องมือเพิ่ม และมีความไม่แน่นอนสูง',
+        3: 'ปานกลาง — ทำได้ด้วยเทคโนโลยีที่มี แต่ต้องใช้ความพยายามและเวลาพอสมควร',
+        4: 'ทำได้ดี — มีเครื่องมือ/บริการสำเร็จรูปรองรับ ทีมพอมีประสบการณ์ เริ่มได้ไม่ยาก',
+        5: 'ง่าย — เทคโนโลยีพร้อมใช้ทันที มีตัวอย่าง/บริการสำเร็จรูปชัดเจน ทีมทำได้เลย'
+      }
+    },
+    data: {
+      title: 'ความพร้อมของข้อมูล',
+      levels: {
+        1: 'แทบไม่มี — ยังไม่มีข้อมูลที่ใช้ได้ ต้องเริ่มเก็บใหม่ทั้งหมด',
+        2: 'น้อย — มีข้อมูลบ้างแต่กระจัดกระจาย ไม่ครบ คุณภาพต่ำ ต้องทำความสะอาดมาก',
+        3: 'ปานกลาง — มีข้อมูลพอเริ่มได้ แต่ต้องจัดระเบียบ/เติมเต็มบางส่วนก่อนใช้จริง',
+        4: 'ดี — ข้อมูลค่อนข้างครบ คุณภาพใช้ได้ เข้าถึงได้ ต้องเตรียมเพิ่มเล็กน้อย',
+        5: 'พร้อมมาก — ข้อมูลครบถ้วน สะอาด เป็นระเบียบ เข้าถึงได้ทันที พร้อมนำไปใช้เลย'
+      }
+    },
+    risk: {
+      title: 'ความเสี่ยง / ความซับซ้อน',
+      levels: {
+        1: 'น้อยมาก — งานตรงไปตรงมา ผลกระทบถ้าผิดพลาดต่ำ ควบคุมได้ง่าย',
+        2: 'น้อย — มีจุดต้องระวังบ้าง แต่จัดการได้ไม่ยาก',
+        3: 'ปานกลาง — มีความซับซ้อนหรือความเสี่ยงพอสมควร เช่น เกี่ยวกับข้อมูลสำคัญหรือหลายระบบ ต้องวางแผนรับมือ',
+        4: 'สูง — ซับซ้อน เกี่ยวข้องหลายฝ่าย/ระบบ หรือมีความเสี่ยงด้านข้อมูล/กฎระเบียบที่ต้องจัดการอย่างรอบคอบ',
+        5: 'สูงมาก — ซับซ้อนมากหรือเสี่ยงสูง เช่น กระทบข้อมูลลับ ความปลอดภัย หรือการปฏิบัติตามกฎหมาย ต้องมีมาตรการเข้มงวด'
+      }
+    }
+  };
+
+  function updateSliderDesc(id, val){
+    var cfg = SLIDER_LEVELS[id];
+    var el = document.getElementById('f-'+id+'-desc');
+    if(!cfg || !el) return;
+    el.textContent = 'คะแนน ' + val + ' — ' + cfg.levels[val];
+  }
+
+  function setSliders(i,f,d,r){
+    document.getElementById('f-impact').value=i; document.getElementById('f-impact-out').textContent=i; updateSliderDesc('impact', i);
+    document.getElementById('f-feasibility').value=f; document.getElementById('f-feasibility-out').textContent=f; updateSliderDesc('feasibility', f);
+    document.getElementById('f-data').value=d; document.getElementById('f-data-out').textContent=d; updateSliderDesc('data', d);
+    document.getElementById('f-risk').value=r; document.getElementById('f-risk-out').textContent=r; updateSliderDesc('risk', r);
+  }
+
+  function closeForm(){
+    document.getElementById('form-panel').classList.remove('open');
+    editingId = null;
+  }
+
+  async function handleSave(){
+    var name = document.getElementById('f-name').value.trim();
+    if(!name){
+      document.getElementById('f-error').style.display='block';
+      document.getElementById('f-name').focus();
+      return;
+    }
+    document.getElementById('f-error').style.display='none';
+
+    var deptVal = document.getElementById('f-dept').value.trim();
+    var ownerVal = document.getElementById('f-owner').value.trim();
+    var problemVal = document.getElementById('f-problem').value.trim();
+    if(!deptVal || !ownerVal || !problemVal){
+      document.getElementById('basic-error').style.display='block';
+      var firstB = !deptVal ? 'f-dept' : (!ownerVal ? 'f-owner' : 'f-problem');
+      var elB = document.getElementById(firstB);
+      elB.scrollIntoView({behavior:'smooth', block:'center'});
+      elB.focus();
+      return;
+    }
+    document.getElementById('basic-error').style.display='none';
+
+    var qwpVal = document.getElementById('f-qwp').value.trim();
+    var refStepVal = document.getElementById('f-refstep').value.trim();
+    var controlVal = document.getElementById('f-control').value.trim();
+    var kqiVal = document.getElementById('f-kqi2').value.trim();
+    if(!qwpVal || !refStepVal || !controlVal || !kqiVal){
+      document.getElementById('qwp-details').open = true;
+      document.getElementById('qwp-error').style.display='block';
+      var firstEmpty = !qwpVal ? 'f-qwp' : (!refStepVal ? 'f-refstep' : (!controlVal ? 'f-control' : 'f-kqi2'));
+      var el = document.getElementById(firstEmpty);
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.focus();
+      return;
+    }
+    document.getElementById('qwp-error').style.display='none';
+
+    var data = {
+      id: editingId || genId(),
+      name: name,
+      dept: deptVal,
+      owner: ownerVal,
+      problem: problemVal,
+      solution: document.getElementById('f-solution').value.trim(),
+      attachment: currentAttachment,
+      attachRef: document.getElementById('f-attach-ref').value.trim(),
+      aiType: document.getElementById('f-aitype').value,
+      hardware: document.getElementById('f-hardware').value.trim(),
+      impact: Number(document.getElementById('f-impact').value),
+      feasibility: Number(document.getElementById('f-feasibility').value),
+      data: Number(document.getElementById('f-data').value),
+      risk: Number(document.getElementById('f-risk').value),
+      risks: document.getElementById('f-risks').value.trim(),
+      resources: document.getElementById('f-resources').value.trim(),
+      kpi: document.getElementById('f-kpi').value.trim(),
+      roi: document.getElementById('f-roi').value.trim(),
+      recommendation: document.getElementById('f-recommendation').value.trim(),
+      preparedBy: document.getElementById('f-preparedby').value.trim(),
+      approver: document.getElementById('f-approver').value.trim(),
+      output: document.getElementById('f-output').value.trim(),
+      users: document.getElementById('f-users').value.trim(),
+      language: document.getElementById('f-language').value.trim(),
+      dataSensitivity: document.getElementById('f-datasensitivity').value,
+      latency: document.getElementById('f-latency').value,
+      availability: document.getElementById('f-availability').value,
+      qwp: qwpVal,
+      refStep: refStepVal,
+      control: controlVal,
+      kqi: kqiVal
+    };
+    if(editingId){
+      var existing = useCases.find(function(u){ return u.id===editingId; });
+      if(existing){ if(existing.aiFlow) data.aiFlow = existing.aiFlow; if(existing.aiPlan) data.aiPlan = existing.aiPlan; }
+      useCases = useCases.map(function(u){ return u.id===editingId ? data : u; });
+    } else {
+      useCases.push(data);
+    }
+    var ok = await saveData();
+    if(!ok && data.attachment){
+      // likely too large for storage — drop embedded file, keep name as reference note
+      var droppedName = data.attachment.name;
+      data.attachment = null;
+      if(!data.attachRef){ data.attachRef = '(ไฟล์ "'+droppedName+'" ใหญ่เกินกว่าที่จะเก็บฝังได้ กรุณาแนบลิงก์อ้างอิงแทน)'; }
+      currentAttachment = null;
+      ok = await saveData();
+      if(ok){
+        document.getElementById('f-attach-status').style.color = '#A32D2D';
+        document.getElementById('f-attach-status').textContent = 'พื้นที่จัดเก็บไม่พอสำหรับไฟล์แนบ จึงบันทึกเฉพาะชื่อไฟล์เป็นข้อมูลอ้างอิง';
+      }
+    }
+    if(!ok){
+      document.getElementById('status-msg').style.color = '#A32D2D';
+      document.getElementById('status-msg').textContent = 'บันทึกไม่สำเร็จ (พื้นที่จัดเก็บอาจเต็ม) — ลองลดขนาด/นำไฟล์แนบออก';
+      renderList();
+      return;
+    }
+    document.getElementById('status-msg').style.color = 'var(--teal)';
+    document.getElementById('status-msg').textContent = 'บันทึกแล้ว';
+    renderList();
+    setTimeout(closeForm, 400);
+  }
+
+  function exportCsv(){
+    if(useCases.length===0) return;
+    var headers = ['ชื่อ use case','แผนก','ผู้รับผิดชอบ','ปัญหาทางธุรกิจ','Output ที่คาดหวัง','จำนวน Users/วัน','ภาษา','ระดับความสำคัญข้อมูล','Latency','Availability','QWP','ขั้นตอนที่อ้างอิง','Control Item','KQI/QI ของขั้นตอน','วิธีการเดิมที่ทำอยู่','เอกสารแนบ','ลักษณะงาน/ข้อมูล','AI ที่แนะนำ','Spec Hardware','ผลกระทบทางธุรกิจ','ความเป็นไปได้ทางเทคนิค','ความพร้อมของข้อมูล','ความเสี่ยง','คะแนนรวม','ระดับความสำคัญ','ความเสี่ยงและการลดความเสี่ยง','ทรัพยากรและประมาณการ','KQI (ตัวชี้วัด)','ROI','ข้อเสนอแนะ','ผู้จัดทำ','ผู้อนุมัติ'];
+    var rows = useCases.map(function(u){
+      var score = computeScore(u);
+      var p = priorityInfo(score);
+      var cat = getCategory(u.aiType);
+      var attachText = (u.attachment ? u.attachment.name : '') + (u.attachment && u.attachRef ? ' / ' : '') + (u.attachRef || '');
+      return [u.name,u.dept,u.owner,u.problem,u.output,u.users,u.language,u.dataSensitivity,u.latency,u.availability,u.qwp,u.refStep,u.control,u.kqi,u.solution,attachText,(cat?cat.label:''),(cat?cat.aiType:''),u.hardware,u.impact,u.feasibility,u.data,u.risk,score,p.label,u.risks,u.resources,u.kpi,u.roi,u.recommendation,u.preparedBy,u.approver]
+        .map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
+    });
+    var csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'ai_use_cases.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function askClearAll(){
+    var btn = document.getElementById('clear-btn');
+    var parent = btn.parentElement;
+    var original = btn.outerHTML;
+    var wrap = document.createElement('span');
+    wrap.className = 'confirm-row';
+    wrap.innerHTML = 'ล้างข้อมูลทั้งหมด?'
+      + '<button class="btn-ghost btn-danger" id="clear-yes">ใช่</button>'
+      + '<button class="btn-ghost" id="clear-no">ไม่</button>';
+    btn.replaceWith(wrap);
+    document.getElementById('clear-yes').onclick = async function(){
+      useCases = [];
+      await saveData();
+      renderList();
+      wrap.replaceWith(htmlToEl(original));
+      document.getElementById('clear-btn').onclick = askClearAll;
+    };
+    document.getElementById('clear-no').onclick = function(){
+      wrap.replaceWith(htmlToEl(original));
+      document.getElementById('clear-btn').onclick = askClearAll;
+    };
+  }
+  function htmlToEl(html){
+    var t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+
+  ['impact','feasibility','data','risk'].forEach(function(id){
+    document.getElementById('f-'+id).addEventListener('input', function(e){
+      document.getElementById('f-'+id+'-out').textContent = e.target.value;
+      updateSliderDesc(id, e.target.value);
+    });
+  });
+
+  document.getElementById('open-add-btn').onclick = openAdd;
+  document.getElementById('cancel-btn').onclick = closeForm;
+  document.getElementById('save-btn').onclick = handleSave;
+  document.getElementById('filter-priority').onchange = renderList;
+  document.getElementById('sort-by').onchange = renderList;
+  document.getElementById('export-btn').onclick = exportCsv;
+  document.getElementById('clear-btn').onclick = askClearAll;
+  function printWithClass(cls){
+    document.body.classList.add(cls);
+    var clear = function(){ document.body.classList.remove(cls); window.removeEventListener('afterprint', clear); };
+    window.addEventListener('afterprint', clear);
+    window.print();
+  }
+  document.getElementById('doc-print-btn').onclick = function(){ printWithClass('printing-doc'); };
+  document.getElementById('doc-word-btn').onclick = function(){
+    var uc = useCases.find(function(u){ return u.id===currentDocId; });
+    exportDocWord(uc);
+  };
+  document.getElementById('doc-close-btn').onclick = closeDoc;
+  document.getElementById('doc-modal').onclick = function(e){ if(e.target.id==='doc-modal') closeDoc(); };
+  document.getElementById('plan-print-btn').onclick = function(){ printWithClass('printing-plan'); };
+  document.getElementById('plan-word-btn').onclick = function(){
+    var uc = useCases.find(function(u){ return u.id===currentDocId; });
+    exportPlanWord(uc);
+  };
+  document.getElementById('plan-close-btn').onclick = closePlan;
+  document.getElementById('plan-modal').onclick = function(e){ if(e.target.id==='plan-modal') closePlan(); };
+  document.getElementById('flow-print-btn').onclick = function(){ printWithClass('printing-flow'); };
+  document.getElementById('flow-json-btn').onclick = function(){
+    var uc = useCases.find(function(u){ return u.id===currentDocId; });
+    exportN8nJson(uc);
+  };
+  document.getElementById('flow-close-btn').onclick = closeFlow;
+  document.getElementById('flow-modal').onclick = function(e){ if(e.target.id==='flow-modal') closeFlow(); };
+  document.getElementById('analyze-btn').onclick = function(){
+    var combined = [
+      document.getElementById('f-name').value,
+      document.getElementById('f-problem').value,
+      document.getElementById('f-solution').value
+    ].join(' ');
+    var result = detectAiType(combined);
+    var statusEl = document.getElementById('analyze-status');
+    if(result){
+      document.getElementById('f-aitype').value = result.key;
+      statusEl.textContent = 'ตรวจพบจากคำว่า: ' + result.matched.slice(0,4).join(', ');
+    } else {
+      statusEl.textContent = 'ไม่พบคำที่บ่งชี้ชัดเจน กรุณาเลือกเองจากรายการด้านบน';
+    }
+  };
+
+  document.getElementById('autofill-btn').onclick = function(){
+    var key = document.getElementById('f-aitype').value;
+    var statusEl = document.getElementById('autofill-status');
+    var cat = getCategory(key);
+    if(!cat){
+      statusEl.textContent = 'กรุณาเลือก "ลักษณะของงาน/ข้อมูล" ด้านบนก่อน หรือกด "วิเคราะห์อัตโนมัติ"';
+      return;
+    }
+    function fillIfEmpty(id, val){
+      var el = document.getElementById(id);
+      if(!el.value.trim()){ el.value = val; }
+    }
+    fillIfEmpty('f-hardware', cat.hardware);
+    fillIfEmpty('f-risks', cat.risks);
+    fillIfEmpty('f-resources', cat.resources);
+    fillIfEmpty('f-kpi', cat.kqi);
+    fillIfEmpty('f-roi', cat.roi);
+    statusEl.textContent = 'เติมค่าแนะนำสำหรับ ' + cat.aiType + ' แล้ว (เฉพาะช่องที่ว่าง) — ปรับแก้ได้ตามจริง';
+  };
+
+  document.getElementById('f-attach-file').addEventListener('change', function(e){
+    var statusEl = document.getElementById('f-attach-status');
+    var file = e.target.files && e.target.files[0];
+    if(!file){ currentAttachment = null; statusEl.textContent=''; return; }
+    var MAX = 10 * 1024 * 1024;
+    if(file.size > MAX){
+      currentAttachment = null;
+      e.target.value = '';
+      statusEl.style.color = '#A32D2D';
+      statusEl.textContent = 'ไฟล์ใหญ่เกิน 10MB ('+(file.size/1048576).toFixed(1)+'MB) — กรุณากรอกลิงก์/ชื่ออ้างอิงในช่องด้านล่างแทน';
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(){
+      currentAttachment = { name: file.name, type: file.type, size: file.size, data: reader.result };
+      statusEl.style.color = 'var(--teal)';
+      statusEl.textContent = 'แนบไฟล์: ' + file.name + ' ('+(file.size/1024).toFixed(0)+' KB)';
+    };
+    reader.onerror = function(){
+      currentAttachment = null;
+      statusEl.style.color = '#A32D2D';
+      statusEl.textContent = 'อ่านไฟล์ไม่สำเร็จ กรุณาลองใหม่';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  (async function init(){
+    useCases = await loadData();
+    renderList();
+  })();
+</script>
+</body>
+</html>
