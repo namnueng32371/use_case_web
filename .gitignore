@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 *_backup_*.sql
+.env
+*.py[cod]
+.DS_Store
