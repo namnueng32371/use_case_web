@@ -5,3 +5,4 @@ __pycache__/
 .env
 *.py[cod]
 .DS_Store
+.claude/skills/impeccable/scripts/bin/
