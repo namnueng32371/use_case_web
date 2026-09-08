@@ -18,3 +18,5 @@
 |---|---|---|
 | `AI_Transformation_Plan_Prod_EE.xlsx` | อัปโหลดโดยผู้ใช้ (2026-09-08) | ชีต: AI-Transform-Plan (template ตัวอย่างทั่วไป, ไม่ใช่ข้อมูลจริง), Prod / Prod (2) / Prod (3) (ขั้นตอนผลิต Molding ของ PE NPD), QWP (เอกสาร QWP-A07 อ้างอิงคุณภาพ), Man Alocation1-3 (แผน AI จัดสรรกำลังคนตาม Skill Matrix แบบละเอียด 3 ระดับ) |
 | `new_usecases_prod_ee.json` | วิเคราะห์จากไฟล์ข้างต้น | use case ใหม่ 6 รายการ พร้อมนำเข้าเว็บแอปด้วย `import_usecases.py` |
+| `AI_Transformation_Plan_RD_CENTER.xlsx` | อัปโหลดโดยผู้ใช้ (2026-09-08) | ไฟล์มีหลายสิบชีต วิเคราะห์จากชีต `AI-Transform-Plan (RD CENTER)` เป็นหลัก ครอบคลุมกระบวนการ RD Center ตั้งแต่รับ RFQ, ประเมิน Feasibility/Out Source, ออกแบบกระบวนการผลิต+Cost1/Cost2+Formulation, ตรวจสอบ Safety/QFD2 ของ QA, ติดตาม NPD Master Plan, จนถึงการทดลองผลิตสินค้าตัวอย่าง |
+| `new_usecases_rd_center.json` | วิเคราะห์จากไฟล์ข้างต้น | use case ใหม่ 6 รายการ พร้อมนำเข้าเว็บแอปด้วย `import_usecases.py` |
