@@ -18,7 +18,11 @@
 4. สร้าง database และตาราง โดยรัน [schema.sql](schema.sql) กับ server (`mysql -u root < schema.sql` **ไม่ต้องใส่ `-p`** เพราะ root ไม่มีรหัสผ่านโดยตั้งใจ ดูเหตุผลด้านล่าง)
 5. `pip install -r requirements.txt` (Flask + PyMySQL)
 6. `python server.py` — คำสั่งนี้จะเสิร์ฟทั้งหน้าเว็บ HTML และ REST API (`/api/usecases` แบบ GET/PUT) ที่ port `8765` โดยต่อกับ MySQL
-7. ตรวจสอบโดยเปิด `http://localhost:8765` แล้วต้องเห็นหน้าเว็บโหลดขึ้นมาพร้อมรายการ use case ว่างเปล่า (ฐานข้อมูลตอนนี้มี 0 แถวโดยตั้งใจ — ข้อมูล mock/ทดสอบถูกล้างออกไปแล้ว **ห้าม seed ข้อมูลกลับเข้าไปเอง** เว้นแต่จะถูกขอให้ทำ)
+7. ตรวจสอบโดยเปิด `http://localhost:8765` แล้วต้องเห็นหน้าเว็บโหลดขึ้นมาพร้อมรายการ use case **12 รายการที่ seed มาจาก [schema.sql](schema.sql)** (ดูหัวข้อถัดไป) — ถ้าเห็นน้อยกว่านั้นหรือว่างเปล่า แปลว่า `schema.sql` รันไม่สำเร็จหรือรันกับ database คนละตัว **ห้าม seed ข้อมูลอื่นเพิ่มเข้าไปเองอีก** เว้นแต่จะถูกขอให้ทำ (ดูวิธีเพิ่มที่ถูกต้องใน [input_data/README.md](input_data/README.md))
+
+### ข้อมูล seed เริ่มต้น (12 use cases)
+
+`schema.sql` มีคำสั่ง `INSERT IGNORE` ต่อท้ายคำสั่งสร้างตาราง เพื่อ seed use case เริ่มต้น 12 รายการที่วิเคราะห์มาจากไฟล์ Excel ใน `input_data/` (6 รายการจาก Prod EE + 6 รายการจาก RD Center) — ใช้ `INSERT IGNORE` โดยตั้งใจ เพื่อให้รัน `schema.sql` ซ้ำกี่ครั้งก็ได้โดยไม่ทับ/ซ้ำแถวที่มีคนแก้ไขผ่านหน้าเว็บไปแล้ว (id เดิมจะถูกข้าม ไม่ถูก overwrite) ถ้าต้องการเพิ่ม use case ชุดใหม่จากไฟล์ Excel อื่นในอนาคต ให้ทำตามขั้นตอนใน [input_data/README.md](input_data/README.md) แล้วต่อท้าย `INSERT IGNORE` ชุดใหม่ใน `schema.sql` ด้วยรูปแบบเดียวกัน (หรือใช้ `import_usecases.py` กับฐานข้อมูลที่รันอยู่แล้วก็ได้ ไม่ต้องรอ re-run schema.sql)
 
 [start_all.bat](start_all.bat) ช่วย automate ขั้นตอนที่ 6 เป็นต้นไปสำหรับการใช้งานประจำวันหลัง setup เสร็จแล้ว (start MySQL แบบ background process + `server.py` ในดับเบิลคลิกเดียว)
 
