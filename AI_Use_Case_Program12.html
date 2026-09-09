@@ -294,6 +294,32 @@
     color:#B91C1C;
     border-color:#FCA5A5;
   }
+  /* --- Spec/price analysis tab --- */
+  .spec-groups{display:flex; flex-direction:column; gap:18px;}
+  .spec-card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 20px;}
+  .spec-card-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:6px;}
+  .spec-card-title{display:flex; align-items:center; gap:10px;}
+  .spec-card-title h3{font-size:15px; font-weight:700; margin:0; color:var(--navy);}
+  .spec-count{font-size:12px; color:var(--text-muted); background:var(--bg); border-radius:20px; padding:3px 10px;}
+  .spec-desc{font-size:12.5px; color:var(--text-muted); margin:0 0 10px;}
+  .spec-uc-list{margin:0 0 12px; display:flex; flex-wrap:wrap; gap:6px;}
+  .spec-uc-chip{font-size:11px; background:var(--bg); border:1px solid var(--border); border-radius:20px; padding:3px 10px; color:var(--text);}
+  .spec-empty{font-size:12.5px; color:var(--text-muted); font-style:italic; margin:0 0 10px;}
+  .spec-stale{font-size:12px; background:var(--med-bg); color:var(--med); border-radius:8px; padding:8px 12px; margin-bottom:10px;}
+  .spec-meta{font-size:11.5px; color:var(--text-muted); margin:8px 0 0;}
+  .spec-result{white-space:pre-wrap; font-size:13px; line-height:1.75; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-top:10px; color:var(--text);}
+  .spec-result.streaming{border-color:var(--teal);}
+  .spec-section{border-left:4px solid var(--border); border-radius:8px; padding:12px 16px; margin-top:10px;}
+  .spec-section h4{margin:0 0 8px; font-size:13px; font-weight:700;}
+  .spec-section p{margin:0; font-size:13px; line-height:1.75; color:var(--text);}
+  .spec-section .doc-table{margin-top:2px; background:var(--card); table-layout:fixed; width:100%;}
+  .spec-section .doc-table th{font-size:12px;}
+  .spec-section .doc-table td{font-size:12.5px; word-wrap:break-word; overflow-wrap:break-word;}
+  .spec-section .doc-table th:nth-child(1), .spec-section .doc-table td:nth-child(1){width:18%;}
+  .spec-section .doc-table th:nth-child(2), .spec-section .doc-table td:nth-child(2){width:42%;}
+  .spec-section .doc-table th:nth-child(3), .spec-section .doc-table td:nth-child(3){width:20%;}
+  .spec-section .doc-table th:nth-child(4), .spec-section .doc-table td:nth-child(4){width:20%;}
+
   .jd-head{
     padding-bottom:16px;
     margin-bottom:20px;
@@ -716,6 +742,7 @@
     <button class="nav-tab active" id="tab-usecases" type="button" role="tab" aria-selected="true"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg>จัดลำดับ Use Case</button>
     <button class="nav-tab" id="tab-org" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>โครงสร้างทีม AI Star</button>
     <button class="nav-tab" id="tab-flow" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>Flow การทำงาน AI Start</button>
+    <button class="nav-tab" id="tab-spec" type="button" role="tab" aria-selected="false">ประเมิน Spec/ราคา Server</button>
   </div>
 
   <div id="view-usecases">
@@ -1509,6 +1536,28 @@
     </div>
   </div>
 
+  <div id="view-spec" hidden>
+    <p class="org-intro">
+      ให้ Claude วิเคราะห์ Spec และงบประมาณ Server AI ที่ควรใช้ โดยอิงจากรายละเอียด use case จริงในแท็บ "จัดลำดับ Use Case" — แบ่งวิเคราะห์ 3 กลุ่มตามระดับความสำคัญ:
+      <b>กลุ่มคะแนนสูง</b> (สีเขียว, ≥75 คะแนน), <b>กลุ่มคะแนนกลาง</b> (สีน้ำตาล/ส้ม, 50-74 คะแนน) และ <b>รวมทุก Use Case</b>
+      เมื่อเพิ่ม/ลบ/แก้ไข use case ระบบจะตรวจพบว่าผลวิเคราะห์เดิม "ล้าสมัย" แล้วให้กดวิเคราะห์ใหม่ได้ทันที ผลที่วิเคราะห์แล้วจะถูกบันทึกไว้ให้ทุกคนที่เปิดหน้านี้เห็นชุดเดียวกัน
+    </p>
+
+    <div class="field" style="max-width:320px; margin-bottom:20px;">
+      <label for="spec-fx-rate">อัตราแลกเปลี่ยนโดยประมาณ (ใช้ร่วมกันทุกกลุ่ม)</label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:13px; color:var(--text-muted);">1 USD ≈</span>
+        <input type="text" id="spec-fx-rate" value="33" style="width:70px; border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:13px; font-family:inherit;">
+        <span style="font-size:13px; color:var(--text-muted);">บาท</span>
+      </div>
+    </div>
+
+    <div id="spec-groups"></div>
+
+    <p class="note">
+      Claude จะพิจารณาจากประเภทงาน AI (aiType), วิธีการเดิม, ข้อมูลที่มีอยู่, แนวทางหลังนำ AI มาใช้, จำนวนผู้ใช้, ความไวของข้อมูล, Latency/Availability ที่ต้องการของแต่ละ use case ในกลุ่มนั้นๆ แล้วเสนอสเปกฮาร์ดแวร์/สถาปัตยกรรมที่เหมาะสมและงบประมาณโดยประมาณ (ไม่ได้ยึดตาม Tier ที่ตายตัว) — ใช้เป็นข้อมูลประกอบการตัดสินใจของผู้บริหาร ไม่ใช่ใบเสนอราคาสุดท้าย
+    </p>
+  </div>
 
 </div>
 
@@ -1958,7 +2007,270 @@
     return escapeHtml(v).replace(/\n/g, '<br>');
   }
 
+  var claudeDb = null;
+  var claudeDbReady = (async function(){
+    try{
+      if(window.claude && typeof window.claude.use === 'function'){
+        claudeDb = await window.claude.use('db');
+      }
+    }catch(e){ claudeDb = null; }
+    return claudeDb;
+  })();
+
+  var claudeSample = null;
+  var claudeSampleReady = (async function(){
+    try{
+      if(window.claude && typeof window.claude.use === 'function'){
+        claudeSample = await window.claude.use('sample');
+      }
+    }catch(e){ claudeSample = null; }
+    return claudeSample;
+  })();
+
+  // ===== Spec/price analysis tab =====
+  var SPEC_GROUPS = [
+    { key:'high', label:'กลุ่มคะแนนสูง', hex:'#1D9E75', bg:'#E1F5EE',
+      desc:'Use case ที่มีคะแนนความสำคัญ ≥ 75 (ระดับสูง) — โดยทั่วไปควรทำก่อนและมักต้องรองรับการใช้งานจริงต่อเนื่อง' },
+    { key:'med', label:'กลุ่มคะแนนกลาง', hex:'#BA7517', bg:'#FAEEDA',
+      desc:'Use case ที่มีคะแนนความสำคัญ 50–74 (ระดับกลาง) — มักเป็นช่วงถัดไปหลังกลุ่มคะแนนสูง' },
+    { key:'all', label:'รวมทุก Use Case', hex:'#13294B', bg:'#EDECE6',
+      desc:'ทุก use case ที่มีอยู่ตอนนี้ (ทุกระดับคะแนน) มองภาพรวมทั้งองค์กรว่าต้องการ Server รวมประมาณเท่าไหร่' }
+  ];
+
+  function computeSpecGroups(){
+    var withScore = useCases.map(function(uc){
+      var s = computeScore(uc);
+      return { uc: uc, score: s, pr: priorityInfo(s) };
+    });
+    return {
+      high: withScore.filter(function(x){ return x.pr.key === 'high'; }).map(function(x){ return x.uc; }),
+      med: withScore.filter(function(x){ return x.pr.key === 'med'; }).map(function(x){ return x.uc; }),
+      all: useCases.slice()
+    };
+  }
+
+  function specGroupSignature(list){
+    return list.map(function(u){ return u.id; }).sort().join(',');
+  }
+
+  var specAnalysisCache = { high:null, med:null, all:null }; // {text, signature, generatedAt, fx}
+  var specAnalysisLoaded = false;
+  var specAnalysisRunning = { high:false, med:false, all:false };
+
+  async function loadSpecAnalysisFromDb(){
+    try{
+      await claudeDbReady;
+      if(!claudeDb) return;
+      for(var i=0;i<SPEC_GROUPS.length;i++){
+        var key = SPEC_GROUPS[i].key;
+        try{
+          var snap = await claudeDb.doc('specAnalysis/' + key).get();
+          if(snap.exists) specAnalysisCache[key] = snap.data();
+        }catch(e){ /* ignore single-doc failure */ }
+      }
+    }catch(e){ /* db unavailable, stay with whatever cache we have */ }
+    specAnalysisLoaded = true;
+  }
+
+  function ucSpecSummaryLine(uc){
+    var cat = getCategory(uc.aiType);
+    var parts = [
+      '- ' + (uc.name || 'ไม่ระบุชื่อ') + ' (แผนก: ' + (uc.dept || '-') + ')',
+      '  ประเภทงาน AI: ' + (cat ? cat.label + ' / ' + cat.aiType : (uc.aiType || 'ไม่ระบุ')),
+      '  วิธีการเดิมที่ทำอยู่: ' + (uc.solution || '-'),
+      '  ข้อมูลที่มีอยู่สำหรับใช้งาน: ' + (uc.dataAvailable || '-'),
+      '  แนวทางหลังนำ AI มาใช้: ' + (uc.redesignDesc || '-'),
+      '  จำนวนผู้ใช้: ' + (uc.users || 'ไม่ระบุ') + ' | ภาษา: ' + (uc.language || 'ไม่ระบุ'),
+      '  ความไวของข้อมูล: ' + (uc.dataSensitivity || 'ไม่ระบุ') + ' | Latency: ' + (uc.latency || 'ไม่ระบุ') + ' | Availability: ' + (uc.availability || 'ไม่ระบุ'),
+      '  คะแนนความสำคัญ: ' + computeScore(uc) + '/100'
+    ];
+    return parts.join('\n');
+  }
+
+  var SPEC_SECTIONS = [
+    { field:'summary', num:1, title:'สรุปลักษณะงานโดยรวม', color:'var(--indigo)', bg:'var(--indigo-light)' },
+    { field:'specText', num:2, title:'สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ', color:'var(--blue)', bg:'var(--blue-light)' },
+    { field:'reasoning', num:4, title:'เหตุผลประกอบ และความเสี่ยง/ข้อควรระวัง', color:'var(--peach)', bg:'var(--peach-light)' },
+    { field:'recommendation', num:5, title:'ข้อเสนอแนะสำหรับผู้บริหาร', color:'var(--high)', bg:'var(--high-bg)' }
+  ];
+
+  function buildSpecPrompt(groupLabel, list, fxRate){
+    var lines = [];
+    lines.push('คุณคือที่ปรึกษาด้าน AI infrastructure ให้กับโรงงานผลิตแห่งหนึ่ง');
+    lines.push('งานของคุณ: วิเคราะห์รายละเอียด use case AI ต่อไปนี้ (กลุ่ม "' + groupLabel + '", มีทั้งหมด ' + list.length + ' รายการ) แล้วเสนอ Spec เซิร์ฟเวอร์/สถาปัตยกรรมและงบประมาณโดยประมาณที่เหมาะสมสำหรับรองรับ use case กลุ่มนี้ทั้งหมดพร้อมกัน โดยไม่ต้องยึดติดกับ Tier ตายตัว ให้พิจารณาจากลักษณะงานจริงของกลุ่มนี้ (เช่น มีงาน vision/agent/RAG ปนกันหรือไม่, ต้องการ real-time หรือไม่, ข้อมูลอ่อนไหวแค่ไหน, จำนวนผู้ใช้รวม)');
+    lines.push('อัตราแลกเปลี่ยนโดยประมาณที่ใช้: 1 USD ≈ ' + fxRate + ' บาท (เป็นตัวเลขคร่าวๆ ไม่ต้องเป๊ะ)');
+    lines.push('');
+    lines.push('รายการ use case:');
+    lines.push(list.map(ucSpecSummaryLine).join('\n\n'));
+    lines.push('');
+    lines.push('ตอบเป็นภาษาไทยทั้งหมด และตอบกลับเป็น JSON object เดียวเท่านั้น (ไม่ต้องมีข้อความอื่นนอก JSON) ตามโครงสร้างนี้เป๊ะๆ:');
+    lines.push('{');
+    lines.push('  "summary": "สรุปลักษณะงานของกลุ่มนี้โดยรวม (ประเภท AI ที่ต้องรองรับ, ระดับความซับซ้อน) เป็นข้อความ 1-2 ย่อหน้า",');
+    lines.push('  "specText": "สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ (GPU รุ่น/จำนวน/VRAM, CPU, RAM, Storage, ต้องมี Vector DB/RAG หรือ load balancer หรือไม่) เขียนเป็นข้อความอ่านง่าย ขึ้นบรรทัดใหม่แยกแต่ละส่วนได้",');
+    lines.push('  "budgetItems": [ { "item": "ชื่ออุปกรณ์/รายการ เช่น GPU", "detail": "รายละเอียดรุ่น/จำนวน เช่น 2x RTX 5090 64GB", "priceUsd": "ราคาโดยประมาณเป็น USD เช่น $7,800", "priceThb": "ราคาแปลงเป็นบาทด้วยอัตราที่ให้ไว้ เช่น 255,960 บาท" } ],');
+    lines.push('  "budgetTotalUsd": "ราคารวมโดยประมาณเป็น USD",');
+    lines.push('  "budgetTotalThb": "ราคารวมโดยประมาณเป็นบาท",');
+    lines.push('  "reasoning": "เหตุผลประกอบสั้นๆ ว่าทำไมถึงเลือกสเปกระดับนี้ และความเสี่ยง/ข้อควรระวังถ้ามี",');
+    lines.push('  "recommendation": "ข้อเสนอแนะสำหรับผู้บริหารในการตัดสินใจ เช่น ควรเริ่มลงทุนระดับไหนก่อน"');
+    lines.push('}');
+    lines.push('budgetItems ต้องแตกเป็นรายการอุปกรณ์ย่อยจริงๆ (เช่น GPU, CPU, RAM, Storage, Networking, Software/Orchestration ฯลฯ) อย่างน้อย 4-8 รายการ ไม่ใช่รวมเป็นก้อนเดียว');
+    return lines.join('\n');
+  }
+
+  async function runSpecAnalysis(key){
+    if(specAnalysisRunning[key]) return;
+    var groups = computeSpecGroups();
+    var list = groups[key];
+    var groupDef = SPEC_GROUPS.filter(function(g){ return g.key === key; })[0];
+    var statusEl = document.getElementById('spec-status-' + key);
+    if(!list || list.length === 0){
+      if(statusEl) statusEl.textContent = 'ไม่มี use case ในกลุ่มนี้ตอนนี้ ยังวิเคราะห์ไม่ได้';
+      return;
+    }
+    await claudeSampleReady;
+    if(!claudeSample){
+      if(statusEl) statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)';
+      return;
+    }
+    var fxInput = document.getElementById('spec-fx-rate');
+    var fxRate = (fxInput && fxInput.value.trim()) ? fxInput.value.trim() : '33';
+    specAnalysisRunning[key] = true;
+    if(statusEl) statusEl.textContent = '';
+    renderSpecTab();
+    try{
+      var prompt = buildSpecPrompt(groupDef.label, list, fxRate);
+      var data = await claudeSample.json(prompt, { modelTier: 'complex', cache: false });
+      var record = {
+        summary: (data && data.summary) || '',
+        specText: (data && data.specText) || '',
+        budgetItems: (data && Array.isArray(data.budgetItems)) ? data.budgetItems : [],
+        budgetTotalUsd: (data && data.budgetTotalUsd) || '',
+        budgetTotalThb: (data && data.budgetTotalThb) || '',
+        reasoning: (data && data.reasoning) || '',
+        recommendation: (data && data.recommendation) || '',
+        signature: specGroupSignature(list),
+        generatedAt: new Date().toISOString(),
+        count: list.length,
+        fx: fxRate
+      };
+      specAnalysisCache[key] = record;
+      try{
+        if(claudeDb) await claudeDb.doc('specAnalysis/' + key).set(record);
+      }catch(e){ /* saving shared copy failed; keep local result anyway */ }
+    }catch(e){
+      if(statusEl) statusEl.textContent = 'วิเคราะห์ไม่สำเร็จ: ' + (e && e.message ? e.message : 'เกิดข้อผิดพลาด') + ' (ลองใหม่อีกครั้ง)';
+    }finally{
+      specAnalysisRunning[key] = false;
+      renderSpecTab();
+    }
+  }
+
+  function specBudgetTableHtml(record){
+    var items = record.budgetItems || [];
+    if(items.length === 0) return '<p class="spec-empty">ไม่มีรายการอุปกรณ์</p>';
+    var rows = items.map(function(it){
+      return '<tr>'
+        + '<td>' + escapeHtml(it.item || '-') + '</td>'
+        + '<td>' + escapeHtml(it.detail || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(it.priceUsd || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(it.priceThb || '-') + '</td>'
+        + '</tr>';
+    }).join('');
+    var totalRow = (record.budgetTotalUsd || record.budgetTotalThb)
+      ? '<tr style="font-weight:700;"><td colspan="2">รวมโดยประมาณ</td>'
+        + '<td style="text-align:right;">' + escapeHtml(record.budgetTotalUsd || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(record.budgetTotalThb || '-') + '</td></tr>'
+      : '';
+    return '<div style="overflow-x:auto;"><table class="doc-table"><thead><tr>'
+      + '<th>รายการอุปกรณ์</th><th>รายละเอียด</th><th style="text-align:right;">ราคา (USD)</th><th style="text-align:right;">ราคา (บาท)</th>'
+      + '</tr></thead><tbody>' + rows + totalRow + '</tbody></table></div>';
+  }
+
+  function renderSpecResultHtml(record){
+    // Legacy cached records (from before structured output) only have `.text`.
+    if(!record.summary && !record.specText && (!record.budgetItems || record.budgetItems.length===0) && record.text){
+      return '<div class="spec-result">' + escapeHtml(record.text) + '</div>';
+    }
+    var html = '';
+    SPEC_SECTIONS.forEach(function(sec){
+      if(sec.field === 'specText'){
+        // budget table goes right after the spec section (section 3)
+        html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
+          + '<h4 style="color:' + sec.color + ';">' + sec.num + '. ' + escapeHtml(sec.title) + '</h4>'
+          + '<p>' + nl2br(record[sec.field]) + '</p>'
+          + '</div>';
+        html += '<div class="spec-section" style="border-left-color:var(--teal); background:var(--teal-light);">'
+          + '<h4 style="color:var(--teal);">3. งบประมาณโดยประมาณ</h4>'
+          + specBudgetTableHtml(record)
+          + '</div>';
+      } else {
+        html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
+          + '<h4 style="color:' + sec.color + ';">' + sec.num + '. ' + escapeHtml(sec.title) + '</h4>'
+          + '<p>' + nl2br(record[sec.field]) + '</p>'
+          + '</div>';
+      }
+    });
+    return html;
+  }
+
+  function renderSpecTab(){
+    var container = document.getElementById('spec-groups');
+    if(!container) return;
+    var groups = computeSpecGroups();
+    container.innerHTML = SPEC_GROUPS.map(function(g){
+      var list = groups[g.key];
+      var cached = specAnalysisCache[g.key];
+      var sig = specGroupSignature(list);
+      var isStale = cached && cached.signature !== sig;
+      var running = specAnalysisRunning[g.key];
+      var btnLabel = running ? 'กำลังวิเคราะห์...' : (cached ? 'วิเคราะห์ใหม่' : 'วิเคราะห์ด้วย Claude');
+      var chips = list.length
+        ? '<div class="spec-uc-list">' + list.map(function(uc){ return '<span class="spec-uc-chip">' + escapeHtml(uc.name || 'ไม่ระบุชื่อ') + '</span>'; }).join('') + '</div>'
+        : '<p class="spec-empty">ยังไม่มี use case ในกลุ่มนี้</p>';
+      var staleBanner = (isStale && !running)
+        ? '<div class="spec-stale">ข้อมูล use case ในกลุ่มนี้เปลี่ยนไปตั้งแต่วิเคราะห์ล่าสุด (' + cached.count + ' → ' + list.length + ' รายการ) กด "วิเคราะห์ใหม่" เพื่ออัปเดตผล</div>'
+        : '';
+      var resultBlock = running
+        ? '<div class="spec-result streaming">กำลังวิเคราะห์... (Claude กำลังคิด อาจใช้เวลาถึง 1 นาที)</div>'
+        : (cached
+          ? renderSpecResultHtml(cached) + '<p class="spec-meta">วิเคราะห์เมื่อ ' + escapeHtml((cached.generatedAt || '').replace('T',' ').slice(0,16)) + ' UTC · อิง ' + cached.count + ' use case · FX ~' + escapeHtml(String(cached.fx||'')) + ' บาท/USD</p>'
+          : '');
+      return (
+        '<div class="spec-card">' +
+          '<div class="spec-card-head">' +
+            '<div class="spec-card-title"><span class="badge" style="background:' + g.bg + '; color:' + g.hex + ';">' + escapeHtml(g.label) + '</span><span class="spec-count">' + list.length + ' use case</span></div>' +
+            '<button class="btn-secondary spec-run-btn" data-key="' + g.key + '"' + (running || list.length===0 ? ' disabled' : '') + '>' + btnLabel + '</button>' +
+          '</div>' +
+          '<p class="spec-desc">' + escapeHtml(g.desc) + '</p>' +
+          chips +
+          staleBanner +
+          '<div id="spec-status-' + g.key + '" class="status"></div>' +
+          resultBlock +
+        '</div>'
+      );
+    }).join('');
+    container.querySelectorAll('.spec-run-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ runSpecAnalysis(btn.getAttribute('data-key')); });
+    });
+  }
+
+  async function initSpecTab(){
+    if(!specAnalysisLoaded) await loadSpecAnalysisFromDb();
+    renderSpecTab();
+  }
+
   async function loadData(){
+    try{
+      await claudeDbReady;
+      if(claudeDb){
+        var snap = await claudeDb.doc('usecases/all').get();
+        if(snap.exists){
+          var data = snap.data();
+          if(data && Array.isArray(data.items)) return data.items;
+        }
+        return [];
+      }
+    }catch(e){ /* fall through to local fallback */ }
     try{
       var resp = await fetch('/api/usecases');
       if(resp.ok) return await resp.json();
@@ -1977,6 +2289,13 @@
 
   async function saveData(){
     var json = JSON.stringify(useCases);
+    try{
+      await claudeDbReady;
+      if(claudeDb){
+        await claudeDb.doc('usecases/all').set({ items: useCases });
+        return true;
+      }
+    }catch(e){ /* fall through to local fallback */ }
     try{
       var resp = await fetch('/api/usecases', {
         method: 'PUT',
@@ -2039,6 +2358,7 @@
       container.innerHTML = '<div class="empty">ยังไม่มี use case ในระบบ กดปุ่ม "เพิ่ม use case ใหม่" เพื่อเริ่มต้น</div>';
       document.getElementById('chart-section').style.display = 'none';
       renderSummary();
+      renderSpecTab();
       return;
     }
     if(list.length===0){
@@ -2070,6 +2390,7 @@
     renderSummary();
     renderChart(list);
     bindCardEvents();
+    renderSpecTab();
   }
 
   function renderChart(list){
@@ -3495,15 +3816,17 @@
   }
 
   function switchTab(tab){
-    ['usecases','org','flow'].forEach(function(t){
+    ['usecases','org','flow','spec'].forEach(function(t){
       document.getElementById('view-' + t).hidden = (t !== tab);
       document.getElementById('tab-' + t).classList.toggle('active', t === tab);
       document.getElementById('tab-' + t).setAttribute('aria-selected', String(t === tab));
     });
+    if(tab === 'spec') initSpecTab();
   }
   document.getElementById('tab-usecases').addEventListener('click', function(){ switchTab('usecases'); });
   document.getElementById('tab-org').addEventListener('click', function(){ switchTab('org'); });
   document.getElementById('tab-flow').addEventListener('click', function(){ switchTab('flow'); });
+  document.getElementById('tab-spec').addEventListener('click', function(){ switchTab('spec'); });
   document.getElementById('org-role-close-btn').addEventListener('click', function(){
     document.getElementById('org-role-modal').classList.remove('open');
   });
