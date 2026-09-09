@@ -2159,8 +2159,8 @@
   var SPEC_SECTIONS = [
     { field:'summary', num:1, title:'สรุปลักษณะงานโดยรวม', color:'var(--indigo)', bg:'var(--indigo-light)' },
     { field:'specText', num:2, title:'สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ', color:'var(--blue)', bg:'var(--blue-light)' },
-    { field:'reasoning', num:5, title:'เหตุผลประกอบ และความเสี่ยง/ข้อควรระวัง', color:'var(--peach)', bg:'var(--peach-light)' },
-    { field:'recommendation', num:6, title:'ข้อเสนอแนะสำหรับผู้บริหาร', color:'var(--high)', bg:'var(--high-bg)' }
+    { field:'reasoning', num:6, title:'เหตุผลประกอบ และความเสี่ยง/ข้อควรระวัง', color:'var(--peach)', bg:'var(--peach-light)' },
+    { field:'recommendation', num:7, title:'ข้อเสนอแนะสำหรับผู้บริหาร', color:'var(--high)', bg:'var(--high-bg)' }
   ];
 
   function buildSpecPrompt(groupLabel, list, fxRate){
@@ -2168,6 +2168,14 @@
     lines.push('คุณคือที่ปรึกษาด้าน AI infrastructure ให้กับโรงงานผลิตแห่งหนึ่ง');
     lines.push('งานของคุณ: วิเคราะห์รายละเอียด use case AI ต่อไปนี้ (กลุ่ม "' + groupLabel + '", มีทั้งหมด ' + list.length + ' รายการ) แล้วเสนอ Spec เซิร์ฟเวอร์/สถาปัตยกรรมและงบประมาณโดยประมาณที่เหมาะสมสำหรับรองรับ use case กลุ่มนี้ทั้งหมดพร้อมกัน โดยไม่ต้องยึดติดกับ Tier ตายตัว ให้พิจารณาจากลักษณะงานจริงของกลุ่มนี้ (เช่น มีงาน vision/agent/RAG ปนกันหรือไม่, ต้องการ real-time หรือไม่, ข้อมูลอ่อนไหวแค่ไหน, จำนวนผู้ใช้รวม)');
     lines.push('อัตราแลกเปลี่ยนโดยประมาณที่ใช้: 1 USD ≈ ' + fxRate + ' บาท (เป็นตัวเลขคร่าวๆ ไม่ต้องเป๊ะ)');
+    lines.push('');
+    lines.push('นโยบาย Safety Factor ที่ต้องเผื่อไว้เสมอ (คำนวณ Peak load ของกลุ่มนี้ก่อน แล้วบวกเผื่อตามนี้ ไม่ใช่คิดสเปกพอดีตัว):');
+    lines.push('- GPU/Compute (CPU): เผื่อ +20-30% เหนือ peak load ที่คำนวณได้');
+    lines.push('- RAM: เผื่อ +20-30%');
+    lines.push('- Storage: เผื่อ +30-50% (โดยเฉพาะกลุ่มที่มีงาน Vision/วิดีโอ ให้ใช้ค่าสูงในช่วงนี้)');
+    lines.push('- Network bandwidth: เผื่อ +30-50%');
+    lines.push('- Power/Cooling: เผื่อ +20-30% หรือออกแบบแบบ N+1 ถ้ามีงาน 24x7 mission-critical ในกลุ่มนี้');
+    lines.push('ตัวเลข GPU/CPU/RAM/Storage ใน specText และ budgetItems ทั้งหมดต้องเป็นตัวเลข "หลังบวก safety factor แล้ว" ไม่ใช่ peak load เฉยๆ');
     lines.push('');
     lines.push('รายการ use case:');
     lines.push(list.map(ucSpecSummaryLine).join('\n\n'));
@@ -2181,11 +2189,14 @@
     lines.push('  "budgetTotalThb": "ราคารวมโดยประมาณเป็นบาท",');
     lines.push('  "aiModelNote": "ภาพรวมแนวทางเลือก AI model/LLM สำหรับกลุ่มนี้ 1-2 ประโยค (เช่น งานไหนพอใช้โมเดลผ่าน API ได้ งานไหนต้องรันเอง/self-host เพราะข้อมูลอ่อนไหว)",');
     lines.push('  "aiModels": [ { "useCase": "ชื่อ use case (ตรงกับชื่อในรายการด้านบนเป๊ะๆ)", "model": "ชื่อ AI model/LLM ที่แนะนำแบบเจาะจง เช่น Claude Sonnet ผ่าน API, Claude Haiku ผ่าน API (งานเร็ว/ง่าย), Llama 3.3 70B self-hosted (ข้อมูลลับห้ามออกนอกองค์กร), YOLOv8 (vision เฉพาะทาง), Whisper (speech-to-text)", "reason": "เหตุผลสั้นๆ ว่าทำไมเลือกโมเดลนี้ (ความสามารถที่ต้องการ, ต้อง self-host เพราะข้อมูลอ่อนไหวหรือไม่, ระดับความซับซ้อน/งบที่เหมาะสม)" } ],');
+    lines.push('  "safetyFactorItems": [ { "category": "หมวด เช่น GPU/Compute, RAM, Storage, Network, Power/Cooling", "peak": "ค่าที่คำนวณได้จาก peak load ก่อนเผื่อ เช่น 64GB VRAM", "factor": "% ที่เผื่อ เช่น +25%", "final": "ค่าสุดท้ายหลังเผื่อที่ใช้จริงในสเปกด้านบน เช่น 80GB VRAM" } ],');
+    lines.push('  "safetyFactorNote": "อธิบายสั้นๆ ว่าทำไมเลือก % เผื่อระดับนี้ในแต่ละหมวด (เช่น กลุ่มนี้มีงาน Vision จึงเผื่อ Storage สูงกว่าปกติ)",');
     lines.push('  "reasoning": "เหตุผลประกอบสั้นๆ ว่าทำไมถึงเลือกสเปกระดับนี้ และความเสี่ยง/ข้อควรระวังถ้ามี",');
     lines.push('  "recommendation": "ข้อเสนอแนะสำหรับผู้บริหารในการตัดสินใจ เช่น ควรเริ่มลงทุนระดับไหนก่อน"');
     lines.push('}');
     lines.push('budgetItems ต้องแตกเป็นรายการอุปกรณ์ย่อยจริงๆ (เช่น GPU, CPU, RAM, Storage, Networking, Software/Orchestration ฯลฯ) อย่างน้อย 4-8 รายการ ไม่ใช่รวมเป็นก้อนเดียว');
     lines.push('aiModels ต้องมีครบทุก use case ในรายการ (' + list.length + ' รายการ) เลือกโมเดลให้เหมาะกับประเภทงานจริงของแต่ละ use case ไม่ใช่โมเดลเดียวกันทั้งหมด และให้ความสำคัญกับความไวของข้อมูล (ถ้าเป็นข้อมูลลับ/confidential ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
+    lines.push('safetyFactorItems ต้องมีอย่างน้อย 4 หมวด (GPU/Compute, RAM, Storage, Network เป็นอย่างน้อย เพิ่ม Power/Cooling ถ้ากลุ่มนี้มีงาน 24x7) แต่ละหมวดต้องแสดงตัวเลข peak/factor/final ให้สอดคล้องกับตัวเลขที่ใช้จริงใน specText และ budgetItems ด้านบน');
     return lines.join('\n');
   }
 
@@ -2220,6 +2231,8 @@
         budgetTotalThb: (data && data.budgetTotalThb) || '',
         aiModelNote: (data && data.aiModelNote) || '',
         aiModels: (data && Array.isArray(data.aiModels)) ? data.aiModels : [],
+        safetyFactorNote: (data && data.safetyFactorNote) || '',
+        safetyFactorItems: (data && Array.isArray(data.safetyFactorItems)) ? data.safetyFactorItems : [],
         reasoning: (data && data.reasoning) || '',
         recommendation: (data && data.recommendation) || '',
         signature: specGroupSignature(list),
@@ -2275,6 +2288,22 @@
       + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
+  function specSafetyFactorTableHtml(record){
+    var items = record.safetyFactorItems || [];
+    if(items.length === 0) return '<p class="spec-empty">ไม่มีข้อมูล Safety Factor</p>';
+    var rows = items.map(function(it){
+      return '<tr>'
+        + '<td>' + escapeHtml(it.category || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(it.peak || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(it.factor || '-') + '</td>'
+        + '<td style="text-align:right;">' + escapeHtml(it.final || '-') + '</td>'
+        + '</tr>';
+    }).join('');
+    return '<div style="overflow-x:auto;"><table class="doc-table"><thead><tr>'
+      + '<th>หมวด</th><th style="text-align:right;">Peak load</th><th style="text-align:right;">Safety Factor</th><th style="text-align:right;">สเปกที่ใช้จริง</th>'
+      + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
   function renderSpecResultHtml(record){
     // Legacy cached records (from before structured output) only have `.text`.
     if(!record.summary && !record.specText && (!record.budgetItems || record.budgetItems.length===0) && record.text){
@@ -2296,6 +2325,11 @@
           + '<h4 style="color:var(--med);">4. AI Model ที่แนะนำสำหรับแต่ละ Use Case</h4>'
           + (record.aiModelNote ? '<p>' + nl2br(record.aiModelNote) + '</p>' : '')
           + specAiModelTableHtml(record)
+          + '</div>';
+        html += '<div class="spec-section" style="border-left-color:var(--teal); background:var(--teal-light);">'
+          + '<h4 style="color:var(--teal);">5. Safety Factor ที่เผื่อไว้ในการประเมิน</h4>'
+          + (record.safetyFactorNote ? '<p>' + nl2br(record.safetyFactorNote) + '</p>' : '')
+          + specSafetyFactorTableHtml(record)
           + '</div>';
       } else {
         html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
