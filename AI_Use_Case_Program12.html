@@ -630,6 +630,39 @@
   .dg-arrowhead{fill:var(--text-muted);}
   .dg-arrowhead-amber{fill:var(--med);}
   .dg-arrowhead-teal{fill:var(--teal);}
+
+  /* Org chart (โครงสร้างทีม AI Local — Lean Model) node variants */
+  .dg-node-outline rect{fill:var(--bg); stroke:var(--border); stroke-dasharray:4 3;}
+  .dg-node-outline .dg-title{font-size:13px; fill:var(--text-muted);}
+  .dg-node-lead rect{fill:var(--navy); stroke:var(--navy);}
+  .dg-node-lead .dg-title{fill:#fff; font-size:16px;}
+  .dg-node-lead .dg-sub{fill:#D7DEEA;}
+  .dg-node-green rect{fill:var(--high-bg); stroke:var(--high);}
+  .dg-node-green .dg-title{fill:var(--high);}
+  .dg-node-amber rect{fill:var(--med-bg); stroke:var(--med);}
+  .dg-node-amber .dg-title{fill:var(--med);}
+  .dg-node-support rect{fill:var(--blue-light); stroke:var(--blue);}
+  .dg-node-support .dg-title{fill:var(--blue); font-size:13.5px;}
+  .dg-node-callout rect{fill:var(--card); stroke:var(--indigo); stroke-width:1.4; stroke-dasharray:3 3;}
+  .dg-node-callout .dg-title{fill:var(--indigo); font-size:13px;}
+  .dg-node-callout .dg-sub{font-size:11px;}
+  .dg-node-sub rect{fill:var(--peach-light); stroke:var(--peach);}
+  .dg-node-sub .dg-title{fill:var(--peach); font-size:13.5px;}
+  .dg-tag{fill:var(--text-muted); font-size:9.5px; font-weight:700; letter-spacing:.03em;}
+  .dg-badge-circle{fill:var(--card); stroke:var(--navy); stroke-width:1.4;}
+  .dg-badge-text{fill:var(--navy); font-size:11px; font-weight:700;}
+  .dg-warn-circle{fill:var(--high-bg); stroke:var(--med); stroke-width:1.4;}
+  .dg-warn-text{fill:var(--med); font-size:13px; font-weight:800;}
+  .dg-org-arrow{stroke:var(--indigo); stroke-width:1.4; stroke-dasharray:3 3; fill:none;}
+  .dg-org-edge{stroke:var(--navy); stroke-width:1.6; fill:none;}
+  .dg-org-dashed{stroke:var(--med); stroke-width:1.5; stroke-dasharray:5 3.5; fill:none;}
+  .dg-org-dashed-red{stroke:var(--peach); stroke-width:1.6; stroke-dasharray:4 3;}
+  .dg-org-section-label{fill:var(--text-muted); font-size:12px; font-weight:600;}
+  .dg-org-section-label-new{fill:var(--peach);}
+  .dg-org-devbox{fill:none; stroke:var(--peach); stroke-width:1.6; stroke-dasharray:6 4;}
+  .dg-org-devbox-label{fill:var(--peach); font-size:12px; font-weight:700;}
+  .dg-org-footnote{fill:var(--text-muted); font-size:11.5px; font-style:italic;}
+
   .org-team.flash{box-shadow:0 0 0 3px var(--teal); transition:box-shadow .2s;}
   @media (max-width:600px){
     .dg-fig{padding:14px 10px 4px;}
@@ -1031,7 +1064,7 @@
 
     <figure class="dg-fig" id="org-chart-figure">
       <div class="dg-header">
-        <span class="dg-header-title"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>Flow Overview &amp; Governance Gates</span>
+        <span class="dg-header-title"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>โครงสร้างทีม AI Local (Lean Model)</span>
         <div class="dg-toolbar">
           <button type="button" class="dg-btn" id="dg-zoom-out" title="ซูมออก (-)" aria-label="ซูมออก">
             <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
@@ -1047,7 +1080,7 @@
         </div>
       </div>
       <div class="dg-scroll" id="dg-scroll-container">
-      <svg viewBox="0 0 1560 380" role="img" aria-label="แผนภาพเส้นทางของ Use Case AI หนึ่งเรื่อง ตั้งแต่ฝ่ายธุรกิจส่งโจทย์ ผ่านทีมสนับสนุนข้ามสายงานทำ Roadmap, ผ่านการตรวจสอบ Governance Gate 1 ด้าน PDPA/Bias, เข้าสู่ทีมพัฒนา AI ที่รับ GPU/Cloud จากทีม Infrastructure, ผ่าน Governance Gate 2 ก่อน Deploy แล้วนำไปใช้งานจริงในฝ่ายธุรกิจ พร้อม feedback loop กลับไปเริ่มรอบใหม่ และเส้นทางปรับแก้เมื่อไม่ผ่าน Gate">
+      <svg viewBox="0 0 1580 730" role="img" aria-label="แผนภาพโครงสร้างทีม AI Local แบบ Lean แสดงสายบังคับบัญชาจาก BOD และผู้บริหาร/CFO ลงมาที่ AI Lead ซึ่งดูแลทั้ง AI Engineer/Builder และ AI Ops/Trainer เป็นแกนหลัก 3 คน พร้อมกลุ่มบทบาทเสริม A ถึง F ที่ล้อมรอบ ได้แก่ AI Transformation Lead, AI Product Owners, AI Engineers/Data Engineers, AI Solution Designers/Prompt Engineers, AI Adoption and Training, และ Governance/Risk/Data ตลอดจนงานสนับสนุนสามด้าน (Governance and Ethics, Change Management, Vendor/Cloud/LLM) และงานเพิ่มเติมที่กระจายให้ทีม Digital Development และ BU Champions ทำแทนการจ้างคนใหม่">
         <defs>
           <marker id="dgArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead"></path>
@@ -1055,94 +1088,169 @@
           <marker id="dgArrowAmber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead-amber"></path>
           </marker>
-          <marker id="dgArrowTeal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead-teal"></path>
-          </marker>
         </defs>
 
-        <!-- main flow edges -->
-        <line x1="195" y1="120" x2="285" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
-        <text x="240" y="110" class="dg-edge-label" text-anchor="middle">ส่ง Use Case</text>
-
-        <line x1="455" y1="120" x2="560" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
-        <text x="507" y="110" class="dg-edge-label" text-anchor="middle">ขออนุมัติ</text>
-
-        <line x1="700" y1="120" x2="805" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
-        <text x="752" y="110" class="dg-edge-label" text-anchor="middle">ผ่าน Gate</text>
-
-        <line x1="975" y1="120" x2="1080" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
-        <text x="1027" y="110" class="dg-edge-label" text-anchor="middle">ก่อน Deploy</text>
-
-        <line x1="1220" y1="120" x2="1325" y2="120" class="dg-edge" marker-end="url(#dgArrow)"></line>
-        <text x="1272" y="110" class="dg-edge-label" text-anchor="middle">Go-live</text>
-
-        <!-- infra bidirectional link -->
-        <line x1="890" y1="148" x2="890" y2="252" class="dg-edge" marker-end="url(#dgArrow)" marker-start="url(#dgArrow)"></line>
-        <text x="902" y="204" class="dg-edge-label" text-anchor="start">GPU / Cloud /</text>
-        <text x="902" y="216" class="dg-edge-label" text-anchor="start">Storage</text>
-
-        <!-- reject / rework loops -->
-        <path d="M630,80 Q500,40 372,90" class="dg-reject" marker-end="url(#dgArrowAmber)"></path>
-        <text x="500" y="34" class="dg-reject-label" text-anchor="middle">ไม่ผ่าน → ปรับแก้</text>
-
-        <path d="M1150,80 Q1020,40 892,90" class="dg-reject" marker-end="url(#dgArrowAmber)"></path>
-        <text x="1020" y="34" class="dg-reject-label" text-anchor="middle">ไม่ผ่าน → แก้ Model</text>
-
-        <!-- feedback loop -->
-        <path d="M1410,148 C1410,340 110,340 110,148" class="dg-loop" marker-end="url(#dgArrowTeal)"></path>
-        <text x="760" y="356" class="dg-loop-label" text-anchor="middle">Feedback: ผลการใช้งานจริงย้อนกลับเข้ารอบ Use Case ถัดไป</text>
-
-        <!-- N1 Business Unit -->
-        <g class="dg-node dg-clickable" data-team-idx="4">
-          <rect x="25" y="92" width="170" height="56" rx="10"></rect>
-          <text x="110" y="115" class="dg-title" text-anchor="middle">ฝ่ายธุรกิจ</text>
-          <text x="110" y="132" class="dg-sub" text-anchor="middle">Business Unit Champions</text>
-        </g>
-
-        <!-- N2 ทีมสนับสนุนข้ามสายงาน -->
-        <g class="dg-node dg-clickable" data-team-idx="0">
-          <rect x="285" y="92" width="170" height="56" rx="10"></rect>
-          <text x="370" y="112" class="dg-title" text-anchor="middle">ทีมสนับสนุนข้ามสายงาน</text>
-          <text x="370" y="130" class="dg-sub" text-anchor="middle">3 ตำแหน่ง · PO ทำ Roadmap</text>
-        </g>
-
-        <!-- G1 Gate -->
-        <g class="dg-node dg-gate dg-clickable" data-team-idx="3">
-          <polygon points="630,80 700,120 630,160 560,120"></polygon>
-          <text x="630" y="115" class="dg-title" text-anchor="middle">Gate 1</text>
-          <text x="630" y="130" class="dg-sub" text-anchor="middle">ตรวจ PDPA / Bias</text>
-        </g>
-
-        <!-- N3 TEAM พัฒนา AI -->
-        <g class="dg-node dg-clickable" data-team-idx="1">
-          <rect x="805" y="92" width="170" height="56" rx="10"></rect>
-          <text x="890" y="112" class="dg-title" text-anchor="middle">TEAM พัฒนา AI</text>
-          <text x="890" y="130" class="dg-sub" text-anchor="middle">3 ตำแหน่ง · Build Model</text>
-        </g>
-
-        <!-- N3b TEAM Infrastructure -->
-        <g class="dg-node dg-clickable" data-team-idx="2">
-          <rect x="805" y="252" width="170" height="56" rx="10"></rect>
-          <text x="890" y="272" class="dg-title" text-anchor="middle">TEAM Infrastructure</text>
-          <text x="890" y="290" class="dg-sub" text-anchor="middle">2 ตำแหน่ง · GPU/Cloud</text>
-        </g>
-
-        <!-- G2 Gate -->
-        <g class="dg-node dg-gate dg-clickable" data-team-idx="3">
-          <polygon points="1150,80 1220,120 1150,160 1080,120"></polygon>
-          <text x="1150" y="115" class="dg-title" text-anchor="middle">Gate 2</text>
-          <text x="1150" y="130" class="dg-sub" text-anchor="middle">ตรวจก่อน Deploy</text>
-        </g>
-
-        <!-- N4 Go-live -->
-        <g class="dg-node dg-clickable" data-team-idx="4">
-          <rect x="1325" y="92" width="170" height="56" rx="10"></rect>
-          <text x="1410" y="112" class="dg-title" text-anchor="middle">ใช้งานจริง</text>
-          <text x="1410" y="130" class="dg-sub" text-anchor="middle">Go-live ในฝ่ายธุรกิจ</text>
-        </g>
+        <g class="dg-node dg-node-outline" id="og-bod">
+      <rect x="560" y="10" width="110" height="42" rx="10"></rect>
+      <text x="615" y="30" class="dg-title" text-anchor="middle">BOD</text>
+      </g>
+      <g class="dg-node dg-node-outline" id="og-cfo">
+      <rect x="690" y="10" width="330" height="42" rx="10"></rect>
+      <text x="855" y="30" class="dg-title" text-anchor="middle">ผู้บริหาร / CFO (นอก AI Unit)</text>
+      <text x="855" y="47" class="dg-sub" text-anchor="middle">อนุมัติงบจริง — AI Lead เป็นแค่ผู้เสนอ</text>
+      </g>
+      <line x1="855" y1="52" x2="750" y2="90" class="dg-org-dashed" marker-end="url(#dgArrowAmber)"></line>
+      <text x="880" y="72" class="dg-edge-label" text-anchor="middle">เสนอ/ขออนุมัติ</text>
+      <g title="เส้นทางการรายงานระหว่าง AI Lead กับผู้บริหารยังไม่ชัดเจนในแผนต้นฉบับ"><circle cx="915" cy="66" r="12" class="dg-warn-circle"></circle><text x="915" y="71" class="dg-warn-text" text-anchor="middle">?</text></g>
+      <g class="dg-node dg-clickable dg-node-lead" data-team-idx="1" id="og-lead">
+      <rect x="610" y="90" width="280" height="68" rx="10"></rect>
+      <text x="750" y="110" class="dg-title" text-anchor="middle">AI Lead</text>
+      <text x="750" y="127" class="dg-sub" text-anchor="middle">กำหนดทิศทาง + เสนอ + คุย Vendor</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="1" id="og-a">
+      <rect x="1170" y="10" width="370" height="118" rx="10"></rect>
+      <text x="1355" y="30" class="dg-title" text-anchor="middle">(A) AI Transformation Lead</text>
+        <text x="1355" y="47" class="dg-title" text-anchor="middle">(1 คน)</text>
+      <text x="1355" y="64" class="dg-sub" text-anchor="middle">บทบาท:</text>
+        <text x="1355" y="78" class="dg-sub" text-anchor="middle">• เทียบเท่า “Head of AI / CAIO”</text>
+        <text x="1355" y="92" class="dg-sub" text-anchor="middle">• ผูก AI กับ KPI ธุรกิจทั้ง 11 บริษัท</text>
+        <text x="1355" y="106" class="dg-sub" text-anchor="middle">• Prioritize Use Case</text>
+        <text x="1355" y="120" class="dg-sub" text-anchor="middle">ต้องมี: Business + Strategy + AI Literacy</text>
+      </g>
+      <line x1="1170" y1="78" x2="895" y2="100" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="1" id="og-c">
+      <rect x="20" y="10" width="350" height="140" rx="10"></rect>
+      <text x="195" y="30" class="dg-title" text-anchor="middle">(C) AI Engineers / Data Engineers</text>
+        <text x="195" y="47" class="dg-title" text-anchor="middle">(4–6 คน)</text>
+      <text x="195" y="64" class="dg-sub" text-anchor="middle">หน้าที่:</text>
+        <text x="195" y="78" class="dg-sub" text-anchor="middle">• สร้าง/ดูแล Local AI Server</text>
+        <text x="195" y="92" class="dg-sub" text-anchor="middle">• ทำ RAG, Fine-tune model</text>
+        <text x="195" y="106" class="dg-sub" text-anchor="middle">• เชื่อมระบบ (ERP/CRM/Line/Email)</text>
+        <text x="195" y="120" class="dg-sub" text-anchor="middle">Tech Stack: LLM orchestration,</text>
+        <text x="195" y="134" class="dg-sub" text-anchor="middle">Vector DB, API integration</text>
+      </g>
+      <line x1="370" y1="150" x2="660" y2="200" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <g class="dg-node dg-clickable dg-node-green" data-team-idx="1" id="og-engineer">
+      <rect x="630" y="200" width="210" height="92" rx="10"></rect>
+      <text x="735" y="220" class="dg-title" text-anchor="middle">AI Engineer / Builder</text>
+      <text x="735" y="237" class="dg-sub" text-anchor="middle">คนที่ 2 — สวม 3 หมวก:</text>
+        <text x="735" y="251" class="dg-sub" text-anchor="middle">ML Engineer + Backend Dev + Infra</text>
+        <text x="735" y="265" class="dg-sub" text-anchor="middle">(setup GPU, deploy model, เขียน API)</text>
+      <circle cx="824" cy="216" r="11" class="dg-badge-circle"></circle>
+      <text x="824" y="220" class="dg-badge-text" text-anchor="middle">2</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-amber" data-team-idx="1" id="og-ops">
+      <rect x="870" y="200" width="210" height="92" rx="10"></rect>
+      <text x="975" y="220" class="dg-title" text-anchor="middle">AI Ops / Trainer</text>
+      <text x="975" y="237" class="dg-sub" text-anchor="middle">คนที่ 3 — สวม 2 หมวก:</text>
+        <text x="975" y="251" class="dg-sub" text-anchor="middle">QA/Monitoring + User Training</text>
+      <circle cx="1064" cy="216" r="11" class="dg-badge-circle"></circle>
+      <text x="1064" y="220" class="dg-badge-text" text-anchor="middle">1</text>
+      </g>
+      <line x1="840" y1="246" x2="870" y2="246" class="dg-org-dashed-red"></line>
+      <line x1="700" y1="158" x2="700" y2="200" class="dg-org-edge" marker-end="url(#dgArrow)"></line>
+      <line x1="830" y1="158" x2="940" y2="200" class="dg-org-edge" marker-end="url(#dgArrow)"></line>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="3" id="og-f">
+      <rect x="20" y="200" width="350" height="108" rx="10"></rect>
+      <text x="195" y="220" class="dg-title" text-anchor="middle">(F) Governance / Risk / Data</text>
+        <text x="195" y="237" class="dg-title" text-anchor="middle">(1–2 คน)</text>
+      <text x="195" y="254" class="dg-sub" text-anchor="middle">หน้าที่:</text>
+        <text x="195" y="268" class="dg-sub" text-anchor="middle">• Data privacy</text>
+        <text x="195" y="282" class="dg-sub" text-anchor="middle">• Model governance</text>
+        <text x="195" y="296" class="dg-sub" text-anchor="middle">• Policy (ใช้ AI ได้แค่ไหน)</text>
+      </g>
+      <line x1="370" y1="254" x2="430" y2="400" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="3" id="og-e">
+      <rect x="1170" y="200" width="370" height="140" rx="10"></rect>
+      <text x="1355" y="220" class="dg-title" text-anchor="middle">(E) AI Adoption &amp; Training</text>
+        <text x="1355" y="237" class="dg-title" text-anchor="middle">(2–3 คน)</text>
+      <text x="1355" y="254" class="dg-sub" text-anchor="middle">หน้าที่:</text>
+        <text x="1355" y="268" class="dg-sub" text-anchor="middle">• ฝึกพนักงาน 500 คน</text>
+        <text x="1355" y="282" class="dg-sub" text-anchor="middle">  (ให้ Process Owner/Leaders เป็นผู้ฝึก)</text>
+        <text x="1355" y="296" class="dg-sub" text-anchor="middle">• สร้าง AI Playbook</text>
+        <text x="1355" y="310" class="dg-sub" text-anchor="middle">• Monitor usage (ใครใช้/ไม่ใช้)</text>
+      </g>
+      <line x1="1170" y1="264" x2="910" y2="400" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="0" id="og-d">
+      <rect x="1170" y="352" width="370" height="108" rx="10"></rect>
+      <text x="1355" y="372" class="dg-title" text-anchor="middle">(D) AI Solution Designers /</text>
+        <text x="1355" y="389" class="dg-title" text-anchor="middle">Prompt Engineers (2–3 คน)</text>
+      <text x="1355" y="406" class="dg-sub" text-anchor="middle">หน้าที่:</text>
+        <text x="1355" y="420" class="dg-sub" text-anchor="middle">• ออกแบบ workflow: Human + AI Co-Work</text>
+        <text x="1355" y="434" class="dg-sub" text-anchor="middle">• สร้าง Prompt Template / Agent</text>
+        <text x="1355" y="448" class="dg-sub" text-anchor="middle">• ทำ SOP ใหม่</text>
+      </g>
+      <line x1="1170" y1="406" x2="1030" y2="545" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <text x="700" y="386" class="dg-org-section-label" text-anchor="middle">งานสนับสนุน — รวมกับ 3 คนข้างบน ไม่ต้องมีคนประจำแยก</text>
+      <g class="dg-node dg-clickable dg-node-support" data-team-idx="3" id="og-gov">
+      <rect x="430" y="400" width="220" height="92" rx="10"></rect>
+      <text x="540" y="430" class="dg-title" text-anchor="middle">Governance / Ethics</text>
+      <text x="540" y="447" class="dg-sub" text-anchor="middle">AI Lead รับผิดชอบ</text>
+        <text x="540" y="461" class="dg-sub" text-anchor="middle">ใช้ Checklist สำเร็จรูป</text>
+      <text x="438" y="413" class="dg-tag" text-anchor="start">QMR</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-support" data-team-idx="3" id="og-change">
+      <rect x="665" y="400" width="220" height="92" rx="10"></rect>
+      <text x="775" y="430" class="dg-title" text-anchor="middle">Change Management</text>
+      <text x="775" y="447" class="dg-sub" text-anchor="middle">AI Lead สื่อสารตรง</text>
+        <text x="775" y="461" class="dg-sub" text-anchor="middle">กับ BU เอง (ทีมเล็ก)</text>
+      <text x="673" y="413" class="dg-tag" text-anchor="start">AMD,GM,ผจก.ฝ่าย</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-support" data-team-idx="2" id="og-vendor">
+      <rect x="900" y="400" width="220" height="92" rx="10"></rect>
+      <text x="1010" y="430" class="dg-title" text-anchor="middle">Vendor / Cloud / LLM</text>
+      <text x="1010" y="447" class="dg-sub" text-anchor="middle">AI Lead เจรจา</text>
+        <text x="1010" y="461" class="dg-sub" text-anchor="middle">(เสนอราคา ไม่ใช่อนุมัติ)</text>
+      <text x="908" y="413" class="dg-tag" text-anchor="start">Outsoure</text>
+      </g>
+      <text x="700" y="518" class="dg-org-section-label dg-org-section-label-new" text-anchor="middle">งานเพิ่มเข้ามา — กระจายให้คนที่รับผิดชอบ (ไม่จ้างคนใหม่)</text>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="0" id="og-b">
+      <rect x="20" y="530" width="350" height="150" rx="10"></rect>
+      <text x="195" y="550" class="dg-title" text-anchor="middle">(B) AI Product Owners</text>
+        <text x="195" y="567" class="dg-title" text-anchor="middle">(3–4 คน)</text>
+      <text x="195" y="584" class="dg-sub" text-anchor="middle">(ดูแลเป็น cluster เช่น Sales/</text>
+        <text x="195" y="598" class="dg-sub" text-anchor="middle">Marketing/Ops/Finance/HR)</text>
+        <text x="195" y="612" class="dg-sub" text-anchor="middle">หน้าที่:</text>
+        <text x="195" y="626" class="dg-sub" text-anchor="middle">• เก็บ Pain Point จากแต่ละ BU</text>
+        <text x="195" y="640" class="dg-sub" text-anchor="middle">• ออกแบบ AI Use Case</text>
+        <text x="195" y="654" class="dg-sub" text-anchor="middle">• วัด ROI (เช่น ลด cost, เพิ่ม conversion)</text>
+      </g>
+      <line x1="370" y1="605" x2="420" y2="578" class="dg-org-arrow" marker-end="url(#dgArrow)"></line>
+      <rect x="400" y="530" width="650" height="150" rx="12" class="dg-org-devbox"></rect>
+      <text x="415" y="552" class="dg-org-devbox-label" text-anchor="start">Digital Development (เป็นรากฐาน)</text>
+      <g class="dg-node dg-clickable dg-node-sub" data-team-idx="0" id="og-research">
+      <rect x="420" y="565" width="190" height="100" rx="10"></rect>
+      <text x="515" y="585" class="dg-title" text-anchor="middle">Research Analyst</text>
+      <text x="515" y="602" class="dg-sub" text-anchor="middle">/ Data Scientist</text>
+        <text x="515" y="616" class="dg-sub" text-anchor="middle">→ AI Engineer ทำ</text>
+        <text x="515" y="630" class="dg-sub" text-anchor="middle">เพิ่ม (part-time)</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-sub" data-team-idx="0" id="og-po">
+      <rect x="630" y="565" width="190" height="100" rx="10"></rect>
+      <text x="725" y="585" class="dg-title" text-anchor="middle">Product Owner</text>
+      <text x="725" y="602" class="dg-sub" text-anchor="middle">/ UX Designer</text>
+        <text x="725" y="616" class="dg-sub" text-anchor="middle">→ AI Lead ทำ</text>
+        <text x="725" y="630" class="dg-sub" text-anchor="middle">(roadmap+UX)</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-sub" data-team-idx="0" id="og-solution">
+      <rect x="840" y="565" width="190" height="100" rx="10"></rect>
+      <text x="935" y="585" class="dg-title" text-anchor="middle">Solution Designer</text>
+      <text x="935" y="602" class="dg-sub" text-anchor="middle">/ Prompt Engineer</text>
+        <text x="935" y="616" class="dg-sub" text-anchor="middle">→ AI Engineer ทำ</text>
+        <text x="935" y="630" class="dg-sub" text-anchor="middle">(ออกแบบ+build)</text>
+      </g>
+      <g class="dg-node dg-clickable dg-node-callout" data-team-idx="4" id="og-bu">
+      <rect x="1170" y="530" width="250" height="150" rx="10"></rect>
+      <text x="1295" y="560" class="dg-title" text-anchor="middle">BU Champions</text>
+      <text x="1295" y="577" class="dg-sub" text-anchor="middle">ทีมละคน</text>
+        <text x="1295" y="591" class="dg-sub" text-anchor="middle">→ คนใน BU เอง</text>
+        <text x="1295" y="605" class="dg-sub" text-anchor="middle">(ไม่ใช่ AI Unit)</text>
+      <text x="1178" y="543" class="dg-tag" text-anchor="start">AMD,GM,ผจก.ฝ่าย ทุกคน</text>
+      </g>
+      <text x="700" y="712" class="dg-org-footnote" text-anchor="middle">สำคัญมาก เพราะเป็นตัวชี้วัดว่า &#8220;AI → Productivity&#8221; เกิดขึ้นจริงหรือไม่ (กรณีของ SK ต้องทำให้เกิดกระบวนการทำงานจริง ไม่ใช่แค่มีคนไปอบรม)</text>
       </svg>
       </div>
-      <figcaption>เส้นทางของ Use Case หนึ่งเรื่อง ตั้งแต่ฝ่ายธุรกิจส่งโจทย์ จนถึงใช้งานจริง ผ่านการตรวจสอบความเสี่ยง (Governance Gate) 2 จุดตามหน้าที่ของทีม Governance &amp; Ethics — กดที่กล่องเพื่อเลื่อนไปดูทีมนั้นด้านล่าง</figcaption>
+      <figcaption>โครงสร้างทีม AI Local แบบ Lean (3 คนหลัก + งานเสริม) สรุปจากไฟล์ "โครงการ AI Local GSK.xlsx" — กดที่กล่องเพื่อเลื่อนไปดูรายละเอียด Job Description ของทีมนั้นด้านล่าง</figcaption>
     </figure>
 
 <details class="dg2-details">
@@ -3851,7 +3959,7 @@
   // ===== Org Chart Zoom Controls =====
   (function(){
     var currentScale = 1.0;
-    var baseWidth = 1380;
+    var baseWidth = 1560;
 
     var chartSvg = document.querySelector('#org-chart-figure .dg-scroll svg');
     var zoomVal = document.getElementById('dg-zoom-val');
