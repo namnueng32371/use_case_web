@@ -2051,8 +2051,8 @@
   var SPEC_SECTIONS = [
     { field:'summary', num:1, title:'สรุปลักษณะงานโดยรวม', color:'var(--indigo)', bg:'var(--indigo-light)' },
     { field:'specText', num:2, title:'สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ', color:'var(--blue)', bg:'var(--blue-light)' },
-    { field:'reasoning', num:4, title:'เหตุผลประกอบ และความเสี่ยง/ข้อควรระวัง', color:'var(--peach)', bg:'var(--peach-light)' },
-    { field:'recommendation', num:5, title:'ข้อเสนอแนะสำหรับผู้บริหาร', color:'var(--high)', bg:'var(--high-bg)' }
+    { field:'reasoning', num:5, title:'เหตุผลประกอบ และความเสี่ยง/ข้อควรระวัง', color:'var(--peach)', bg:'var(--peach-light)' },
+    { field:'recommendation', num:6, title:'ข้อเสนอแนะสำหรับผู้บริหาร', color:'var(--high)', bg:'var(--high-bg)' }
   ];
 
   function buildSpecPrompt(groupLabel, list, fxRate){
@@ -2071,10 +2071,13 @@
     lines.push('  "budgetItems": [ { "item": "ชื่ออุปกรณ์/รายการ เช่น GPU", "detail": "รายละเอียดรุ่น/จำนวน เช่น 2x RTX 5090 64GB", "priceUsd": "ราคาโดยประมาณเป็น USD เช่น $7,800", "priceThb": "ราคาแปลงเป็นบาทด้วยอัตราที่ให้ไว้ เช่น 255,960 บาท" } ],');
     lines.push('  "budgetTotalUsd": "ราคารวมโดยประมาณเป็น USD",');
     lines.push('  "budgetTotalThb": "ราคารวมโดยประมาณเป็นบาท",');
+    lines.push('  "aiModelNote": "ภาพรวมแนวทางเลือก AI model/LLM สำหรับกลุ่มนี้ 1-2 ประโยค (เช่น งานไหนพอใช้โมเดลผ่าน API ได้ งานไหนต้องรันเอง/self-host เพราะข้อมูลอ่อนไหว)",');
+    lines.push('  "aiModels": [ { "useCase": "ชื่อ use case (ตรงกับชื่อในรายการด้านบนเป๊ะๆ)", "model": "ชื่อ AI model/LLM ที่แนะนำแบบเจาะจง เช่น Claude Sonnet ผ่าน API, Claude Haiku ผ่าน API (งานเร็ว/ง่าย), Llama 3.3 70B self-hosted (ข้อมูลลับห้ามออกนอกองค์กร), YOLOv8 (vision เฉพาะทาง), Whisper (speech-to-text)", "reason": "เหตุผลสั้นๆ ว่าทำไมเลือกโมเดลนี้ (ความสามารถที่ต้องการ, ต้อง self-host เพราะข้อมูลอ่อนไหวหรือไม่, ระดับความซับซ้อน/งบที่เหมาะสม)" } ],');
     lines.push('  "reasoning": "เหตุผลประกอบสั้นๆ ว่าทำไมถึงเลือกสเปกระดับนี้ และความเสี่ยง/ข้อควรระวังถ้ามี",');
     lines.push('  "recommendation": "ข้อเสนอแนะสำหรับผู้บริหารในการตัดสินใจ เช่น ควรเริ่มลงทุนระดับไหนก่อน"');
     lines.push('}');
     lines.push('budgetItems ต้องแตกเป็นรายการอุปกรณ์ย่อยจริงๆ (เช่น GPU, CPU, RAM, Storage, Networking, Software/Orchestration ฯลฯ) อย่างน้อย 4-8 รายการ ไม่ใช่รวมเป็นก้อนเดียว');
+    lines.push('aiModels ต้องมีครบทุก use case ในรายการ (' + list.length + ' รายการ) เลือกโมเดลให้เหมาะกับประเภทงานจริงของแต่ละ use case ไม่ใช่โมเดลเดียวกันทั้งหมด และให้ความสำคัญกับความไวของข้อมูล (ถ้าเป็นข้อมูลลับ/confidential ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
     return lines.join('\n');
   }
 
@@ -2107,6 +2110,8 @@
         budgetItems: (data && Array.isArray(data.budgetItems)) ? data.budgetItems : [],
         budgetTotalUsd: (data && data.budgetTotalUsd) || '',
         budgetTotalThb: (data && data.budgetTotalThb) || '',
+        aiModelNote: (data && data.aiModelNote) || '',
+        aiModels: (data && Array.isArray(data.aiModels)) ? data.aiModels : [],
         reasoning: (data && data.reasoning) || '',
         recommendation: (data && data.recommendation) || '',
         signature: specGroupSignature(list),
@@ -2147,6 +2152,21 @@
       + '</tr></thead><tbody>' + rows + totalRow + '</tbody></table></div>';
   }
 
+  function specAiModelTableHtml(record){
+    var items = record.aiModels || [];
+    if(items.length === 0) return '<p class="spec-empty">ไม่มีข้อมูลคำแนะนำ AI model</p>';
+    var rows = items.map(function(it){
+      return '<tr>'
+        + '<td>' + escapeHtml(it.useCase || '-') + '</td>'
+        + '<td>' + escapeHtml(it.model || '-') + '</td>'
+        + '<td>' + escapeHtml(it.reason || '-') + '</td>'
+        + '</tr>';
+    }).join('');
+    return '<div style="overflow-x:auto;"><table class="doc-table"><thead><tr>'
+      + '<th style="width:26%;">Use Case</th><th style="width:28%;">AI Model ที่แนะนำ</th><th>เหตุผล</th>'
+      + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
   function renderSpecResultHtml(record){
     // Legacy cached records (from before structured output) only have `.text`.
     if(!record.summary && !record.specText && (!record.budgetItems || record.budgetItems.length===0) && record.text){
@@ -2163,6 +2183,11 @@
         html += '<div class="spec-section" style="border-left-color:var(--teal); background:var(--teal-light);">'
           + '<h4 style="color:var(--teal);">3. งบประมาณโดยประมาณ</h4>'
           + specBudgetTableHtml(record)
+          + '</div>';
+        html += '<div class="spec-section" style="border-left-color:var(--med); background:var(--med-bg);">'
+          + '<h4 style="color:var(--med);">4. AI Model ที่แนะนำสำหรับแต่ละ Use Case</h4>'
+          + (record.aiModelNote ? '<p>' + nl2br(record.aiModelNote) + '</p>' : '')
+          + specAiModelTableHtml(record)
           + '</div>';
       } else {
         html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
