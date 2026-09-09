@@ -1652,65 +1652,26 @@
   var currentAttachment = null;
 
   // ===== Claude AI integration =====
-  function ucContextText(uc){
-    var cat = getCategory(uc.aiType);
-    var lines = [];
-    lines.push('วิธีการเดิมที่ทำอยู่ (Existing Work): ' + (uc.solution || '-'));
-    lines.push('ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available): ' + (uc.dataAvailable || '-'));
-    lines.push('แนวทางหลังนำ AI มาใช้ (Redesign): ' + (uc.redesignDesc || '-'));
-    lines.push('ลักษณะงาน/ประเภท AI: ' + (cat ? (cat.label + ' (' + cat.aiType + ')') : 'ยังไม่ระบุ'));
-    lines.push('QWP อ้างอิง: ' + (uc.qwp || '-'));
-    lines.push('kQI / QI ที่เกี่ยวข้อง: ' + (uc.kqi || '-'));
-    if(uc.attachment){
-      lines.push('เอกสารแนบ (วิธีการเดิม): ' + uc.attachment.name + (isClaudeReadable(uc.attachment) ? ' (แนบเนื้อหามาด้วย)' : ' (เป็นไฟล์ ' + (uc.attachment.type||'') + ' — อ่านเนื้อหาโดยตรงไม่ได้ ใช้เป็นบริบท)'));
-    } else if(uc.attachRef){
-      lines.push('เอกสารอ้างอิง (วิธีการเดิม): ' + uc.attachRef);
-    }
-    return lines.join('\n');
-  }
-
-  function isClaudeReadable(att){
-    if(!att || !att.type) return false;
-    return att.type === 'application/pdf' || att.type.indexOf('image/') === 0;
-  }
-
-  function ucContentBlocks(uc, promptText){
-    var blocks = [];
-    if(uc.attachment && isClaudeReadable(uc.attachment) && uc.attachment.data){
+  // เอกสารแนบที่เป็นรูปภาพเท่านั้นที่ส่งให้ Claude ดูได้จริงผ่าน sample capability
+  // (sample.images รับเฉพาะ JPEG/PNG/WebP/GIF ไม่รองรับ PDF) — แปลง base64 data URL เป็น Blob
+  function attachmentImageBlob(uc){
+    if(!uc.attachment || !uc.attachment.type || uc.attachment.type.indexOf('image/') !== 0 || !uc.attachment.data) return null;
+    try{
       var b64 = String(uc.attachment.data).split(',')[1] || '';
-      if(uc.attachment.type === 'application/pdf'){
-        blocks.push({ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } });
-      } else {
-        blocks.push({ type:'image', source:{ type:'base64', media_type:uc.attachment.type, data:b64 } });
-      }
-    }
-    blocks.push({ type:'text', text: promptText });
-    return blocks;
+      var byteChars = atob(b64);
+      var byteNumbers = new Array(byteChars.length);
+      for(var i=0;i<byteChars.length;i++){ byteNumbers[i] = byteChars.charCodeAt(i); }
+      return new Blob([new Uint8Array(byteNumbers)], { type: uc.attachment.type });
+    }catch(e){ return null; }
   }
 
-  async function callClaude(systemPrompt, userBlocks){
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1500,
-        system: systemPrompt,
-        messages: [ { role: 'user', content: userBlocks } ]
-      })
-    });
-    if(!resp.ok){ throw new Error('API error ' + resp.status); }
-    var data = await resp.json();
-    var text = (data.content || []).map(function(c){ return c.type === 'text' ? c.text : ''; }).filter(Boolean).join('\n');
-    return text;
-  }
-
-  function parseJsonLoose(text){
-    if(!text) return null;
-    var t = text.replace(/```json/gi,'').replace(/```/g,'').trim();
-    var s = t.indexOf('{'), e = t.lastIndexOf('}');
-    if(s !== -1 && e !== -1 && e > s){ t = t.slice(s, e+1); }
-    try{ return JSON.parse(t); }catch(err){ return null; }
+  function sampleErrorMessage(e){
+    var code = e && e.code;
+    if(code === 'not_granted') return 'ฟีเจอร์นี้ต้องได้รับอนุญาตให้ใช้ Claude ก่อน (ผู้ใช้ปฏิเสธ หรือองค์กรไม่อนุญาต)';
+    if(code === 'rate_limited') return 'เรียกใช้ Claude ถี่เกินไป กรุณาลองใหม่อีกครั้งภายหลัง';
+    if(code === 'not_declared' || code === 'sampling_disabled' || code === 'capability_disabled') return 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)';
+    if(code === 'invalid_json') return 'Claude ตอบกลับในรูปแบบที่อ่านไม่ได้ ลองใหม่อีกครั้ง';
+    return (e && e.message) ? e.message : 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
   }
   var chart = null;
 
@@ -2616,10 +2577,16 @@
     var btn = document.getElementById('plan-ai-btn');
     if(btn){ btn.disabled = true; }
     if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์แผนงานด้วย AI Claude...'; }
+    await claudeSampleReady;
+    if(!claudeSample){
+      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)'; }
+      if(btn){ btn.disabled = false; }
+      return;
+    }
     var plan = buildPlan(uc);
     var phaseSummary = plan.phases.map(function(p){ return p.no+'. '+p.name+' ('+p.durWeeks+' สัปดาห์, '+p.people+' คน, '+p.manDays+' man-days)'; }).join('\n');
-    var systemPrompt = 'คุณเป็นผู้จัดการโครงการ AI ที่มีประสบการณ์ ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown';
-    var instruction = 'นี่คือแผนงานพัฒนา AI สำหรับ use case หนึ่ง ช่วยวิเคราะห์และให้คำแนะนำเพื่อให้แผนสมจริงและสำเร็จมากขึ้น (พิจารณาเอกสารแนบถ้ามี)\n\n'
+    var prompt = 'คุณเป็นผู้จัดการโครงการ AI ที่มีประสบการณ์ ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown\n\n'
+      + 'นี่คือแผนงานพัฒนา AI สำหรับ use case หนึ่ง ช่วยวิเคราะห์และให้คำแนะนำเพื่อให้แผนสมจริงและสำเร็จมากขึ้น (พิจารณาเอกสารแนบถ้ามี)\n\n'
       + ucContextText(uc) + '\n\n'
       + 'ระยะเวลารวม '+plan.totalWeeks+' สัปดาห์, ทีม '+plan.teamSize+' คน, รวม '+plan.totalManDays+' man-days' + (plan.budget?(', งบ '+plan.budget+' บาท'):'') + '\n'
       + 'เฟสงาน:\n' + phaseSummary + '\n\n'
@@ -2629,10 +2596,11 @@
       + '"risks":["ความเสี่ยงของแผนงานนี้"],'
       + '"phaseNotes":[{"phase":"ชื่อเฟส","note":"ข้อสังเกต/คำแนะนำเฉพาะเฟส"}]}\n'
       + 'recommendations และ risks อย่างละ 3-5 ข้อ, phaseNotes เฉพาะเฟสที่มีข้อสังเกตสำคัญ ตอบเป็นภาษาไทย';
+    var imgBlob = attachmentImageBlob(uc);
     try {
-      var text = await callClaude(systemPrompt, ucContentBlocks(uc, instruction));
-      var parsed = parseJsonLoose(text);
-      if(!parsed) throw new Error('bad shape');
+      var opts = { modelTier: 'complex', cache: false };
+      if(imgBlob) opts.images = imgBlob;
+      var parsed = await claudeSample.json(prompt, opts);
       uc.aiPlan = { summary: parsed.summary||'', recommendations: parsed.recommendations||[], risks: parsed.risks||[], phaseNotes: parsed.phaseNotes||[], at: new Date().toISOString() };
       await saveData();
       document.getElementById('plan-content').innerHTML = buildPlanBody(uc);
@@ -2640,7 +2608,7 @@
     } catch(e){
       if(statusEl){
         statusEl.style.color = '#A32D2D';
-        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ (ใช้ได้เฉพาะเมื่อเปิดในแอป Claude)';
+        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ: ' + sampleErrorMessage(e);
       }
       if(btn){ btn.disabled = false; }
     }
@@ -2757,24 +2725,10 @@
     return lines.join('\n');
   }
 
+  // เอกสารแนบที่ "อ่านได้" คือรูปภาพเท่านั้น (ส่งผ่าน sample.images ได้จริง) — PDF ใช้เป็นบริบทข้อความเท่านั้น
   function isClaudeReadable(att){
     if(!att || !att.type) return false;
-    return att.type === 'application/pdf' || att.type.indexOf('image/') === 0;
-  }
-
-  // build content array (text + optional document/image) for the API
-  function ucContentBlocks(uc, instruction){
-    var blocks = [];
-    if(uc.attachment && isClaudeReadable(uc.attachment)){
-      var b64 = String(uc.attachment.data).split(',')[1] || '';
-      if(uc.attachment.type === 'application/pdf'){
-        blocks.push({ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } });
-      } else {
-        blocks.push({ type:'image', source:{ type:'base64', media_type:uc.attachment.type, data:b64 } });
-      }
-    }
-    blocks.push({ type:'text', text: instruction });
-    return blocks;
+    return att.type.indexOf('image/') === 0;
   }
 
   // ===== Flow การทำงาน + n8n =====
@@ -2963,17 +2917,25 @@
     var btn = document.getElementById('flow-ai-btn');
     if(btn){ btn.disabled = true; }
     if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์ด้วย AI Claude...'; }
-    var systemPrompt = 'คุณเป็นผู้เชี่ยวชาญด้านการออกแบบระบบ AI และ automation (n8n) ในองค์กร ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown';
-    var instruction = 'วิเคราะห์ข้อมูล use case ต่อไปนี้ (รวมเอกสารแนบถ้ามี) แล้วออกแบบ (1) Flow การทำงานเชิงธุรกิจ และ (2) โครงสร้าง workflow n8n ที่เหมาะสม\n\n'
+    await claudeSampleReady;
+    if(!claudeSample){
+      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ) — แสดงผลแบบ template แทน'; }
+      if(btn){ btn.disabled = false; }
+      return;
+    }
+    var prompt = 'คุณเป็นผู้เชี่ยวชาญด้านการออกแบบระบบ AI และ automation (n8n) ในองค์กร ตอบกลับเป็น JSON ที่ถูกต้องเท่านั้น ไม่ต้องมีคำอธิบายหรือ markdown\n\n'
+      + 'วิเคราะห์ข้อมูล use case ต่อไปนี้ (รวมเอกสารแนบถ้ามี) แล้วออกแบบ (1) Flow การทำงานเชิงธุรกิจ และ (2) โครงสร้าง workflow n8n ที่เหมาะสม\n\n'
       + ucContextText(uc) + '\n\n'
       + 'ตอบกลับเป็น JSON เท่านั้น โครงสร้าง:\n'
       + '{"workflow":[{"label":"ชื่อขั้นตอนสั้นๆ ภาษาไทย","note":"คำอธิบายสั้นๆ"}],'
       + '"n8n":[{"name":"ชื่อ node ภาษาไทยหรืออังกฤษ","type":"ประเภท n8n เช่น webhook, openAi, httpRequest, set, if, code, scheduleTrigger, respondToWebhook"}]}\n'
       + 'workflow ควรมี 5-9 ขั้นตอน, n8n ควรมี 4-8 nodes โดยขั้นตอนต้องอิงวิธีการเดิม ข้อมูลที่มีอยู่ แนวทางหลังนำ AI มาใช้ และ kQI ที่ให้มา';
+    var imgBlob = attachmentImageBlob(uc);
     try {
-      var text = await callClaude(systemPrompt, ucContentBlocks(uc, instruction));
-      var parsed = parseJsonLoose(text);
-      if(!parsed || !parsed.workflow || !parsed.n8n) throw new Error('bad shape');
+      var opts = { modelTier: 'complex', cache: false };
+      if(imgBlob) opts.images = imgBlob;
+      var parsed = await claudeSample.json(prompt, opts);
+      if(!parsed || !parsed.workflow || !parsed.n8n) throw { code:'invalid_json', message:'bad shape' };
       uc.aiFlow = { workflow: parsed.workflow, n8n: parsed.n8n, at: new Date().toISOString() };
       await saveData();
       document.getElementById('flow-content').innerHTML = buildFlowBody(uc);
@@ -2981,7 +2943,7 @@
     } catch(e){
       if(statusEl){
         statusEl.style.color = '#A32D2D';
-        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ (ใช้ได้เฉพาะเมื่อเปิดในแอป Claude) — แสดงผลแบบ template แทน';
+        statusEl.textContent = 'วิเคราะห์ด้วย AI ไม่สำเร็จ: ' + sampleErrorMessage(e) + ' — แสดงผลแบบ template แทน';
       }
       if(btn){ btn.disabled = false; }
     }
