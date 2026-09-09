@@ -61,7 +61,8 @@
   .doc-footer-bar{margin-top:24px; background:#E3631C; color:#fff; padding:10px 16px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:13px;}
   .doc-footer-bar .brand{font-weight:700;}
   .doc-footer-bar .brand small{font-weight:400; font-size:9px; opacity:.9;}
-  .header{display:flex; align-items:center; gap:14px; margin-bottom:28px;}
+  .header{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:28px;}
+  .header .header-text{text-align:left;}
   .logo{
     width:42px; height:42px; border-radius:10px; background:var(--navy);
     display:flex; align-items:center; justify-content:center;
@@ -704,11 +705,11 @@
 <div class="app">
 
   <div class="header">
-    <img id="brand-logo" alt="Polymate" style="height:46px; width:auto; flex-shrink:0;">
-    <div>
+    <div class="header-text">
       <h1>AI use case prioritization tool</h1>
       <p>บันทึก ให้คะแนน จัดลำดับความสำคัญ และออกเอกสารสรุปของ use case AI ในองค์กร — ในโปรแกรมเดียว</p>
     </div>
+    <img id="brand-logo" alt="Polymate" style="height:46px; width:auto; flex-shrink:0;">
   </div>
 
   <div class="nav-tabs" role="tablist">
@@ -772,37 +773,56 @@
         <input type="text" id="f-name" placeholder="เช่น แชทบอทตอบคำถามลูกค้า">
       </div>
       <div class="field">
-        <label for="f-dept">แผนก / หน่วยงาน <span style="color:#A32D2D;">*</span></label>
+        <label for="f-dept">แผนก / หน่วยงาน</label>
         <input type="text" id="f-dept" placeholder="เช่น ฝ่ายบริการลูกค้า">
       </div>
     </div>
     <div class="error-msg" id="f-error">กรุณากรอกชื่อ use case</div>
     <div class="field">
-      <label for="f-owner">ผู้รับผิดชอบ / เจ้าของ use case <span style="color:#A32D2D;">*</span></label>
+      <label for="f-owner">ผู้รับผิดชอบ / เจ้าของ use case</label>
       <input type="text" id="f-owner" placeholder="ชื่อผู้รับผิดชอบ">
     </div>
-    <div class="field">
-      <label for="f-problem">ปัญหาทางธุรกิจที่ต้องการแก้ไข <span style="color:#A32D2D;">*</span></label>
-      <textarea id="f-problem" rows="2" placeholder="อธิบายปัญหาหรือ pain point ปัจจุบัน"></textarea>
-    </div>
-    <div class="error-msg" id="basic-error">กรุณากรอก แผนก, ผู้รับผิดชอบ และ ปัญหาทางธุรกิจ ให้ครบ</div>
-    <div class="field">
-      <label for="f-solution">วิธีการเดิมที่ทำอยู่</label>
-      <textarea id="f-solution" rows="2" placeholder="อธิบายวิธีการ/ขั้นตอนที่ทำอยู่ในปัจจุบัน"></textarea>
-    </div>
-    <div class="field">
-      <label>แนบเอกสารที่ใช้ (วิธีการเดิมที่ทำอยู่)</label>
-      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-        <input type="file" id="f-attach-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp" style="font-size:12px;">
+    <div style="border:1px solid var(--border); border-radius:10px; padding:14px 16px 4px; margin:0 0 18px; background:#FAFAF8;">
+      <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">อ้างอิงกระบวนการคุณภาพ (QWP / Control / kQI) <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่บังคับ</span></div>
+      <div class="field">
+        <label for="f-qwp">QWP อ้างอิง (รหัส/ชื่อเอกสาร)</label>
+        <input type="text" id="f-qwp" placeholder="เช่น รหัส/ชื่อเอกสาร QWP ที่อ้างอิง">
       </div>
-      <div class="slider-hint">รองรับ PDF, รูปภาพ, Word, Excel ขนาดไม่เกิน 10MB (เก็บฝังในโปรแกรม) — หากเกิน ให้กรอกลิงก์/ชื่ออ้างอิงด้านล่างแทน</div>
-      <div id="f-attach-status" class="status" style="height:auto; min-height:16px;"></div>
-      <input type="text" id="f-attach-ref" placeholder="ลิงก์หรือชื่ออ้างอิงเอกสาร (กรณีไฟล์เกิน 10MB หรือเก็บไว้ที่อื่น)" style="margin-top:6px;">
+      <div class="field">
+        <label for="f-kqi2">kQI / QI ที่เกี่ยวข้อง</label>
+        <textarea id="f-kqi2" rows="2" placeholder="Key Quality Indicator / Quality Indicator ของขั้นตอนนั้น"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-refstep">ขั้นตอนที่เกี่ยวข้อง</label>
+        <textarea id="f-refstep" rows="2" placeholder="ขั้นตอนใน QWP ที่ use case นี้เกี่ยวข้อง"></textarea>
+      </div>
     </div>
-    <div class="field">
-      <label for="f-output">Output ที่คาดหวัง</label>
-      <textarea id="f-output" rows="2" placeholder="ผลลัพธ์ที่ต้องการได้จากระบบ เช่น คำตอบอัตโนมัติ, รายงานสรุป, การแจ้งเตือน"></textarea>
+
+    <div style="border:1.5px solid var(--navy); border-radius:12px; padding:16px 18px 4px; margin:0 0 18px; background:#FBFAF6;">
+      <div style="font-size:11.5px; font-weight:700; color:var(--navy); letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ใจความสำคัญของ Use Case</div>
+      <div class="field">
+        <label for="f-solution">วิธีการเดิมที่ทำอยู่ (Existing Work)</label>
+        <textarea id="f-solution" rows="2" placeholder="อธิบายวิธีการ/ขั้นตอนที่ทำอยู่ในปัจจุบัน"></textarea>
+      </div>
+      <div class="field">
+        <label>แนบเอกสารที่ใช้ (วิธีการเดิมที่ทำอยู่)</label>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <input type="file" id="f-attach-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp" style="font-size:12px;">
+        </div>
+        <div class="slider-hint">รองรับ PDF, รูปภาพ, Word, Excel ขนาดไม่เกิน 10MB (เก็บฝังในโปรแกรม) — หากเกิน ให้กรอกลิงก์/ชื่ออ้างอิงด้านล่างแทน</div>
+        <div id="f-attach-status" class="status" style="height:auto; min-height:16px;"></div>
+        <input type="text" id="f-attach-ref" placeholder="ลิงก์หรือชื่ออ้างอิงเอกสาร (กรณีไฟล์เกิน 10MB หรือเก็บไว้ที่อื่น)" style="margin-top:6px;">
+      </div>
+      <div class="field">
+        <label for="f-dataavailable">ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</label>
+        <textarea id="f-dataavailable" rows="2" placeholder="ระบุว่ามีข้อมูลอะไร มาจากระบบ/แหล่งใด และใครดูแล — ที่จะนำมาใช้หรือให้ AI ดูเพื่อทำงาน เช่น ข้อมูลยอดขายรายวันจากระบบ ERP ดูแลโดยฝ่ายบัญชี"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-redesign">แนวทางหลังนำ AI มาใช้ (Redesign)</label>
+        <textarea id="f-redesign" rows="2" placeholder="อธิบายว่าเมื่อนำ AI มาใช้แล้ว ขั้นตอน/ผลลัพธ์จะเปลี่ยนไปเป็นอย่างไร"></textarea>
+      </div>
     </div>
+
     <div class="field">
       <label for="f-aitype">ลักษณะของงาน/ข้อมูล (ใช้แนะนำประเภท AI)</label>
       <div style="display:flex; gap:8px;">
@@ -883,29 +903,6 @@
         <option value="ใช้งานเป็นครั้งคราว (ไม่กำหนด SLA)">ใช้งานเป็นครั้งคราว (ไม่กำหนด SLA)</option>
       </select>
     </div>
-
-    <details id="qwp-details" open style="margin:4px 0 4px;">
-      <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">การอ้างอิงกระบวนการคุณภาพ (QWP / Control / KQI) <span style="color:#A32D2D;">*จำเป็น</span></summary>
-      <div style="margin-top:14px;">
-        <div class="field">
-          <label for="f-qwp">ระบุ รหัสเอกสาร และ ชื่อ QWP (Quality Work Procedure) ของบริษัท <span style="color:#A32D2D;">*</span></label>
-          <input type="text" id="f-qwp" placeholder="เช่น รหัส/ชื่อเอกสาร QWP ที่อ้างอิง">
-        </div>
-        <div class="field">
-          <label for="f-refstep">ระบุ ขั้นตอนการทำงานที่อ้างอิง QWP (Quality Work Procedure) <span style="color:#A32D2D;">*</span></label>
-          <textarea id="f-refstep" rows="2" placeholder="ขั้นตอนใน QWP ที่ use case นี้เกี่ยวข้อง"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-control">ระบุ Control Item ของขั้นตอนการทำงานที่อ้างอิง QWP (Quality Work Procedure) <span style="color:#A32D2D;">*</span></label>
-          <textarea id="f-control" rows="2" placeholder="จุดควบคุม/Control point ของขั้นตอนที่อ้างถึง"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-kqi2">kQI / QI ของขั้นตอนการทำงานที่อ้างถึง <span style="color:#A32D2D;">*</span></label>
-          <textarea id="f-kqi2" rows="2" placeholder="Key Quality Indicator / Quality Indicator ของขั้นตอนนั้น"></textarea>
-        </div>
-        <div class="error-msg" id="qwp-error">กรุณากรอกข้อมูลในกลุ่มการอ้างอิงกระบวนการคุณภาพ (QWP / Control / KQI) ให้ครบทุกช่อง</div>
-      </div>
-    </details>
 
     <div class="slider-row">
       <div class="top"><label for="f-impact">ผลกระทบทางธุรกิจ <span class="w">(น้ำหนัก 35%)</span></label><span class="v" id="f-impact-out">3</span></div>
@@ -1609,12 +1606,12 @@
   function ucContextText(uc){
     var cat = getCategory(uc.aiType);
     var lines = [];
-    lines.push('ปัญหาทางธุรกิจที่ต้องการแก้ไข: ' + (uc.problem || '-'));
-    lines.push('วิธีการเดิมที่ทำอยู่: ' + (uc.solution || '-'));
-    lines.push('Output ที่คาดหวัง: ' + (uc.output || '-'));
+    lines.push('วิธีการเดิมที่ทำอยู่ (Existing Work): ' + (uc.solution || '-'));
+    lines.push('ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available): ' + (uc.dataAvailable || '-'));
+    lines.push('แนวทางหลังนำ AI มาใช้ (Redesign): ' + (uc.redesignDesc || '-'));
     lines.push('ลักษณะงาน/ประเภท AI: ' + (cat ? (cat.label + ' (' + cat.aiType + ')') : 'ยังไม่ระบุ'));
-    lines.push('Control Item ของขั้นตอน (QWP): ' + (uc.control || '-'));
-    lines.push('kQI / QI ของขั้นตอนที่อ้างถึง: ' + (uc.kqi || '-'));
+    lines.push('QWP อ้างอิง: ' + (uc.qwp || '-'));
+    lines.push('kQI / QI ที่เกี่ยวข้อง: ' + (uc.kqi || '-'));
     if(uc.attachment){
       lines.push('เอกสารแนบ (วิธีการเดิม): ' + uc.attachment.name + (isClaudeReadable(uc.attachment) ? ' (แนบเนื้อหามาด้วย)' : ' (เป็นไฟล์ ' + (uc.attachment.type||'') + ' — อ่านเนื้อหาโดยตรงไม่ได้ ใช้เป็นบริบท)'));
     } else if(uc.attachRef){
@@ -2055,7 +2052,7 @@
           + '<div class="info">'
           + '<p class="name">'+escapeHtml(uc.name)+'</p>'
           + '<p class="dept">'+escapeHtml(uc.dept||'ไม่ระบุแผนก')+(uc.owner?' · '+escapeHtml(uc.owner):'')+'</p>'
-          + (uc.problem ? '<p class="problem">'+escapeHtml(uc.problem)+'</p>' : '')
+          + (uc.solution ? '<p class="problem">'+escapeHtml(uc.solution)+'</p>' : '')
           + '</div>'
           + (cat ? '<span class="badge ai">'+escapeHtml(cat.aiType)+'</span>' : '')
           + '<span class="badge '+p.key+'">'+p.icon+p.label+'</span>'
@@ -2151,32 +2148,32 @@
       + '<div class="doc-section"><h3>1. ข้อมูลทั่วไป</h3>'
       + '<table class="doc-table"><tr><th style="width:34%">แผนก / หน่วยงาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
       + '<tr><th>ผู้รับผิดชอบ</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
-      + '<div class="doc-section"><h3>2. ปัญหาทางธุรกิจ</h3><p class="doc-text">'+fillOrDash(uc.problem)+'</p></div>'
-      + '<div class="doc-section"><h3>3. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<div class="doc-section"><h3>2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
       + '<table class="doc-table">'
-      + '<tr><th style="width:34%">Output ที่คาดหวัง</th><td>'+nl2br(uc.output)+'</td></tr>'
-      + '<tr><th>จำนวน Users / วัน</th><td>'+fillOrDash(uc.users)+'</td></tr>'
+      + '<tr><th style="width:34%">QWP อ้างอิง (รหัส/ชื่อเอกสาร)</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
+      + '<tr><th>kQI / QI ที่เกี่ยวข้อง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
+      + '<tr><th>ขั้นตอนที่เกี่ยวข้อง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3><p class="doc-text">'+fillOrDash(uc.solution)+'</p>'
+      + ((uc.attachment || uc.attachRef) ? '<p class="doc-text" style="margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? '<a href="'+uc.attachment.data+'" download="'+escapeHtml(uc.attachment.name)+'">'+escapeHtml(uc.attachment.name)+'</a>' : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
+      + '</div>'
+      + '<div class="doc-section"><h3>4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3><p class="doc-text">'+fillOrDash(uc.dataAvailable)+'</p></div>'
+      + '<div class="doc-section"><h3>5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3><p class="doc-text">'+fillOrDash(uc.redesignDesc)+'</p>'
+      + (cat ? '<p class="doc-text" style="margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '</div>'
+      + '<div class="doc-section"><h3>6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">จำนวน Users / วัน</th><td>'+fillOrDash(uc.users)+'</td></tr>'
       + '<tr><th>ภาษาที่ต้องการ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
       + '<tr><th>ระดับความสำคัญของข้อมูล</th><td>'+fillOrDash(uc.dataSensitivity)+'</td></tr>'
       + '<tr><th>Latency ที่รับได้</th><td>'+fillOrDash(uc.latency)+'</td></tr>'
       + '<tr><th>Availability ที่ต้องการ</th><td>'+fillOrDash(uc.availability)+'</td></tr>'
       + '</table></div>'
-      + '<div class="doc-section"><h3>4. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
-      + '<table class="doc-table">'
-      + '<tr><th style="width:34%">ข้อมูลอ้างอิงจาก QWP</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
-      + '<tr><th>ขั้นตอนการทำงานที่อ้างอิง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
-      + '<tr><th>Control Item ของขั้นตอน</th><td>'+nl2br(uc.control)+'</td></tr>'
-      + '<tr><th>KQI / QI ของขั้นตอนที่อ้างถึง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
-      + '</table></div>'
-      + '<div class="doc-section"><h3>5. วิธีการเดิมที่ทำอยู่</h3><p class="doc-text">'+fillOrDash(uc.solution)+'</p>'
-      + ((uc.attachment || uc.attachRef) ? '<p class="doc-text" style="margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? '<a href="'+uc.attachment.data+'" download="'+escapeHtml(uc.attachment.name)+'">'+escapeHtml(uc.attachment.name)+'</a>' : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + (cat ? '<p class="doc-text" style="margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '</div>'
-      + '<div class="doc-section"><h3>6. Spec Hardware ที่ใช้ทำ AI</h3><p class="doc-text">'+nl2br(uc.hardware)+'</p></div>'
-      + '<div class="doc-section"><h3>7. Flow ขั้นตอนการทำ AI</h3>'
+      + '<div class="doc-section"><h3>7. Spec Hardware ที่ใช้ทำ AI</h3><p class="doc-text">'+nl2br(uc.hardware)+'</p></div>'
+      + '<div class="doc-section"><h3>8. Flow ขั้นตอนการทำ AI</h3>'
       + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
       + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
-      + '<div class="doc-section"><h3>8. การประเมินและให้คะแนน</h3>'
+      + '<div class="doc-section"><h3>9. การประเมินและให้คะแนน</h3>'
       + '<table class="doc-table"><tr><th>เกณฑ์</th><th>น้ำหนัก</th><th>คะแนน (1-5)</th></tr>'
       + '<tr><td>ผลกระทบทางธุรกิจ</td><td>35%</td><td>'+uc.impact+'</td></tr>'
       + '<tr><td>ความเป็นไปได้ทางเทคนิค</td><td>25%</td><td>'+uc.feasibility+'</td></tr>'
@@ -2185,12 +2182,12 @@
       + '</table>'
       + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
       + '</div>'
-      + '<div class="doc-section"><h3>9. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
-      + '<div class="doc-section"><h3>10. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
-      + '<div class="doc-section"><h3>11. ตัวชี้วัดความสำเร็จ (KQI)</h3><p class="doc-text">'+nl2br(uc.kpi)+'</p></div>'
-      + '<div class="doc-section"><h3>12. ผลตอบแทนการลงทุน (ROI)</h3><p class="doc-text">'+nl2br(uc.roi)+'</p></div>'
-      + '<div class="doc-section"><h3>13. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p class="doc-text">'+nl2br(uc.recommendation)+'</p></div>'
-      + '<div class="doc-section"><h3>14. การอนุมัติ</h3><div class="doc-grid2">'
+      + '<div class="doc-section"><h3>10. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
+      + '<div class="doc-section"><h3>11. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
+      + '<div class="doc-section"><h3>12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p class="doc-text">'+nl2br(uc.kpi)+'</p></div>'
+      + '<div class="doc-section"><h3>13. ผลตอบแทนการลงทุน (ROI)</h3><p class="doc-text">'+nl2br(uc.roi)+'</p></div>'
+      + '<div class="doc-section"><h3>14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p class="doc-text">'+nl2br(uc.recommendation)+'</p></div>'
+      + '<div class="doc-section"><h3>15. การอนุมัติ</h3><div class="doc-grid2">'
       + '<div class="box"><p class="lbl">ผู้จัดทำ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</div><div class="ln">วันที่: '+today+'</div><div class="ln">ลงชื่อ:</div></div>'
       + '<div class="box"><p class="lbl">ผู้พิจารณา / อนุมัติ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</div><div class="ln">วันที่:</div><div class="ln">ลงชื่อ:</div></div>'
       + '</div></div>'
@@ -2428,12 +2425,12 @@
     var cat = getCategory(uc.aiType);
     var lines = [];
     lines.push('ชื่อ use case: ' + (uc.name||'-'));
-    lines.push('ปัญหาทางธุรกิจที่ต้องการแก้ไข: ' + (uc.problem||'-'));
-    lines.push('วิธีการเดิมที่ทำอยู่: ' + (uc.solution||'-'));
-    lines.push('Output ที่คาดหวัง: ' + (uc.output||'-'));
+    lines.push('วิธีการเดิมที่ทำอยู่ (Existing Work): ' + (uc.solution||'-'));
+    lines.push('ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available): ' + (uc.dataAvailable||'-'));
+    lines.push('แนวทางหลังนำ AI มาใช้ (Redesign): ' + (uc.redesignDesc||'-'));
     lines.push('ลักษณะงาน/ประเภท AI: ' + (cat ? (cat.label+' ('+cat.aiType+')') : 'ยังไม่ระบุ'));
-    lines.push('Control Item ของขั้นตอน (QWP): ' + (uc.control||'-'));
-    lines.push('kQI/QI ของขั้นตอนที่อ้างถึง: ' + (uc.kqi||'-'));
+    lines.push('QWP อ้างอิง: ' + (uc.qwp||'-'));
+    lines.push('kQI/QI ที่เกี่ยวข้อง: ' + (uc.kqi||'-'));
     if(uc.attachRef) lines.push('เอกสารอ้างอิง: ' + uc.attachRef);
     if(uc.attachment && !isClaudeReadable(uc.attachment)) lines.push('ชื่อไฟล์แนบ: ' + uc.attachment.name + ' (ประเภทที่อ่านไม่ได้โดยตรง)');
     return lines.join('\n');
@@ -2487,12 +2484,12 @@
     // business workflow steps
     var steps = [];
     steps.push({ label: triggerLabel, note: 'จุดเริ่มงาน' });
-    steps.push({ label: 'รับ Input', note: uc.problem ? ('บริบท: '+uc.problem) : 'ข้อมูลนำเข้าจากผู้ใช้/ระบบ' });
+    steps.push({ label: 'รับ Input', note: uc.dataAvailable ? ('ข้อมูลที่มี: '+uc.dataAvailable) : 'ข้อมูลนำเข้าจากผู้ใช้/ระบบ' });
     if(uc.solution){ steps.push({ label: 'แทนที่ขั้นตอนเดิม', note: 'เดิม: '+uc.solution }); }
     prof.extra.forEach(function(e){ steps.push({ label: e, note: 'ขั้นเตรียมข้อมูลก่อนเข้า AI' }); });
     steps.push({ label: 'ประมวลผลด้วย AI', note: prof.aiOp + (cat ? ' ('+cat.aiType+')' : '') });
     steps.push({ label: 'ตรวจสอบ/จัดรูปผลลัพธ์', note: 'ตรวจความถูกต้องและจัดรูปแบบ' });
-    steps.push({ label: 'ส่ง Output', note: uc.output ? ('ผลลัพธ์: '+uc.output) : 'ส่งผลลัพธ์กลับผู้ใช้/ระบบปลายทาง' });
+    steps.push({ label: 'ส่ง Output', note: uc.redesignDesc ? ('ผลลัพธ์: '+uc.redesignDesc) : 'ส่งผลลัพธ์กลับผู้ใช้/ระบบปลายทาง' });
     return { steps: steps, profile: prof, triggerLabel: triggerLabel };
   }
 
@@ -2597,7 +2594,7 @@
     if(uc.aiType==='text' || uc.aiType==='generative' || uc.aiType==='rag' || uc.aiType==='knowledge' || uc.aiType==='agent'){
       aiType = '@n8n/n8n-nodes-langchain.openAi';
       aiTV = 1.3;
-      aiParams = { resource: 'chat', operation: 'message', modelId: 'gpt-4o-mini', messages: { values: [ { role: 'system', content: 'คุณเป็นผู้ช่วยสำหรับ use case: '+(uc.name||'') + (uc.output ? ('\nผลลัพธ์ที่ต้องการ: '+uc.output) : '') }, { role: 'user', content: '={{ $json.input }}' } ] } };
+      aiParams = { resource: 'chat', operation: 'message', modelId: 'gpt-4o-mini', messages: { values: [ { role: 'system', content: 'คุณเป็นผู้ช่วยสำหรับ use case: '+(uc.name||'') + (uc.redesignDesc ? ('\nผลลัพธ์ที่ต้องการ: '+uc.redesignDesc) : '') }, { role: 'user', content: '={{ $json.input }}' } ] } };
     } else {
       aiType = 'n8n-nodes-base.httpRequest';
       aiTV = 4.2;
@@ -2651,7 +2648,7 @@
       + 'ตอบกลับเป็น JSON เท่านั้น โครงสร้าง:\n'
       + '{"workflow":[{"label":"ชื่อขั้นตอนสั้นๆ ภาษาไทย","note":"คำอธิบายสั้นๆ"}],'
       + '"n8n":[{"name":"ชื่อ node ภาษาไทยหรืออังกฤษ","type":"ประเภท n8n เช่น webhook, openAi, httpRequest, set, if, code, scheduleTrigger, respondToWebhook"}]}\n'
-      + 'workflow ควรมี 5-9 ขั้นตอน, n8n ควรมี 4-8 nodes โดยขั้นตอนต้องอิงปัญหา วิธีเดิม output และ control item/KQI ที่ให้มา';
+      + 'workflow ควรมี 5-9 ขั้นตอน, n8n ควรมี 4-8 nodes โดยขั้นตอนต้องอิงวิธีการเดิม ข้อมูลที่มีอยู่ แนวทางหลังนำ AI มาใช้ และ kQI ที่ให้มา';
     try {
       var text = await callClaude(systemPrompt, ucContentBlocks(uc, instruction));
       var parsed = parseJsonLoose(text);
@@ -2694,12 +2691,12 @@
         + (i < n8nList.length-1 ? '<div class="n8n-conn">→</div>' : '');
     }).join('');
     var inputsTable = '<table class="doc-table">'
-      + '<tr><th style="width:30%">ปัญหาทางธุรกิจ</th><td>'+fillOrDash(uc.problem)+'</td></tr>'
-      + '<tr><th>วิธีการเดิมที่ทำอยู่</th><td>'+fillOrDash(uc.solution)+'</td></tr>'
-      + '<tr><th>Output ที่คาดหวัง</th><td>'+fillOrDash(uc.output)+'</td></tr>'
+      + '<tr><th style="width:30%">วิธีการเดิมที่ทำอยู่</th><td>'+fillOrDash(uc.solution)+'</td></tr>'
+      + '<tr><th>ข้อมูลที่มีอยู่สำหรับใช้งาน</th><td>'+fillOrDash(uc.dataAvailable)+'</td></tr>'
+      + '<tr><th>แนวทางหลังนำ AI มาใช้</th><td>'+fillOrDash(uc.redesignDesc)+'</td></tr>'
       + '<tr><th>ลักษณะงาน / ประเภท AI</th><td>'+(cat ? escapeHtml(cat.label)+' → '+escapeHtml(cat.aiType) : '<span style="color:var(--text-muted);">ยังไม่ระบุ</span>')+'</td></tr>'
-      + '<tr><th>Control Item (QWP)</th><td>'+fillOrDash(uc.control)+'</td></tr>'
-      + '<tr><th>kQI / QI ของขั้นตอน</th><td>'+fillOrDash(uc.kqi)+'</td></tr>'
+      + '<tr><th>QWP อ้างอิง</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
+      + '<tr><th>kQI / QI ที่เกี่ยวข้อง</th><td>'+fillOrDash(uc.kqi)+'</td></tr>'
       + '<tr><th>เอกสารแนบ</th><td>'+((uc.attachment||uc.attachRef) ? (escapeHtml((uc.attachment?uc.attachment.name:'')+(uc.attachment&&uc.attachRef?' / ':'')+(uc.attachRef||''))) : '<span style="color:var(--text-muted);">-</span>')+'</td></tr>'
       + '</table>';
     var sourceBadge = ai
@@ -2764,33 +2761,33 @@
       + '<p style="'+SUB+'">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
       + '<h3 style="'+H3+'">1. ข้อมูลทั่วไป</h3>'
       + tbl(row2('แผนก / หน่วยงาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ', fillOrDash(uc.owner), true))
-      + '<h3 style="'+H3+'">2. ปัญหาทางธุรกิจ</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.problem)+'</p>'
-      + '<h3 style="'+H3+'">3. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<h3 style="'+H3+'">2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
       + tbl(
-          row2('Output ที่คาดหวัง', nl2br(uc.output,'color:#6B7280;'), true)
-          + row2('จำนวน Users / วัน', fillOrDash(uc.users), true)
+          row2('QWP อ้างอิง (รหัส/ชื่อเอกสาร)', fillOrDash(uc.qwp), true)
+          + row2('kQI / QI ที่เกี่ยวข้อง', nl2br(uc.kqi,'color:#6B7280;'), true)
+          + row2('ขั้นตอนที่เกี่ยวข้อง', nl2br(uc.refStep,'color:#6B7280;'), true)
+        )
+      + '<h3 style="'+H3+'">3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3>'
+      + '<p style="'+TXT+'">'+fillOrDash(uc.solution)+'</p>'
+      + ((uc.attachment || uc.attachRef) ? '<p style="'+TXT+' margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? escapeHtml(uc.attachment.name) : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
+      + '<h3 style="'+H3+'">4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3>'
+      + '<p style="'+TXT+'">'+fillOrDash(uc.dataAvailable)+'</p>'
+      + '<h3 style="'+H3+'">5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3>'
+      + '<p style="'+TXT+'">'+fillOrDash(uc.redesignDesc)+'</p>'
+      + (cat ? '<p style="'+TXT+' margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '<h3 style="'+H3+'">6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + tbl(
+          row2('จำนวน Users / วัน', fillOrDash(uc.users), true)
           + row2('ภาษาที่ต้องการ', fillOrDash(uc.language), true)
           + row2('ระดับความสำคัญของข้อมูล', fillOrDash(uc.dataSensitivity), true)
           + row2('Latency ที่รับได้', fillOrDash(uc.latency), true)
           + row2('Availability ที่ต้องการ', fillOrDash(uc.availability), true)
         )
-      + '<h3 style="'+H3+'">4. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
-      + tbl(
-          row2('ข้อมูลอ้างอิงจาก QWP', fillOrDash(uc.qwp), true)
-          + row2('ขั้นตอนการทำงานที่อ้างอิง', nl2br(uc.refStep,'color:#6B7280;'), true)
-          + row2('Control Item ของขั้นตอน', nl2br(uc.control,'color:#6B7280;'), true)
-          + row2('KQI / QI ของขั้นตอนที่อ้างถึง', nl2br(uc.kqi,'color:#6B7280;'), true)
-        )
-      + '<h3 style="'+H3+'">5. วิธีการเดิมที่ทำอยู่</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.solution)+'</p>'
-      + ((uc.attachment || uc.attachRef) ? '<p style="'+TXT+' margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? escapeHtml(uc.attachment.name) : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + (cat ? '<p style="'+TXT+' margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '<h3 style="'+H3+'">6. Spec Hardware ที่ใช้ทำ AI</h3><p style="'+TXT+'">'+nl2br(uc.hardware,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">7. Flow ขั้นตอนการทำ AI</h3>'
+      + '<h3 style="'+H3+'">7. Spec Hardware ที่ใช้ทำ AI</h3><p style="'+TXT+'">'+nl2br(uc.hardware,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">8. Flow ขั้นตอนการทำ AI</h3>'
       + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
       + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''))
-      + '<h3 style="'+H3+'">8. การประเมินและให้คะแนน</h3>'
+      + '<h3 style="'+H3+'">9. การประเมินและให้คะแนน</h3>'
       + tbl(
           '<tr><td style="'+TH+'">เกณฑ์</td><td style="'+TH+'">น้ำหนัก</td><td style="'+TH+'">คะแนน (1-5)</td></tr>'
           + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+uc.impact+'</td></tr>'
@@ -2799,12 +2796,12 @@
           + '<tr><td style="'+TD+'">ความเสี่ยง / ความซับซ้อน</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+uc.risk+'</td></tr>'
         )
       + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
-      + '<h3 style="'+H3+'">9. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">10. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">11. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">12. ผลตอบแทนการลงทุน (ROI)</h3><p style="'+TXT+'">'+nl2br(uc.roi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">13. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p style="'+TXT+'">'+nl2br(uc.recommendation,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">14. การอนุมัติ</h3>'
+      + '<h3 style="'+H3+'">10. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">11. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">13. ผลตอบแทนการลงทุน (ROI)</h3><p style="'+TXT+'">'+nl2br(uc.roi,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p style="'+TXT+'">'+nl2br(uc.recommendation,'color:#6B7280;')+'</p>'
+      + '<h3 style="'+H3+'">15. การอนุมัติ</h3>'
       + tbl(
           '<tr><td style="'+TH+' width:50%;">ผู้จัดทำ</td><td style="'+TH+' width:50%;">ผู้พิจารณา / อนุมัติ</td></tr>'
           + '<tr><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</td><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</td></tr>'
@@ -2856,7 +2853,6 @@
     document.getElementById('f-name').value='';
     document.getElementById('f-dept').value='';
     document.getElementById('f-owner').value='';
-    document.getElementById('f-problem').value='';
     document.getElementById('f-solution').value='';
     document.getElementById('f-aitype').value='';
     document.getElementById('analyze-status').textContent='';
@@ -2869,7 +2865,8 @@
     document.getElementById('f-recommendation').value='';
     document.getElementById('f-preparedby').value='';
     document.getElementById('f-approver').value='';
-    document.getElementById('f-output').value='';
+    document.getElementById('f-dataavailable').value='';
+    document.getElementById('f-redesign').value='';
     document.getElementById('f-users').value='';
     document.getElementById('f-language').value='';
     document.getElementById('f-datasensitivity').value='';
@@ -2877,10 +2874,7 @@
     document.getElementById('f-availability').value='';
     document.getElementById('f-qwp').value='';
     document.getElementById('f-refstep').value='';
-    document.getElementById('f-control').value='';
     document.getElementById('f-kqi2').value='';
-    document.getElementById('qwp-error').style.display='none';
-    document.getElementById('basic-error').style.display='none';
     document.getElementById('f-attach-file').value='';
     document.getElementById('f-attach-ref').value='';
     document.getElementById('f-attach-status').textContent='';
@@ -2900,7 +2894,6 @@
     document.getElementById('f-name').value = uc.name;
     document.getElementById('f-dept').value = uc.dept||'';
     document.getElementById('f-owner').value = uc.owner||'';
-    document.getElementById('f-problem').value = uc.problem||'';
     document.getElementById('f-solution').value = uc.solution||'';
     document.getElementById('f-aitype').value = uc.aiType||'';
     document.getElementById('analyze-status').textContent='';
@@ -2913,7 +2906,8 @@
     document.getElementById('f-recommendation').value = uc.recommendation||'';
     document.getElementById('f-preparedby').value = uc.preparedBy||'';
     document.getElementById('f-approver').value = uc.approver||'';
-    document.getElementById('f-output').value = uc.output||'';
+    document.getElementById('f-dataavailable').value = uc.dataAvailable||'';
+    document.getElementById('f-redesign').value = uc.redesignDesc||'';
     document.getElementById('f-users').value = uc.users||'';
     document.getElementById('f-language').value = uc.language||'';
     document.getElementById('f-datasensitivity').value = uc.dataSensitivity||'';
@@ -2921,10 +2915,7 @@
     document.getElementById('f-availability').value = uc.availability||'';
     document.getElementById('f-qwp').value = uc.qwp||'';
     document.getElementById('f-refstep').value = uc.refStep||'';
-    document.getElementById('f-control').value = uc.control||'';
     document.getElementById('f-kqi2').value = uc.kqi||'';
-    document.getElementById('qwp-error').style.display='none';
-    document.getElementById('basic-error').style.display='none';
     document.getElementById('f-attach-file').value='';
     document.getElementById('f-attach-ref').value = uc.attachRef||'';
     currentAttachment = uc.attachment || null;
@@ -3010,38 +3001,16 @@
 
     var deptVal = document.getElementById('f-dept').value.trim();
     var ownerVal = document.getElementById('f-owner').value.trim();
-    var problemVal = document.getElementById('f-problem').value.trim();
-    if(!deptVal || !ownerVal || !problemVal){
-      document.getElementById('basic-error').style.display='block';
-      var firstB = !deptVal ? 'f-dept' : (!ownerVal ? 'f-owner' : 'f-problem');
-      var elB = document.getElementById(firstB);
-      elB.scrollIntoView({behavior:'smooth', block:'center'});
-      elB.focus();
-      return;
-    }
-    document.getElementById('basic-error').style.display='none';
 
     var qwpVal = document.getElementById('f-qwp').value.trim();
     var refStepVal = document.getElementById('f-refstep').value.trim();
-    var controlVal = document.getElementById('f-control').value.trim();
     var kqiVal = document.getElementById('f-kqi2').value.trim();
-    if(!qwpVal || !refStepVal || !controlVal || !kqiVal){
-      document.getElementById('qwp-details').open = true;
-      document.getElementById('qwp-error').style.display='block';
-      var firstEmpty = !qwpVal ? 'f-qwp' : (!refStepVal ? 'f-refstep' : (!controlVal ? 'f-control' : 'f-kqi2'));
-      var el = document.getElementById(firstEmpty);
-      el.scrollIntoView({behavior:'smooth', block:'center'});
-      el.focus();
-      return;
-    }
-    document.getElementById('qwp-error').style.display='none';
 
     var data = {
       id: editingId || genId(),
       name: name,
       dept: deptVal,
       owner: ownerVal,
-      problem: problemVal,
       solution: document.getElementById('f-solution').value.trim(),
       attachment: currentAttachment,
       attachRef: document.getElementById('f-attach-ref').value.trim(),
@@ -3058,7 +3027,8 @@
       recommendation: document.getElementById('f-recommendation').value.trim(),
       preparedBy: document.getElementById('f-preparedby').value.trim(),
       approver: document.getElementById('f-approver').value.trim(),
-      output: document.getElementById('f-output').value.trim(),
+      dataAvailable: document.getElementById('f-dataavailable').value.trim(),
+      redesignDesc: document.getElementById('f-redesign').value.trim(),
       users: document.getElementById('f-users').value.trim(),
       language: document.getElementById('f-language').value.trim(),
       dataSensitivity: document.getElementById('f-datasensitivity').value,
@@ -3066,7 +3036,6 @@
       availability: document.getElementById('f-availability').value,
       qwp: qwpVal,
       refStep: refStepVal,
-      control: controlVal,
       kqi: kqiVal
     };
     if(editingId){
@@ -3103,13 +3072,13 @@
 
   function exportCsv(){
     if(useCases.length===0) return;
-    var headers = ['ชื่อ use case','แผนก','ผู้รับผิดชอบ','ปัญหาทางธุรกิจ','Output ที่คาดหวัง','จำนวน Users/วัน','ภาษา','ระดับความสำคัญข้อมูล','Latency','Availability','QWP','ขั้นตอนที่อ้างอิง','Control Item','KQI/QI ของขั้นตอน','วิธีการเดิมที่ทำอยู่','เอกสารแนบ','ลักษณะงาน/ข้อมูล','AI ที่แนะนำ','Spec Hardware','ผลกระทบทางธุรกิจ','ความเป็นไปได้ทางเทคนิค','ความพร้อมของข้อมูล','ความเสี่ยง','คะแนนรวม','ระดับความสำคัญ','ความเสี่ยงและการลดความเสี่ยง','ทรัพยากรและประมาณการ','KQI (ตัวชี้วัด)','ROI','ข้อเสนอแนะ','ผู้จัดทำ','ผู้อนุมัติ'];
+    var headers = ['ชื่อ use case','แผนก','ผู้รับผิดชอบ','QWP อ้างอิง','kQI/QI ที่เกี่ยวข้อง','ขั้นตอนที่เกี่ยวข้อง','วิธีการเดิมที่ทำอยู่','ข้อมูลที่มีอยู่สำหรับใช้งาน','แนวทางหลังนำ AI มาใช้','เอกสารแนบ','จำนวน Users/วัน','ภาษา','ระดับความสำคัญข้อมูล','Latency','Availability','ลักษณะงาน/ข้อมูล','AI ที่แนะนำ','Spec Hardware','ผลกระทบทางธุรกิจ','ความเป็นไปได้ทางเทคนิค','ความพร้อมของข้อมูล','ความเสี่ยง','คะแนนรวม','ระดับความสำคัญ','ความเสี่ยงและการลดความเสี่ยง','ทรัพยากรและประมาณการ','KQI (ตัวชี้วัด)','ROI','ข้อเสนอแนะ','ผู้จัดทำ','ผู้อนุมัติ'];
     var rows = useCases.map(function(u){
       var score = computeScore(u);
       var p = priorityInfo(score);
       var cat = getCategory(u.aiType);
       var attachText = (u.attachment ? u.attachment.name : '') + (u.attachment && u.attachRef ? ' / ' : '') + (u.attachRef || '');
-      return [u.name,u.dept,u.owner,u.problem,u.output,u.users,u.language,u.dataSensitivity,u.latency,u.availability,u.qwp,u.refStep,u.control,u.kqi,u.solution,attachText,(cat?cat.label:''),(cat?cat.aiType:''),u.hardware,u.impact,u.feasibility,u.data,u.risk,score,p.label,u.risks,u.resources,u.kpi,u.roi,u.recommendation,u.preparedBy,u.approver]
+      return [u.name,u.dept,u.owner,u.qwp,u.kqi,u.refStep,u.solution,u.dataAvailable,u.redesignDesc,attachText,u.users,u.language,u.dataSensitivity,u.latency,u.availability,(cat?cat.label:''),(cat?cat.aiType:''),u.hardware,u.impact,u.feasibility,u.data,u.risk,score,p.label,u.risks,u.resources,u.kpi,u.roi,u.recommendation,u.preparedBy,u.approver]
         .map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
     });
     var csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
@@ -3196,8 +3165,9 @@
   document.getElementById('analyze-btn').onclick = function(){
     var combined = [
       document.getElementById('f-name').value,
-      document.getElementById('f-problem').value,
-      document.getElementById('f-solution').value
+      document.getElementById('f-solution').value,
+      document.getElementById('f-dataavailable').value,
+      document.getElementById('f-redesign').value
     ].join(' ');
     var result = detectAiType(combined);
     var statusEl = document.getElementById('analyze-status');
