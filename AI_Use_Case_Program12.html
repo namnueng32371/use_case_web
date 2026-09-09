@@ -329,6 +329,7 @@
   .rack-slot-free{background:transparent; border-left-color:var(--border); border-left-style:dashed; opacity:.7;}
   .rack-slot-free .rack-slot-name{color:var(--text-muted); font-weight:500; font-style:italic;}
   .rack-meta{font-size:11.5px; color:var(--text-muted); margin:8px 0 0;}
+  .rack-fallback-note{font-size:11.5px; color:var(--med); background:var(--med-bg); border-radius:6px; padding:6px 10px; margin:0 0 8px;}
 
   .jd-head{
     padding-bottom:16px;
@@ -2206,8 +2207,57 @@
     lines.push('}');
     lines.push('budgetItems ต้องแตกเป็นรายการอุปกรณ์ย่อยจริงๆ (เช่น GPU, CPU, RAM, Storage, Networking, Software/Orchestration ฯลฯ) อย่างน้อย 4-8 รายการ ไม่ใช่รวมเป็นก้อนเดียว');
     lines.push('aiModels ต้องมีครบทุก use case ในรายการ (' + list.length + ' รายการ) เลือกโมเดลให้เหมาะกับประเภทงานจริงของแต่ละ use case ไม่ใช่โมเดลเดียวกันทั้งหมด และให้ความสำคัญกับความไวของข้อมูล (ถ้าเป็นข้อมูลลับ/confidential ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
-    lines.push('rackItems ให้ใส่เฉพาะอุปกรณ์ที่เป็นฮาร์ดแวร์จับต้องได้และต้องติดตั้งในตู้ Rack จริง (GPU/CPU Server, Storage/NAS, Network Switch, UPS, PDU, Patch Panel ฯลฯ) ข้ามรายการที่เป็น Software/License/ค่าติดตั้ง ตำแหน่ง (position) ต้องเรียงจากบนลงล่างไม่ทับซ้อนกัน ผลรวม heightU ต้องไม่เกิน rackTotalU และควรเหลือพื้นที่ว่างท้ายตู้ไว้เผื่อขยายตามหลัก Safety Factor (ประมาณ 20-30% ของ rackTotalU)');
+    lines.push('rackTotalU และ rackItems เป็น field บังคับ ห้ามเว้นว่างหรือส่งเป็น array ว่างเด็ดขาด: ให้ใส่เฉพาะอุปกรณ์ที่เป็นฮาร์ดแวร์จับต้องได้และต้องติดตั้งในตู้ Rack จริง (GPU/CPU Server, Storage/NAS, Network Switch, UPS, PDU, Patch Panel ฯลฯ — ไม่นับอุปกรณ์หน้างานที่ไม่ใช่ rack เช่น กล้อง/เครื่องสแกน/เซนเซอร์) ข้ามรายการที่เป็น Software/License/ค่าติดตั้ง/ค่าบริการ ตำแหน่ง (position) ต้องเรียงจากบนลงล่างไม่ทับซ้อนกัน ผลรวม heightU ต้องไม่เกิน rackTotalU และควรเหลือพื้นที่ว่างท้ายตู้ไว้เผื่อขยายตามหลัก Safety Factor (ประมาณ 20-30% ของ rackTotalU) หากในกลุ่มนี้ budgetItems ไม่มีฮาร์ดแวร์ที่ต้องติดตั้งในตู้ Rack เลยจริงๆ (เช่นใช้ API ภายนอกทั้งหมด) ให้ตอบ rackTotalU เป็น "0U (ไม่ต้องใช้ตู้ Rack)" และ rackItems เป็น array ว่างได้ในกรณีนี้เท่านั้น');
     return lines.join('\n');
+  }
+
+  // เมื่อ Claude ไม่ส่ง rackItems กลับมา (หรือส่งเป็น array ว่าง) ให้เดาผัง Rack
+  // แบบคร่าวๆ จากรายการอุปกรณ์ในงบประมาณเอง เพื่อไม่ให้หัวข้อนี้ว่างเปล่า
+  var RACK_KEYWORD_RULES = [
+    { re:/gpu/i, category:'compute', heightU:4 },
+    { re:/cpu|server/i, category:'compute', heightU:2 },
+    { re:/storage|nas|backup/i, category:'storage', heightU:2 },
+    { re:/switch|network|firewall/i, category:'network', heightU:1 },
+    { re:/ups/i, category:'power', heightU:2 },
+    { re:/pdu|power/i, category:'power', heightU:1 }
+  ];
+  var RACK_SKIP_RE = /software|license|orchestration|implementation|setup|integration|subscription|\bapi\b|training|consult|man-?day|labor|service|scanner|barcode|label|handheld|sensor|camera|จ้าง|ติดตั้ง|อบรม|ค่าบริการ/i;
+
+  function deriveRackItemsFallback(budgetItems){
+    var pos = 1;
+    var items = [];
+    (budgetItems || []).forEach(function(bi){
+      var name = (bi.item || '') + ' ' + (bi.detail || '');
+      if(RACK_SKIP_RE.test(name)) return;
+      var rule = RACK_KEYWORD_RULES.filter(function(k){ return k.re.test(name); })[0];
+      if(!rule) return;
+      var h = rule.heightU;
+      items.push({
+        position: 'U' + pos + (h > 1 ? ('-U' + (pos + h - 1)) : ''),
+        heightU: h,
+        item: bi.item || 'ไม่ระบุ',
+        category: rule.category,
+        note: ''
+      });
+      pos += h;
+    });
+    return items;
+  }
+
+  function roundRackSize(u){
+    var sizes = [12, 24, 32, 42];
+    for(var i=0; i<sizes.length; i++){ if(u <= sizes[i]) return sizes[i]; }
+    return Math.ceil(u / 2) * 2;
+  }
+
+  function ensureRackLayout(record){
+    if(record.rackItems && record.rackItems.length) return;
+    var derived = deriveRackItemsFallback(record.budgetItems);
+    if(!derived.length) return;
+    var used = derived.reduce(function(s, it){ return s + it.heightU; }, 0);
+    record.rackItems = derived;
+    record.rackTotalU = record.rackTotalU || (roundRackSize(Math.ceil(used * 1.3)) + 'U');
+    record.rackFallback = true;
   }
 
   async function runSpecAnalysis(key){
@@ -2250,6 +2300,7 @@
         count: list.length,
         fx: fxRate
       };
+      ensureRackLayout(record);
       specAnalysisCache[key] = record;
       try{
         if(claudeDb) await claudeDb.doc('specAnalysis/' + key).set(record);
@@ -2293,7 +2344,11 @@
 
   function specRackLayoutHtml(record){
     var items = record.rackItems || [];
-    if(items.length === 0) return '<p class="spec-empty">ไม่มีข้อมูลผัง Rack</p>';
+    if(items.length === 0){
+      return /^\s*0\s*U/i.test(String(record.rackTotalU||''))
+        ? '<p class="spec-empty">กลุ่มนี้ไม่มีฮาร์ดแวร์ที่ต้องติดตั้งในตู้ Rack (ใช้บริการภายนอก/API ทั้งหมด)</p>'
+        : '<p class="spec-empty">ไม่มีข้อมูลผัง Rack</p>';
+    }
     var totalU = parseInt(String(record.rackTotalU||'').replace(/[^0-9]/g,''), 10) || 0;
     var usedU = 0;
     var blocks = items.map(function(it){
@@ -2313,7 +2368,10 @@
       ? '<div class="rack-slot rack-slot-free" style="flex-grow:' + freeU + ';"><div class="rack-slot-pos">U' + (Math.round(usedU)+1) + '-U' + totalU + '</div><div class="rack-slot-body"><p class="rack-slot-name">ว่าง (เผื่อขยายในอนาคต)</p></div></div>'
       : '';
     var totalLabel = totalU ? (totalU + 'U') : (Math.ceil(usedU) + 'U (โดยประมาณ)');
-    return '<div class="rack-diagram">' + blocks + freeBlock + '</div>'
+    var fallbackNote = record.rackFallback
+      ? '<p class="rack-fallback-note">⚠️ Claude ไม่ได้ระบุผัง Rack มาในรอบนี้ ระบบจึงประมาณตำแหน่งอัตโนมัติจากรายการอุปกรณ์แทน (ลองกด "วิเคราะห์ใหม่" เพื่อให้ Claude ออกแบบเองอีกครั้ง)</p>'
+      : '';
+    return fallbackNote + '<div class="rack-diagram">' + blocks + freeBlock + '</div>'
       + '<p class="rack-meta">รวมใช้พื้นที่ ' + Math.round(usedU*10)/10 + 'U จากตู้ขนาด ' + escapeHtml(totalLabel) + (freeU > 0.4 ? ' · เหลือเผื่อขยาย ' + Math.round(freeU*10)/10 + 'U' : '') + '</p>';
   }
 
