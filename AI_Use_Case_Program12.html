@@ -96,11 +96,13 @@
   }
   .btn-secondary:hover{background:var(--bg);}
   .btn-ghost{
-    background:transparent; border:none; color:var(--text-muted); padding:4px 8px; font-weight:500;
-    display:inline-flex; align-items:center; gap:4px;
+    background:transparent; border:none; color:var(--text-muted); padding:6px 10px; font-weight:600;
+    display:inline-flex; align-items:center; gap:5px; border-radius:8px; font-size:12.5px;
+    transition:background .15s ease, color .15s ease;
   }
-  .btn-ghost:hover{color:var(--text);}
+  .btn-ghost:hover{color:var(--text); background:var(--bg);}
   .btn-danger{color:#A32D2D;}
+  .btn-ghost.btn-danger:hover{background:#FBEAEA; color:#A32D2D;}
   .icon{flex:none; display:inline-block;}
 
   .panel{
@@ -132,20 +134,34 @@
   }
 
   .card{
-    background:var(--card); border:1px solid var(--border); border-radius:12px;
-    padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:16px 18px; margin-bottom:12px; display:flex; flex-direction:column;
+    transition:box-shadow .15s ease, border-color .15s ease, transform .15s ease;
   }
-  .card .info{flex:1; min-width:0;}
-  .card .name{font-size:14px; font-weight:600; margin:0 0 2px;}
-  .card .dept{font-size:12px; color:var(--text-muted); margin:0;}
-  .card .problem{font-size:12px; color:var(--text-muted); margin:6px 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .card:hover{box-shadow:0 6px 18px rgba(19,41,75,.08); border-color:#D7D5CC; transform:translateY(-1px);}
+  .card-header{display:flex; align-items:flex-start; justify-content:space-between; gap:14px;}
+  .card-heading{flex:1; min-width:0;}
+  .card .name{font-size:15px; font-weight:700; margin:0 0 3px; line-height:1.45; color:var(--text);}
+  .card .dept{font-size:12.5px; color:var(--text-muted); margin:0;}
+  .card .problem{font-size:12.5px; color:var(--text-muted); margin:10px 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-style:italic;}
+  .score-chip{
+    flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-width:58px; padding:7px 10px; border-radius:14px; gap:2px;
+  }
+  .score-chip-num{font-size:19px; font-weight:800; line-height:1;}
+  .score-chip-label{font-size:10.5px; font-weight:700; display:inline-flex; align-items:center; gap:3px; letter-spacing:.2px; white-space:nowrap;}
+  .score-chip-label .icon{width:11px; height:11px;}
+  .score-chip--high{background:var(--high-bg); color:var(--high);}
+  .score-chip--med{background:var(--med-bg); color:var(--med);}
+  .score-chip--low{background:var(--low-bg); color:var(--low);}
+  .card-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
   .badge{font-size:12px; font-weight:600; padding:4px 10px; border-radius:8px; white-space:nowrap; display:inline-flex; align-items:center; gap:4px;}
   .badge.high{background:var(--high-bg); color:var(--high);}
   .badge.med{background:var(--med-bg); color:var(--med);}
   .badge.low{background:var(--low-bg); color:var(--low);}
   .badge.ai{background:var(--teal-light); color:var(--teal);}
-  .score{font-size:15px; font-weight:700; min-width:38px; text-align:right; color:var(--navy);}
-  .card-actions{display:flex; gap:2px; flex-shrink:0;}
+  .card-actions{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border);}
+  .action-group{display:flex; align-items:center; gap:2px; flex-wrap:wrap;}
   .confirm-row{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);}
 
   .chart-section{margin-top:28px;}
@@ -312,6 +328,16 @@
   .spec-section{border-left:4px solid var(--border); border-radius:8px; padding:12px 16px; margin-top:10px;}
   .spec-section h4{margin:0 0 8px; font-size:13px; font-weight:700;}
   .spec-section p{margin:0; font-size:13px; line-height:1.75; color:var(--text);}
+  .spec-bullets{margin:0; display:flex; flex-direction:column; gap:8px;}
+  .spec-bullet-item{display:flex; align-items:flex-start; gap:10px; background:rgba(255,255,255,.6); border:1px solid rgba(0,0,0,.06); border-radius:9px; padding:8px 12px;}
+  .spec-bullet-num{flex-shrink:0; width:19px; height:19px; margin-top:1px; border-radius:50%; color:#fff; font-size:10.5px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+  .spec-bullet-text{font-size:13px; line-height:1.6; color:var(--text);}
+  .spec-bullet-text b{color:inherit;}
+  .spec-sf-summary{font-size:12px; line-height:1.7; color:var(--text-muted); background:var(--teal-light); border:1px solid rgba(15,110,86,0.25); border-radius:8px; padding:8px 12px; margin-bottom:10px;}
+  .spec-sf-summary b{color:var(--teal);}
+  .sf-chip{display:inline-block; background:#fff; border:1px solid var(--teal); color:var(--teal); font-weight:600; font-size:11px; padding:2px 8px; border-radius:20px; margin:2px 4px 2px 0;}
+  .doc-table tr.sf-row{background:var(--teal-light);}
+  .sf-badge{display:inline-block; background:var(--teal); color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:8px; margin-left:4px; white-space:nowrap;}
   .spec-section .doc-table{margin-top:2px; background:var(--card); table-layout:fixed; width:100%;}
   .spec-section .doc-table th{font-size:12px;}
   .spec-section .doc-table td{font-size:12.5px; word-wrap:break-word; overflow-wrap:break-word;}
@@ -962,6 +988,10 @@
       </select>
     </div>
 
+    <div class="field" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 14px;">
+      <button type="button" class="btn-secondary" id="score-ai-btn">ให้ AI ประเมินคะแนน</button>
+      <span class="status" id="score-ai-status" style="height:auto; margin:0;"></span>
+    </div>
     <div class="slider-row">
       <div class="top"><label for="f-impact">ผลกระทบทางธุรกิจ <span class="w">(น้ำหนัก 35%)</span></label><span class="v" id="f-impact-out">3</span></div>
       <input type="range" id="f-impact" min="1" max="5" step="1" value="3">
@@ -1777,7 +1807,19 @@
     if(code === 'rate_limited') return 'เรียกใช้ Claude ถี่เกินไป กรุณาลองใหม่อีกครั้งภายหลัง';
     if(code === 'not_declared' || code === 'sampling_disabled' || code === 'capability_disabled') return 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)';
     if(code === 'invalid_json') return 'Claude ตอบกลับในรูปแบบที่อ่านไม่ได้ ลองใหม่อีกครั้ง';
+    if(code === 'cancelled') return 'รอผลจาก Claude นานเกินไป ยกเลิกอัตโนมัติ ลองใหม่อีกครั้ง (กลุ่มที่มี use case เยอะจะใช้เวลานานกว่าปกติ)';
     return (e && e.message) ? e.message : 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+  }
+
+  // Wraps claudeSample.json with a hard timeout so the UI can never hang forever
+  // waiting on a call that never settles — aborts via the sample() signal contract
+  // and rejects {code:'cancelled'} which sampleErrorMessage() turns into a message.
+  function sampleJsonWithTimeout(prompt, opts, timeoutMs){
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var callOpts = Object.assign({}, opts || {});
+    if(controller) callOpts.signal = controller.signal;
+    var timer = setTimeout(function(){ if(controller) controller.abort(); }, timeoutMs || 90000);
+    return claudeSample.json(prompt, callOpts).finally(function(){ clearTimeout(timer); });
   }
   var chart = null;
 
@@ -2074,6 +2116,29 @@
     return escapeHtml(v).replace(/\n/g, '<br>');
   }
 
+  // Renders "- label: detail" lines as numbered info-cards (like a formal checklist),
+  // bolding the label part. Falls back to a plain nl2br paragraph for older cached
+  // records or free-form text that isn't in bullet form.
+  function bulletTextHtml(v, color){
+    if(!v || !String(v).trim()) return '<p style="color:var(--text-muted); margin:0;">-</p>';
+    var lines = String(v).split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+    var bulletLines = lines.filter(function(l){ return /^[-•]\s*/.test(l); });
+    var badgeColor = color || 'var(--navy)';
+    if(lines.length > 1 && bulletLines.length >= Math.ceil(lines.length * 0.6)){
+      var items = bulletLines.map(function(l, i){
+        var content = l.replace(/^[-•]\s*/, '');
+        var esc = escapeHtml(content);
+        esc = esc.replace(/^([^:：]{2,32}[:：])/, '<b>$1</b>');
+        return '<div class="spec-bullet-item">'
+          + '<span class="spec-bullet-num" style="background:' + badgeColor + ';">' + (i + 1) + '</span>'
+          + '<span class="spec-bullet-text">' + esc + '</span>'
+          + '</div>';
+      }).join('');
+      return '<div class="spec-bullets">' + items + '</div>';
+    }
+    return '<p>' + nl2br(v) + '</p>';
+  }
+
   var claudeDb = null;
   var claudeDbReady = (async function(){
     try{
@@ -2154,6 +2219,20 @@
     return parts.join('\n');
   }
 
+  // Compact one-liner for large groups — keeps the prompt (and the output
+  // Claude has to write back per item) short enough to finish before the
+  // response length limit cuts the JSON off mid-way (this was causing
+  // "รวมทุก Use Case" to load for a long time then fail with no result).
+  function ucSpecSummaryLineShort(uc){
+    var cat = getCategory(uc.aiType);
+    return '- ' + (uc.name || 'ไม่ระบุชื่อ') + ' (แผนก: ' + (uc.dept || '-') + ', '
+      + 'AI: ' + (cat ? cat.aiType : (uc.aiType || 'ไม่ระบุ')) + ', '
+      + 'ความไวข้อมูล: ' + (uc.dataSensitivity || 'ไม่ระบุ') + ', '
+      + 'คะแนน: ' + computeScore(uc) + '/100)';
+  }
+
+  var SPEC_LARGE_GROUP_THRESHOLD = 12;
+
   var SPEC_SECTIONS = [
     { field:'summary', num:1, title:'สรุปลักษณะงานโดยรวม', color:'var(--indigo)', bg:'var(--indigo-light)' },
     { field:'specText', num:2, title:'สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ', color:'var(--blue)', bg:'var(--blue-light)' },
@@ -2162,10 +2241,12 @@
   ];
 
   function buildSpecPrompt(groupLabel, list, fxRate){
+    var isLarge = list.length > SPEC_LARGE_GROUP_THRESHOLD;
     var lines = [];
     lines.push('คุณคือที่ปรึกษาด้าน AI infrastructure ให้กับโรงงานผลิตแห่งหนึ่ง');
     lines.push('งานของคุณ: วิเคราะห์รายละเอียด use case AI ต่อไปนี้ (กลุ่ม "' + groupLabel + '", มีทั้งหมด ' + list.length + ' รายการ) แล้วเสนอ Spec เซิร์ฟเวอร์/สถาปัตยกรรมและงบประมาณโดยประมาณที่เหมาะสมสำหรับรองรับ use case กลุ่มนี้ทั้งหมดพร้อมกัน โดยไม่ต้องยึดติดกับ Tier ตายตัว ให้พิจารณาจากลักษณะงานจริงของกลุ่มนี้ (เช่น มีงาน vision/agent/RAG ปนกันหรือไม่, ต้องการ real-time หรือไม่, ข้อมูลอ่อนไหวแค่ไหน, จำนวนผู้ใช้รวม)');
     lines.push('อัตราแลกเปลี่ยนโดยประมาณที่ใช้: 1 USD ≈ ' + fxRate + ' บาท (เป็นตัวเลขคร่าวๆ ไม่ต้องเป๊ะ)');
+    lines.push('ถ้า use case รายการไหนไม่ได้ระบุ "จำนวนผู้ใช้" ไว้ ให้ถือว่าเป็นเครื่องมือใช้เฉพาะทีม/แผนกเดียวในโรงงานขนาดกลาง ประมาณ 6 คน/วัน เป็นค่ากลาง ยกเว้นเนื้อหาบ่งชัดว่าเป็นเครื่องมือระดับองค์กรที่ใช้ได้หลายแผนกพร้อมกัน (เช่น Chatbot/AI Front Door กลาง) หรือเป็นระบบแจ้งเตือนที่กระจายไปหลายฝ่าย ให้ประเมินสูงกว่าค่ากลางนี้ตามความเหมาะสม');
     lines.push('');
     lines.push('นโยบาย Safety Factor ที่ต้องเผื่อไว้เสมอ (คำนวณ Peak load ของกลุ่มนี้ในใจก่อน แล้วบวกเผื่อตามนี้ ไม่ใช่คิดสเปกพอดีตัว — ห้ามแยกเป็นหัวข้อต่างหาก ให้ฝังตัวเลขที่เผื่อแล้วลงในสเปกและรายการอุปกรณ์ (budgetItems) ตรงๆ เลย):');
     lines.push('- GPU/Compute (CPU): เผื่อ +20-30% เหนือ peak load ที่คำนวณได้');
@@ -2174,24 +2255,49 @@
     lines.push('- Network bandwidth: เผื่อ +30-50%');
     lines.push('- Power/Cooling: เผื่อ +20-30% หรือออกแบบแบบ N+1 ถ้ามีงาน 24x7 mission-critical ในกลุ่มนี้');
     lines.push('ตัวเลข GPU/CPU/RAM/Storage/Network/Power ที่ปรากฏใน specText และ budgetItems ทั้งหมดต้องเป็นตัวเลข "หลังบวก safety factor แล้ว" (เช่น เลือกรุ่น/จำนวนที่รองรับได้มากกว่า peak load จริง) ไม่ใช่ peak load เฉยๆ และในช่อง "detail" ของ budgetItems แต่ละแถวที่เกี่ยวข้อง ให้ระบุสั้นๆ ในวงเล็บด้วยว่าเผื่อไว้กี่ % จาก peak load เท่าไหร่ เช่น "2x RTX 6000 Ada 48GB (รวม 96GB VRAM, เผื่อ Safety Factor +25% จาก peak ~77GB)"');
+    lines.push('Safety Factor ใช้กับ "รายการฮาร์ดแวร์ที่ต้องไซส์ตาม peak load" เท่านั้น (GPU/Compute, RAM, Storage, Network, Power/Cooling) ส่วนรายการที่ไม่ได้ scale ตาม peak load เช่น Software license, Vector DB/monitoring subscription, ค่าติดตั้ง/setup แบบ one-time ห้ามใส่ safety factor ให้ (ระบุ safetyFactor เป็น false)');
+    lines.push('');
+    lines.push('ตารางราคาอ้างอิง (ใช้เป็นฐานคำนวณเสมอ เพื่อให้ตัวเลขงบประมาณสอดคล้องกันทุกครั้งที่วิเคราะห์ ไม่เหวี่ยงไปมา — ปรับตามความเหมาะสมของงานได้ แต่ห้ามหนีจากช่วงนี้เกินสมเหตุสมผล):');
+    lines.push('- GPU: RTX 4090 24GB ~$1,800/ตัว | RTX 6000 Ada 48GB ~$7,000/ตัว | L40S 48GB ~$9,000/ตัว | H100 80GB ~$28,000/ตัว');
+    lines.push('- CPU เซิร์ฟเวอร์ (EPYC/Xeon ระดับ 32+ core ต่อ socket): ~$3,000-5,000/ตัว');
+    lines.push('- RAM เซิร์ฟเวอร์ (DDR5 ECC): ~$4-6/GB');
+    lines.push('- Storage NVMe enterprise SSD: ~$0.10-0.15/GB | HDD จัดเก็บข้อมูลจำนวนมาก: ~$0.02-0.03/GB');
+    lines.push('- Networking (switch/NIC 10-25GbE ระดับองค์กร): ~$2,000-5,000/ตัว');
+    lines.push('- Server chassis/barebone (2U dual-socket): ~$5,000-8,000/เครื่อง');
+    lines.push('- Software/Orchestration (MLOps platform, monitoring, Vector DB license รายปี): ~$5,000-15,000/ปี ถ้าจำเป็นต้องใช้');
+    lines.push('ให้คำนวณ quantity ของแต่ละชิ้นจาก peak load ที่ประเมินได้จริง (จำนวน user รวม, ลักษณะงาน) คูณด้วยราคาต่อหน่วยข้างต้น แล้วค่อยเผื่อ Safety Factor ตามนโยบายด้านบน อย่าประเมินราคารวมแบบเดาลอยๆ');
     lines.push('');
     lines.push('รายการ use case:');
-    lines.push(list.map(ucSpecSummaryLine).join('\n\n'));
+    if(isLarge){
+      lines.push(list.map(ucSpecSummaryLineShort).join('\n'));
+    } else {
+      lines.push(list.map(ucSpecSummaryLine).join('\n\n'));
+    }
+    lines.push('');
+    lines.push('การจัดรูปแบบข้อความ (สำคัญมาก): ฟิลด์ summary, specText, aiModelNote, reasoning, recommendation ห้ามเขียนเป็นย่อหน้ายาวต่อเนื่องเด็ดขาด ให้แตกเป็นบรรทัดย่อยสั้นๆ ทีละประเด็นเสมอ โดยขึ้นต้นทุกบรรทัดด้วย "- " แล้วคั่นแต่ละบรรทัดด้วย \\n จริงในค่า JSON string แต่ละบรรทัดควรสั้นกระชับ (ไม่เกิน ~1 ประโยค) และถ้าทำได้ให้ขึ้นต้นด้วยหัวข้อสั้นๆ แล้วตามด้วย ":" ก่อนรายละเอียด เช่น "- GPU: 2x RTX 6000 Ada 48GB", "- ความเสี่ยงด้านข้อมูล: ...". ห้ามใช้ตัวเลข "1) 2) 3)" หรือย่อหน้ารวม');
     lines.push('');
     lines.push('ตอบเป็นภาษาไทยทั้งหมด และตอบกลับเป็น JSON object เดียวเท่านั้น (ไม่ต้องมีข้อความอื่นนอก JSON) ตามโครงสร้างนี้เป๊ะๆ:');
     lines.push('{');
-    lines.push('  "summary": "สรุปลักษณะงานของกลุ่มนี้โดยรวม (ประเภท AI ที่ต้องรองรับ, ระดับความซับซ้อน) เป็นข้อความ 1-2 ย่อหน้า",');
-    lines.push('  "specText": "สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ (GPU รุ่น/จำนวน/VRAM, CPU, RAM, Storage, ต้องมี Vector DB/RAG หรือ load balancer หรือไม่) เขียนเป็นข้อความอ่านง่าย ขึ้นบรรทัดใหม่แยกแต่ละส่วนได้",');
-    lines.push('  "budgetItems": [ { "item": "ชื่ออุปกรณ์/รายการ เช่น GPU", "detail": "รายละเอียดรุ่น/จำนวน เช่น 2x RTX 5090 64GB", "priceUsd": "ราคาโดยประมาณเป็น USD เช่น $7,800", "priceThb": "ราคาแปลงเป็นบาทด้วยอัตราที่ให้ไว้ เช่น 255,960 บาท" } ],');
+    lines.push('  "summary": "สรุปลักษณะงานของกลุ่มนี้โดยรวม (ประเภท AI ที่ต้องรองรับ, ระดับความซับซ้อน) เป็น bullet สั้นๆ 3-5 บรรทัดตามรูปแบบที่กำหนดด้านบน",');
+    lines.push('  "specText": "สเปกฮาร์ดแวร์/สถาปัตยกรรมที่แนะนำ เป็น bullet สั้นๆ แยกทีละองค์ประกอบ (GPU รุ่น/จำนวน/VRAM, CPU, RAM, Storage, Network, Vector DB/RAG หรือ load balancer ถ้ามี) ตามรูปแบบที่กำหนดด้านบน",');
+    lines.push('  "budgetItems": [ { "item": "ชื่ออุปกรณ์/รายการ เช่น GPU", "detail": "รายละเอียดรุ่น/จำนวน เช่น 2x RTX 5090 64GB", "priceUsd": "ราคาโดยประมาณเป็น USD เช่น $7,800", "priceThb": "ราคาแปลงเป็นบาทด้วยอัตราที่ให้ไว้ เช่น 255,960 บาท", "safetyFactor": true หรือ false (true เฉพาะรายการฮาร์ดแวร์ที่ไซส์ตาม peak load ตามนโยบายด้านบนเท่านั้น เช่น GPU/CPU/RAM/Storage/Network/Power ส่วน Software license หรือค่า setup ให้เป็น false), "safetyFactorPct": "เปอร์เซ็นต์ที่เผื่อไว้ เช่น +25% (ใส่เฉพาะตอน safetyFactor เป็น true ถ้าเป็น false ใส่ค่าว่าง)" } ],');
     lines.push('  "budgetTotalUsd": "ราคารวมโดยประมาณเป็น USD",');
     lines.push('  "budgetTotalThb": "ราคารวมโดยประมาณเป็นบาท",');
-    lines.push('  "aiModelNote": "ภาพรวมแนวทางเลือก AI model/LLM สำหรับกลุ่มนี้ 1-2 ประโยค (เช่น งานไหนพอใช้โมเดลผ่าน API ได้ งานไหนต้องรันเอง/self-host เพราะข้อมูลอ่อนไหว)",');
-    lines.push('  "aiModels": [ { "useCase": "ชื่อ use case (ตรงกับชื่อในรายการด้านบนเป๊ะๆ)", "model": "ชื่อ AI model/LLM ที่แนะนำแบบเจาะจง เช่น Claude Sonnet ผ่าน API, Claude Haiku ผ่าน API (งานเร็ว/ง่าย), Llama 3.3 70B self-hosted (ข้อมูลลับห้ามออกนอกองค์กร), YOLOv8 (vision เฉพาะทาง), Whisper (speech-to-text)", "reason": "เหตุผลสั้นๆ ว่าทำไมเลือกโมเดลนี้ (ความสามารถที่ต้องการ, ต้อง self-host เพราะข้อมูลอ่อนไหวหรือไม่, ระดับความซับซ้อน/งบที่เหมาะสม)" } ],');
-    lines.push('  "reasoning": "เหตุผลประกอบสั้นๆ ว่าทำไมถึงเลือกสเปกระดับนี้ และความเสี่ยง/ข้อควรระวังถ้ามี",');
-    lines.push('  "recommendation": "ข้อเสนอแนะสำหรับผู้บริหารในการตัดสินใจ เช่น ควรเริ่มลงทุนระดับไหนก่อน"');
+    lines.push('  "aiModelNote": "ภาพรวมแนวทางเลือก AI model/LLM สำหรับกลุ่มนี้ เป็น bullet สั้นๆ 1-3 บรรทัด (เช่น งานไหนพอใช้โมเดลผ่าน API ได้ งานไหนต้องรันเอง/self-host เพราะข้อมูลอ่อนไหว) ตามรูปแบบที่กำหนดด้านบน",');
+    if(isLarge){
+      lines.push('  "aiModels": [ { "useCase": "ชื่อกลุ่มงาน AI เช่น \\"งาน NLP/LLM (5 use case)\\" — จัดกลุ่ม use case ที่ประเภทงาน AI ใกล้เคียงกันเข้าด้วยกัน ไม่ต้องแยกทีละ use case", "model": "ชื่อ AI model/LLM ที่แนะนำสำหรับกลุ่มนี้แบบเจาะจง เช่น Claude Sonnet ผ่าน API, Llama 3.3 70B self-hosted, YOLOv8 (vision)", "reason": "เหตุผลสั้นๆ ว่าทำไมเลือกโมเดลนี้ให้กลุ่มนี้ (ความสามารถที่ต้องการ, ต้อง self-host เพราะข้อมูลอ่อนไหวหรือไม่)" } ],');
+    } else {
+      lines.push('  "aiModels": [ { "useCase": "ชื่อ use case (ตรงกับชื่อในรายการด้านบนเป๊ะๆ)", "model": "ชื่อ AI model/LLM ที่แนะนำแบบเจาะจง เช่น Claude Sonnet ผ่าน API, Claude Haiku ผ่าน API (งานเร็ว/ง่าย), Llama 3.3 70B self-hosted (ข้อมูลลับห้ามออกนอกองค์กร), YOLOv8 (vision เฉพาะทาง), Whisper (speech-to-text)", "reason": "เหตุผลสั้นๆ ว่าทำไมเลือกโมเดลนี้ (ความสามารถที่ต้องการ, ต้อง self-host เพราะข้อมูลอ่อนไหวหรือไม่, ระดับความซับซ้อน/งบที่เหมาะสม)" } ],');
+    }
+    lines.push('  "reasoning": "เหตุผลประกอบว่าทำไมถึงเลือกสเปกระดับนี้ และความเสี่ยง/ข้อควรระวังถ้ามี เป็น bullet สั้นๆ ตามรูปแบบที่กำหนดด้านบน",');
+    lines.push('  "recommendation": "ข้อเสนอแนะสำหรับผู้บริหารในการตัดสินใจ เป็น bullet สั้นๆ ตามรูปแบบที่กำหนดด้านบน"');
     lines.push('}');
     lines.push('budgetItems ต้องแตกเป็นรายการอุปกรณ์ย่อยจริงๆ (เช่น GPU, CPU, RAM, Storage, Networking, Software/Orchestration ฯลฯ) อย่างน้อย 4-8 รายการ ไม่ใช่รวมเป็นก้อนเดียว');
-    lines.push('aiModels ต้องมีครบทุก use case ในรายการ (' + list.length + ' รายการ) เลือกโมเดลให้เหมาะกับประเภทงานจริงของแต่ละ use case ไม่ใช่โมเดลเดียวกันทั้งหมด และให้ความสำคัญกับความไวของข้อมูล (ถ้าเป็นข้อมูลลับ/confidential ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
+    if(isLarge){
+      lines.push('กลุ่มนี้มี ' + list.length + ' use case ซึ่งเยอะเกินกว่าจะแนะนำ AI model แยกทีละรายการได้ในคำตอบเดียว — ให้จัดกลุ่ม use case ที่ประเภทงาน AI ใกล้เคียงกัน (ดูจาก "AI:" ที่ให้ไว้ในแต่ละบรรทัด) เป็นกลุ่มย่อยประมาณ 4-8 กลุ่ม แล้วใส่ผลลัพธ์ลงใน aiModels ทีละกลุ่มแทน ห้ามพยายามแยกทีละ use case เพราะจะทำให้คำตอบยาวเกินและถูกตัดจบก่อนสมบูรณ์ ให้ความสำคัญกับความไวของข้อมูล (ถ้ากลุ่มไหนมีข้อมูลลับ/confidential ปนอยู่ ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
+    } else {
+      lines.push('aiModels ต้องมีครบทุก use case ในรายการ (' + list.length + ' รายการ) เลือกโมเดลให้เหมาะกับประเภทงานจริงของแต่ละ use case ไม่ใช่โมเดลเดียวกันทั้งหมด และให้ความสำคัญกับความไวของข้อมูล (ถ้าเป็นข้อมูลลับ/confidential ให้แนะนำโมเดลที่รันเองภายในองค์กรได้แทนการส่งผ่าน API ภายนอก)');
+    }
     return lines.join('\n');
   }
 
@@ -2217,7 +2323,21 @@
     renderSpecTab();
     try{
       var prompt = buildSpecPrompt(groupDef.label, list, fxRate);
-      var data = await claudeSample.json(prompt, { modelTier: 'complex', cache: false });
+      // Large groups (e.g. "รวมทุก Use Case") ask Claude to write a lot more
+      // JSON back — 90s was cutting it off mid-answer before it could finish,
+      // so give it more room to think and write (still under the platform's
+      // ~5 min per-round cap).
+      var timeoutMs = (list.length > SPEC_LARGE_GROUP_THRESHOLD) ? 240000 : 90000;
+      // cache:false meant every click — even "วิเคราะห์ใหม่" on an UNCHANGED
+      // group — asked Claude fresh, and the price table/safety-factor policy
+      // above only pins unit prices, not the equipment QUANTITY (that's
+      // still the model's own judgement call from prose), so repeat clicks
+      // could still land 15-20% apart. Cache for 30 min so re-clicking the
+      // same unchanged group replays the same numbers instead of re-rolling;
+      // editing/re-scoring a use case changes specGroupSignature() and is
+      // treated as stale regardless of this cache, so a real change still
+      // triggers a fresh analysis.
+      var data = await sampleJsonWithTimeout(prompt, { modelTier: 'complex', cache: { gcTime: 1800000 } }, timeoutMs);
       var record = {
         summary: (data && data.summary) || '',
         specText: (data && data.specText) || '',
@@ -2238,20 +2358,30 @@
         if(claudeDb) await claudeDb.doc('specAnalysis/' + key).set(record);
       }catch(e){ /* saving shared copy failed; keep local result anyway */ }
     }catch(e){
-      if(statusEl) statusEl.textContent = 'วิเคราะห์ไม่สำเร็จ: ' + (e && e.message ? e.message : 'เกิดข้อผิดพลาด') + ' (ลองใหม่อีกครั้ง)';
+      if(statusEl) statusEl.textContent = 'วิเคราะห์ไม่สำเร็จ: ' + sampleErrorMessage(e) + ' (ลองใหม่อีกครั้ง)';
     }finally{
       specAnalysisRunning[key] = false;
       renderSpecTab();
     }
   }
 
+  function specSafetyFactorSummaryHtml(record){
+    var items = (record.budgetItems || []).filter(function(it){ return it && it.safetyFactor; });
+    if(items.length === 0) return '';
+    var chips = items.map(function(it){
+      return '<span class="sf-chip">' + escapeHtml(it.item || '-') + (it.safetyFactorPct ? ' ' + escapeHtml(it.safetyFactorPct) : '') + '</span>';
+    }).join('');
+    return '<div class="spec-sf-summary"><b>เผื่อ Safety Factor แล้ว</b> (กันสเปกไม่พอรองรับ peak load): ' + chips + '</div>';
+  }
+
   function specBudgetTableHtml(record){
     var items = record.budgetItems || [];
     if(items.length === 0) return '<p class="spec-empty">ไม่มีรายการอุปกรณ์</p>';
     var rows = items.map(function(it){
-      return '<tr>'
+      var sf = !!it.safetyFactor;
+      return '<tr' + (sf ? ' class="sf-row"' : '') + '>'
         + '<td>' + escapeHtml(it.item || '-') + '</td>'
-        + '<td>' + escapeHtml(it.detail || '-') + '</td>'
+        + '<td>' + escapeHtml(it.detail || '-') + (sf ? ' <span class="sf-badge" title="เผื่อ Safety Factor แล้ว">Safety Factor' + (it.safetyFactorPct ? ' ' + escapeHtml(it.safetyFactorPct) : '') + '</span>' : '') + '</td>'
         + '<td style="text-align:right;">' + escapeHtml(it.priceUsd || '-') + '</td>'
         + '<td style="text-align:right;">' + escapeHtml(it.priceThb || '-') + '</td>'
         + '</tr>';
@@ -2261,7 +2391,8 @@
         + '<td style="text-align:right;">' + escapeHtml(record.budgetTotalUsd || '-') + '</td>'
         + '<td style="text-align:right;">' + escapeHtml(record.budgetTotalThb || '-') + '</td></tr>'
       : '';
-    return '<div style="overflow-x:auto;"><table class="doc-table"><thead><tr>'
+    return specSafetyFactorSummaryHtml(record)
+      + '<div style="overflow-x:auto;"><table class="doc-table"><thead><tr>'
       + '<th>รายการอุปกรณ์</th><th>รายละเอียด</th><th style="text-align:right;">ราคา (USD)</th><th style="text-align:right;">ราคา (บาท)</th>'
       + '</tr></thead><tbody>' + rows + totalRow + '</tbody></table></div>';
   }
@@ -2292,7 +2423,7 @@
         // budget table goes right after the spec section (section 3)
         html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
           + '<h4 style="color:' + sec.color + ';">' + sec.num + '. ' + escapeHtml(sec.title) + '</h4>'
-          + '<p>' + nl2br(record[sec.field]) + '</p>'
+          + bulletTextHtml(record[sec.field], sec.color)
           + '</div>';
         html += '<div class="spec-section" style="border-left-color:var(--teal); background:var(--teal-light);">'
           + '<h4 style="color:var(--teal);">3. งบประมาณโดยประมาณ</h4>'
@@ -2300,13 +2431,13 @@
           + '</div>';
         html += '<div class="spec-section" style="border-left-color:var(--med); background:var(--med-bg);">'
           + '<h4 style="color:var(--med);">4. AI Model ที่แนะนำสำหรับแต่ละ Use Case</h4>'
-          + (record.aiModelNote ? '<p>' + nl2br(record.aiModelNote) + '</p>' : '')
+          + (record.aiModelNote ? bulletTextHtml(record.aiModelNote, 'var(--med)') : '')
           + specAiModelTableHtml(record)
           + '</div>';
       } else {
         html += '<div class="spec-section" style="border-left-color:' + sec.color + '; background:' + sec.bg + ';">'
           + '<h4 style="color:' + sec.color + ';">' + sec.num + '. ' + escapeHtml(sec.title) + '</h4>'
-          + '<p>' + nl2br(record[sec.field]) + '</p>'
+          + bulletTextHtml(record[sec.field], sec.color)
           + '</div>';
       }
     });
@@ -2469,20 +2600,26 @@
         var p = priorityInfo(score);
         var cat = getCategory(uc.aiType);
         return '<div class="card" data-id="'+uc.id+'">'
-          + '<div class="info">'
+          + '<div class="card-header">'
+          + '<div class="card-heading">'
           + '<p class="name">'+escapeHtml(uc.name)+'</p>'
           + '<p class="dept">'+escapeHtml(uc.dept||'ไม่ระบุแผนก')+(uc.owner?' · '+escapeHtml(uc.owner):'')+'</p>'
-          + (uc.solution ? '<p class="problem">'+escapeHtml(uc.solution)+'</p>' : '')
           + '</div>'
-          + (cat ? '<span class="badge ai">'+escapeHtml(cat.aiType)+'</span>' : '')
-          + '<span class="badge '+p.key+'">'+p.icon+p.label+'</span>'
-          + '<span class="score">'+score+'</span>'
+          + '<div class="score-chip score-chip--'+p.key+'">'
+          + '<span class="score-chip-num">'+score+'</span>'
+          + '<span class="score-chip-label">'+p.icon+p.label+'</span>'
+          + '</div>'
+          + '</div>'
+          + (uc.solution ? '<p class="problem">'+escapeHtml(uc.solution)+'</p>' : '')
+          + (cat ? '<div class="card-tags"><span class="badge ai">'+escapeHtml(cat.aiType)+'</span></div>' : '')
           + '<div class="card-actions">'
-          + '<button class="btn-ghost doc-btn" data-id="'+uc.id+'" aria-label="ดูเอกสาร">'+ICONS.fileText+'เอกสาร</button>'
-          + '<button class="btn-ghost plan-btn" data-id="'+uc.id+'" aria-label="ดูแผนงาน">'+ICONS.calendarDays+'แผนงาน</button>'
-          + '<button class="btn-ghost flow-btn" data-id="'+uc.id+'" aria-label="ดู Flow และ n8n">'+ICONS.workflow+'Flow+n8n</button>'
-          + '<button class="btn-ghost edit-btn" data-id="'+uc.id+'" aria-label="แก้ไข">'+ICONS.squarePen+'แก้ไข</button>'
-          + '<button class="btn-ghost btn-danger delete-btn" data-id="'+uc.id+'" aria-label="ลบ">'+ICONS.trash+'ลบ</button>'
+          + '<div class="action-group">'
+          + '<button class="btn-ghost doc-btn" data-id="'+uc.id+'" aria-label="ดูเอกสาร" title="ดูเอกสาร">'+ICONS.fileText+'เอกสาร</button>'
+          + '<button class="btn-ghost plan-btn" data-id="'+uc.id+'" aria-label="ดูแผนงาน" title="ดูแผนงาน">'+ICONS.calendarDays+'แผนงาน</button>'
+          + '<button class="btn-ghost flow-btn" data-id="'+uc.id+'" aria-label="ดู Flow และ n8n" title="ดู Flow และ n8n">'+ICONS.workflow+'Flow+n8n</button>'
+          + '<button class="btn-ghost edit-btn" data-id="'+uc.id+'" aria-label="แก้ไข" title="แก้ไข">'+ICONS.squarePen+'แก้ไข</button>'
+          + '</div>'
+          + '<button class="btn-ghost btn-danger delete-btn" data-id="'+uc.id+'" aria-label="ลบ" title="ลบ">'+ICONS.trash+'ลบ</button>'
           + '</div>'
           + '</div>';
       }).join('');
@@ -2715,7 +2852,7 @@
     var statusEl = document.getElementById('plan-ai-status');
     var btn = document.getElementById('plan-ai-btn');
     if(btn){ btn.disabled = true; }
-    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์แผนงานด้วย AI Claude...'; }
+    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์แผนงานด้วย AI Claude... (Claude กำลังคิด อาจใช้เวลาถึง 1 นาที)'; }
     await claudeSampleReady;
     if(!claudeSample){
       if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)'; }
@@ -2739,7 +2876,7 @@
     try {
       var opts = { modelTier: 'complex', cache: false };
       if(imgBlob) opts.images = imgBlob;
-      var parsed = await claudeSample.json(prompt, opts);
+      var parsed = await sampleJsonWithTimeout(prompt, opts, 90000);
       uc.aiPlan = { summary: parsed.summary||'', recommendations: parsed.recommendations||[], risks: parsed.risks||[], phaseNotes: parsed.phaseNotes||[], at: new Date().toISOString() };
       await saveData();
       document.getElementById('plan-content').innerHTML = buildPlanBody(uc);
@@ -3055,7 +3192,7 @@
     var statusEl = document.getElementById('flow-ai-status');
     var btn = document.getElementById('flow-ai-btn');
     if(btn){ btn.disabled = true; }
-    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์ด้วย AI Claude...'; }
+    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังวิเคราะห์ด้วย AI Claude... (Claude กำลังคิด อาจใช้เวลาถึง 1 นาที)'; }
     await claudeSampleReady;
     if(!claudeSample){
       if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ) — แสดงผลแบบ template แทน'; }
@@ -3073,7 +3210,7 @@
     try {
       var opts = { modelTier: 'complex', cache: false };
       if(imgBlob) opts.images = imgBlob;
-      var parsed = await claudeSample.json(prompt, opts);
+      var parsed = await sampleJsonWithTimeout(prompt, opts, 90000);
       if(!parsed || !parsed.workflow || !parsed.n8n) throw { code:'invalid_json', message:'bad shape' };
       uc.aiFlow = { workflow: parsed.workflow, n8n: parsed.n8n, at: new Date().toISOString() };
       await saveData();
@@ -3278,6 +3415,7 @@
     document.getElementById('f-solution').value='';
     document.getElementById('f-aitype').value='';
     document.getElementById('analyze-status').textContent='';
+    document.getElementById('score-ai-status').textContent='';
     document.getElementById('f-hardware').value='';
     document.getElementById('autofill-status').textContent='';
     document.getElementById('f-risks').value='';
@@ -3319,6 +3457,7 @@
     document.getElementById('f-solution').value = uc.solution||'';
     document.getElementById('f-aitype').value = uc.aiType||'';
     document.getElementById('analyze-status').textContent='';
+    document.getElementById('score-ai-status').textContent='';
     document.getElementById('autofill-status').textContent='';
     document.getElementById('f-hardware').value = uc.hardware||'';
     document.getElementById('f-risks').value = uc.risks||'';
@@ -3405,6 +3544,55 @@
     document.getElementById('f-feasibility').value=f; document.getElementById('f-feasibility-out').textContent=f; updateSliderDesc('feasibility', f);
     document.getElementById('f-data').value=d; document.getElementById('f-data-out').textContent=d; updateSliderDesc('data', d);
     document.getElementById('f-risk').value=r; document.getElementById('f-risk-out').textContent=r; updateSliderDesc('risk', r);
+  }
+
+  function sliderRubricText(){
+    return ['impact','feasibility','data','risk'].map(function(k){
+      var cfg = SLIDER_LEVELS[k];
+      var lvls = Object.keys(cfg.levels).map(function(lv){ return lv+'='+cfg.levels[lv]; }).join(' | ');
+      return cfg.title + ': ' + lvls;
+    }).join('\n');
+  }
+
+  async function analyzeScoresAI(){
+    var statusEl = document.getElementById('score-ai-status');
+    var btn = document.getElementById('score-ai-btn');
+    var name = document.getElementById('f-name').value.trim();
+    if(!name){
+      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'กรุณากรอกชื่อ use case ก่อน'; }
+      return;
+    }
+    if(btn) btn.disabled = true;
+    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังประเมินคะแนนด้วย AI Claude...'; }
+    await claudeSampleReady;
+    if(!claudeSample){
+      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)'; }
+      if(btn) btn.disabled = false;
+      return;
+    }
+    var context = [
+      'ชื่อ use case: ' + name,
+      'วิธีการเดิมที่ทำอยู่: ' + (document.getElementById('f-solution').value.trim() || '-'),
+      'ข้อมูลที่มีอยู่สำหรับใช้งาน: ' + (document.getElementById('f-dataavailable').value.trim() || '-'),
+      'แนวทางหลังนำ AI มาใช้: ' + (document.getElementById('f-redesign').value.trim() || '-'),
+      'ความไวของข้อมูล: ' + (document.getElementById('f-datasensitivity').value || 'ไม่ระบุ'),
+      'Latency ที่รับได้: ' + (document.getElementById('f-latency').value || 'ไม่ระบุ'),
+      'Availability ที่ต้องการ: ' + (document.getElementById('f-availability').value || 'ไม่ระบุ')
+    ].join('\n');
+    var prompt = 'คุณเป็นที่ปรึกษาประเมิน use case AI ในโรงงานผลิต ให้คะแนน 4 มิติของ use case นี้ตามเกณฑ์ที่กำหนดเป๊ะๆ (เลือกเลข 1-5 ที่ตรงกับคำอธิบายมากที่สุดเท่านั้น):\n\n'
+      + context + '\n\n'
+      + 'เกณฑ์การให้คะแนน:\n' + sliderRubricText() + '\n\n'
+      + 'ตอบกลับเป็น JSON เท่านั้น (ไม่ต้องมีข้อความอื่นนอก JSON): {"impact":1-5,"feasibility":1-5,"data":1-5,"risk":1-5,"reason":"เหตุผลสั้นๆ รวมไม่เกิน 2-3 ประโยค อธิบายว่าทำไมถึงให้คะแนนแต่ละมิติแบบนั้น"}';
+    try {
+      var parsed = await sampleJsonWithTimeout(prompt, { modelTier: 'quick', cache: false }, 45000);
+      var clamp = function(v){ v = Math.round(Number(v)); if(isNaN(v)) return 3; return Math.max(1, Math.min(5, v)); };
+      setSliders(clamp(parsed.impact), clamp(parsed.feasibility), clamp(parsed.data), clamp(parsed.risk));
+      if(statusEl){ statusEl.style.color = 'var(--teal)'; statusEl.textContent = (parsed.reason ? parsed.reason : 'ประเมินเสร็จแล้ว') + ' — ปรับ slider เองได้ตามจริง'; }
+    } catch(e){
+      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ประเมินไม่สำเร็จ: ' + sampleErrorMessage(e); }
+    } finally {
+      if(btn) btn.disabled = false;
+    }
   }
 
   function closeForm(){
@@ -3600,6 +3788,8 @@
       statusEl.textContent = 'ไม่พบคำที่บ่งชี้ชัดเจน กรุณาเลือกเองจากรายการด้านบน';
     }
   };
+
+  document.getElementById('score-ai-btn').onclick = function(){ analyzeScoresAI(); };
 
   document.getElementById('autofill-btn').onclick = function(){
     var key = document.getElementById('f-aitype').value;
