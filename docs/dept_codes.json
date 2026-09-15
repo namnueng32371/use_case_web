@@ -1,0 +1,4 @@
+{
+  "_comment": "Known department/plant codes used to auto-detect 'แผนก' from a source file's filename during use case import. Matching is a case-insensitive substring check against the filename; when multiple codes match, the longest one wins. Add new codes here as new source files/departments are discovered — no code changes needed elsewhere.",
+  "codes": ["E&E", "Auto", "RD CENTER", "TRT", "GSK"]
+}
