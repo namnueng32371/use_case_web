@@ -1083,48 +1083,6 @@
       <div class="slider-desc" id="f-risk-desc"></div>
     </div>
 
-    <details style="margin:16px 0 4px;">
-      <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">Spec, ความเสี่ยง, ทรัพยากร และ kQI (ไม่บังคับ, ระบบคำนวณอัตโนมัติ)</summary>
-      <div style="margin-top:14px;">
-        <button type="button" class="btn-secondary" id="autofill-btn" style="margin-bottom:14px;">เติม Spec แนะนำตามประเภท AI อัตโนมัติ</button>
-        <div class="status" id="autofill-status" style="margin-top:-8px; margin-bottom:8px;"></div>
-        <div class="field">
-          <label for="f-hardware">Spec Hardware ที่ใช้ทำ AI</label>
-          <textarea id="f-hardware" rows="3" placeholder="เช่น GPU, CPU, RAM, VRAM หรือการใช้ cloud/API"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-risks">ความเสี่ยงและการลดความเสี่ยง</label>
-          <textarea id="f-risks" rows="3" placeholder="เช่น ความเสี่ยงด้านข้อมูล และแนวทางลดความเสี่ยง"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-resources">ทรัพยากรและประมาณการ (บุคคล, เทคโนโลยี, งบประมาณ, ระยะเวลา)</label>
-          <textarea id="f-resources" rows="4"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-kpi">ตัวชี้วัดความสำเร็จ (KQI)</label>
-          <textarea id="f-kpi" rows="2"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-roi">ผลตอบแทนการลงทุน (ROI)</label>
-          <textarea id="f-roi" rows="3" placeholder="ประมาณการ ROI และระยะคืนทุน"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-recommendation">ข้อเสนอแนะและขั้นตอนต่อไป</label>
-          <textarea id="f-recommendation" rows="2"></textarea>
-        </div>
-        <div class="row2">
-          <div class="field">
-            <label for="f-preparedby">ผู้จัดทำ</label>
-            <input type="text" id="f-preparedby" placeholder="ชื่อผู้จัดทำเอกสาร">
-          </div>
-          <div class="field">
-            <label for="f-approver">ผู้พิจารณา / อนุมัติ</label>
-            <input type="text" id="f-approver" placeholder="ชื่อผู้อนุมัติ (ไม่บังคับ)">
-          </div>
-        </div>
-      </div>
-    </details>
-
     <div class="form-actions">
       <button class="btn-primary" id="save-btn">บันทึก</button>
       <button class="btn-secondary" id="cancel-btn">ยกเลิก</button>
@@ -4038,15 +3996,6 @@
     document.getElementById('f-aitype').value='';
     document.getElementById('analyze-status').textContent='';
     document.getElementById('score-ai-status').textContent='';
-    document.getElementById('f-hardware').value='';
-    document.getElementById('autofill-status').textContent='';
-    document.getElementById('f-risks').value='';
-    document.getElementById('f-resources').value='';
-    document.getElementById('f-kpi').value='';
-    document.getElementById('f-roi').value='';
-    document.getElementById('f-recommendation').value='';
-    document.getElementById('f-preparedby').value='';
-    document.getElementById('f-approver').value='';
     document.getElementById('f-dataavailable').value='';
     document.getElementById('f-redesign').value='';
     document.getElementById('f-qwp').value='';
@@ -4075,15 +4024,6 @@
     document.getElementById('f-aitype').value = uc.aiType||'';
     document.getElementById('analyze-status').textContent='';
     document.getElementById('score-ai-status').textContent='';
-    document.getElementById('autofill-status').textContent='';
-    document.getElementById('f-hardware').value = uc.hardware||'';
-    document.getElementById('f-risks').value = uc.risks||'';
-    document.getElementById('f-resources').value = uc.resources||'';
-    document.getElementById('f-kpi').value = uc.kpi||'';
-    document.getElementById('f-roi').value = uc.roi||'';
-    document.getElementById('f-recommendation').value = uc.recommendation||'';
-    document.getElementById('f-preparedby').value = uc.preparedBy||'';
-    document.getElementById('f-approver').value = uc.approver||'';
     document.getElementById('f-dataavailable').value = uc.dataAvailable||'';
     document.getElementById('f-redesign').value = uc.redesignDesc||'';
     document.getElementById('f-qwp').value = uc.qwp||'';
@@ -4238,18 +4178,10 @@
       attachment: currentAttachment,
       attachRef: document.getElementById('f-attach-ref').value.trim(),
       aiType: document.getElementById('f-aitype').value,
-      hardware: document.getElementById('f-hardware').value.trim(),
       impact: Number(document.getElementById('f-impact').value),
       feasibility: Number(document.getElementById('f-feasibility').value),
       data: Number(document.getElementById('f-data').value),
       risk: Number(document.getElementById('f-risk').value),
-      risks: document.getElementById('f-risks').value.trim(),
-      resources: document.getElementById('f-resources').value.trim(),
-      kpi: document.getElementById('f-kpi').value.trim(),
-      roi: document.getElementById('f-roi').value.trim(),
-      recommendation: document.getElementById('f-recommendation').value.trim(),
-      preparedBy: document.getElementById('f-preparedby').value.trim(),
-      approver: document.getElementById('f-approver').value.trim(),
       dataAvailable: document.getElementById('f-dataavailable').value.trim(),
       redesignDesc: document.getElementById('f-redesign').value.trim(),
       qwp: qwpVal,
@@ -4268,6 +4200,17 @@
         data.dataSensitivity = existing.dataSensitivity;
         data.latency = existing.latency;
         data.availability = existing.availability;
+        // hardware/risks/resources/kpi/roi/recommendation/preparedBy/approver:
+        // เอาหัวข้อ "Spec, ความเสี่ยง, ทรัพยากร และ kQI" ออกจากฟอร์มแล้วเช่นกัน
+        // (จะกลับมาทบทวนทีหลัง) — คงค่าเดิมไว้ ไม่ทับด้วยค่าว่าง
+        data.hardware = existing.hardware;
+        data.risks = existing.risks;
+        data.resources = existing.resources;
+        data.kpi = existing.kpi;
+        data.roi = existing.roi;
+        data.recommendation = existing.recommendation;
+        data.preparedBy = existing.preparedBy;
+        data.approver = existing.approver;
       }
       useCases = useCases.map(function(u){ return u.id===editingId ? data : u; });
     } else {
@@ -4416,26 +4359,6 @@
   };
 
   document.getElementById('score-ai-btn').onclick = function(){ analyzeScoresAI(); };
-
-  document.getElementById('autofill-btn').onclick = function(){
-    var key = document.getElementById('f-aitype').value;
-    var statusEl = document.getElementById('autofill-status');
-    var cat = getCategory(key);
-    if(!cat){
-      statusEl.textContent = 'กรุณาเลือก "ลักษณะของงาน/ข้อมูล" ด้านบนก่อน หรือกด "วิเคราะห์อัตโนมัติ"';
-      return;
-    }
-    function fillIfEmpty(id, val){
-      var el = document.getElementById(id);
-      if(!el.value.trim()){ el.value = val; }
-    }
-    fillIfEmpty('f-hardware', cat.hardware);
-    fillIfEmpty('f-risks', cat.risks);
-    fillIfEmpty('f-resources', cat.resources);
-    fillIfEmpty('f-kpi', cat.kqi);
-    fillIfEmpty('f-roi', cat.roi);
-    statusEl.textContent = 'เติมค่าแนะนำสำหรับ ' + cat.aiType + ' แล้ว (เฉพาะช่องที่ว่าง) — ปรับแก้ได้ตามจริง';
-  };
 
   document.getElementById('f-attach-file').addEventListener('change', function(e){
     var statusEl = document.getElementById('f-attach-status');
