@@ -104,7 +104,7 @@ _z = zipfile.ZipFile(PATH)
 (ok if _z.testzip() is None else bad)(f"โครงสร้างไฟล์ zip ปกติ ({len(_z.namelist())} ส่วน)")
 
 print("\n=== 5. หัวคอลัมน์และจำนวนช่อง ===")
-for ws, n in ((w1, 23), (w2, 23), (w3, 21)):
+for ws, n in ((w1, 23), (w2, 22), (w3, 21)):
     got = sum(1 for c in range(1, 40) if ws.cell(row=5, column=c).value)
     (ok if got == n else bad)(f"{ws.title}: {got} คอลัมน์ (คาด {n})")
     for c in range(1, got + 1):
