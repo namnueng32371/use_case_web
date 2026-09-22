@@ -87,6 +87,22 @@ for ws in (w1, w2):
             bad(f"{ws.title} {col}6 = '{v}' ไม่มีในรายการ DATA!{c1}")
 ok("ตรวจค่าตัวอย่างครบทุกช่องที่เป็น dropdown")
 
+print("\n=== 4b. ขีดจำกัดของ Excel (เกินแล้วไฟล์เปิดไม่ขึ้น) ===")
+LIM = [("promptTitle", 32), ("prompt", 255), ("errorTitle", 32), ("error", 255)]
+n_chk = 0
+for ws in wb.worksheets:
+    for d in ws.data_validations.dataValidation:
+        for attr, mx in LIM:
+            v = getattr(d, attr, None)
+            if v is None: continue
+            n_chk += 1
+            if len(v) > mx:
+                bad(f"{ws.title} {d.sqref}: {attr} ยาว {len(v)} ตัว เกินขีดจำกัด {mx}")
+ok(f"ตรวจความยาวข้อความใน validation {n_chk} รายการ (ขีดจำกัด 32 / 255)")
+import zipfile
+_z = zipfile.ZipFile(PATH)
+(ok if _z.testzip() is None else bad)(f"โครงสร้างไฟล์ zip ปกติ ({len(_z.namelist())} ส่วน)")
+
 print("\n=== 5. หัวคอลัมน์และจำนวนช่อง ===")
 for ws, n in ((w1, 23), (w2, 19), (w3, 21)):
     got = sum(1 for c in range(1, 40) if ws.cell(row=5, column=c).value)
