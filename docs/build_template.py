@@ -6,7 +6,7 @@ import os
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.worksheet.datavalidation import DataValidation
-from openpyxl.formatting.rule import CellIsRule
+from openpyxl.formatting.rule import CellIsRule, FormulaRule
 from openpyxl.utils import get_column_letter
 
 OUT = r"C:\Users\Jengza\Desktop\use_case_web\docs\AI_UseCase_Template_v2.xlsx"
@@ -38,6 +38,13 @@ FILL_INPUT = PatternFill("solid", fgColor="FFF2CC")   # เหลือง = ก
 FILL_AUTO  = PatternFill("solid", fgColor="E2EFDA")   # เขียวอ่อน = ระบบเติมให้
 FILL_EX    = PatternFill("solid", fgColor="F2F2F2")
 FILL_IT    = PatternFill("solid", fgColor="DEEBF7")   # ฟ้าอ่อน = ทีม AI/IT เติม
+
+def cf_style(bg, fg, bold=True):
+    """สีสำหรับ conditional formatting — ต้องเป็น bgColor และ alpha FF
+    ถ้าใช้ fgColor หรือ alpha 00 แบบค่าเริ่มต้นของ openpyxl Excel จะไม่ทาสีให้"""
+    return (PatternFill(bgColor="FF" + bg),
+            Font(name=FONT, size=9, bold=bold, color="FF" + fg))
+
 
 THIN = Side(style="thin", color="BFBFBF")
 BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
@@ -238,7 +245,7 @@ def tip(ws, col, title, text):
     v.add(f"{col}{FIRST}:{col}{LAST}")
 
 
-def dv(col):
+def dv(col, prompt=None):
     """dropdown: formula1 ห้ามมี '=' นำหน้า, showDropDown=False = ให้แสดงลูกศร"""
     if len(LISTS[col][0]) > TITLE_MAX:
         raise ValueError(f"หัวรายการ {col} ยาว {len(LISTS[col][0])} ตัว เกิน {TITLE_MAX}")
@@ -247,12 +254,14 @@ def dv(col):
     v.errorTitle = "ค่าไม่ถูกต้อง"
     v.error = "กรุณาเลือกจากรายการเท่านั้น (กดลูกศรด้านขวาของช่อง)"
     v.promptTitle = LISTS[col][0]
-    v.prompt = "เลือกจากรายการ — กดลูกศรด้านขวาของช่อง"
+    v.prompt = prompt or "เลือกจากรายการ — กดลูกศรด้านขวาของช่อง"
+    if len(v.prompt) > PROMPT_MAX:
+        raise ValueError(f"ข้อความอธิบายของ {col} ยาว {len(v.prompt)} ตัว เกิน {PROMPT_MAX}")
     v.showInputMessage = True
     return v
 
 # ------------------------------------------------- helper สร้าง sheet ตาราง
-def build_sheet(ws, title, note, groups, cols, example, auto_cols=()):
+def build_sheet(ws, title, note, groups, cols, example, auto_cols=(), prompts=None):
     ws.sheet_view.showGridLines = False
     ncol = len(cols)
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=ncol)
@@ -300,7 +309,8 @@ def build_sheet(ws, title, note, groups, cols, example, auto_cols=()):
 
     for i, (_h, _w, dvcol) in enumerate(cols, start=1):
         if dvcol:
-            v = dv(dvcol); ws.add_data_validation(v)
+            v = dv(dvcol, (prompts or {}).get(get_column_letter(i)))
+            ws.add_data_validation(v)
             L = get_column_letter(i)
             v.add(f"{L}{FIRST}:{L}{LAST}")
     ws.freeze_panes = "C6"
@@ -425,7 +435,33 @@ build_sheet(
     "ชั้นที่ 2 : รายละเอียดเทคนิค   (กรอกทุก Use Case — ใช้กำหนด Spec Server ที่จะตั้งในบริษัท)",
     "Server เป็นเครื่องซื้อใหม่ ตั้งในบริษัทที่เดียว ไม่ใช้ Cloud  |  "
     "เขียว = ระบบดึงมาให้  |  เหลือง = แผนกกรอก  |  ฟ้า = ทีม AI/IT เติมให้ทีหลัง แผนกข้ามไปได้เลย",
-    groups2, cols2, ex2, auto_cols=(1, 2, 3))
+    groups2, cols2, ex2, auto_cols=(1, 2, 3),
+    prompts={
+        "E": "นับคนทั้งหมดที่เข้ามาใช้ตลอดทั้งวัน ไม่ใช่พร้อมกัน\n"
+             "เช่น ทยอยเข้ามาตั้งแต่เช้าถึงเย็น รวม 10 คน = เลือก 1 - 10 คน",
+        "F": "ช่วงที่คนใช้เยอะที่สุดของวัน มีกี่คนกดพร้อมกัน\n\n"
+             "ต้องไม่เกินจำนวนคนที่ใช้งาน/วัน\n"
+             "เช่น ทั้งวันมี 10 คน ช่วงพีคมักอยู่แค่ 1 - 2 คน\n\n"
+             "ช่องนี้คือตัวกำหนดขนาดเครื่อง ไม่ใช่จำนวนคนต่อวัน",
+    })
+
+# เตือนเมื่อช่วงพีคมากเกินกว่าจำนวนคนใช้งานต่อวันจะเป็นไปได้
+# เขียนสูตรจากข้อความตัวเลือกตรงๆ ไม่อ้างอิงข้าม sheet เพราะ Excel ไม่ประมวลผลให้
+_U = [o for o, _ in LISTS["T"][1]]     # คนใช้งาน/วัน
+_P = [o for o, _ in LISTS["U"][1]]     # ช่วงพีค
+_pairs = []
+for i, u in enumerate(_U):
+    # ขอบบนของจำนวนคนต่อวัน เทียบกับขอบล่างของช่วงพีค
+    hi = [10, 50, 200, 1000, 10 ** 9][i]
+    over = [p for j, p in enumerate(_P) if [1, 3, 6, 21, 51][j] > hi]
+    if over:
+        cond = f'$F{FIRST}="' + f'",$F{FIRST}="'.join(over) + '"'
+        _pairs.append(f'AND($E{FIRST}="{u}",OR({cond}))')
+ws2.conditional_formatting.add(
+    f"F{FIRST}:F{LAST}",
+    FormulaRule(formula=["OR(" + ",".join(_pairs) + ")"],
+                fill=cf_style("FFC7CE", "9C0006")[0],
+                font=cf_style("FFC7CE", "9C0006")[1]))
 
 # ทาสีโซน B ให้ต่างจากช่องที่แผนกต้องกรอก
 for _c in IT_ZONE:
@@ -533,19 +569,18 @@ for r in [6] + list(range(FIRST, LAST + 1)):
     ws3.row_dimensions[r].height = 22
 
 rng = f"R6:R{LAST}"   # รวมแถวตัวอย่าง เพื่อให้เห็นตัวอย่างการไล่สีด้วย
+_f, _t = cf_style("C6EFCE", "006100")
 ws3.conditional_formatting.add(rng, CellIsRule(
-    operator="greaterThanOrEqual", formula=["75"],
-    fill=PatternFill("solid", fgColor="C6EFCE"), font=Font(name=FONT, size=9, bold=True, color="006100")))
+    operator="greaterThanOrEqual", formula=["75"], fill=_f, font=_t))
+_f, _t = cf_style("FFEB9C", "9C5700")
 ws3.conditional_formatting.add(rng, CellIsRule(
-    operator="between", formula=["50", "74.99"],
-    fill=PatternFill("solid", fgColor="FFEB9C"), font=Font(name=FONT, size=9, bold=True, color="9C5700")))
+    operator="between", formula=["50", "74.99"], fill=_f, font=_t))
+_f, _t = cf_style("F2F2F2", "808080", bold=False)
 ws3.conditional_formatting.add(rng, CellIsRule(
-    operator="lessThan", formula=["50"],
-    fill=PatternFill("solid", fgColor="F2F2F2"), font=Font(name=FONT, size=9, color="808080")))
+    operator="lessThan", formula=["50"], fill=_f, font=_t))
 
 # เตือนแถวที่กรอกข้อมูลไม่ครบ
-warn_fill = PatternFill("solid", fgColor="FFC7CE")
-warn_font = Font(name=FONT, size=9, bold=True, color="9C0006")
+warn_fill, warn_font = cf_style("FFC7CE", "9C0006")
 ws3.conditional_formatting.add(f"S6:S{LAST}", CellIsRule(
     operator="equal", formula=['"ข้อมูลไม่ครบ"'], fill=warn_fill, font=warn_font))
 ws3.conditional_formatting.add(f"U6:U{LAST}", CellIsRule(
