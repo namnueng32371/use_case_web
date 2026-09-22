@@ -443,7 +443,7 @@ build_sheet(
              "ต้องไม่เกินจำนวนคนที่ใช้งาน/วัน\n"
              "เช่น ทั้งวันมี 10 คน ช่วงพีคมักอยู่แค่ 1 - 2 คน\n\n"
              "ช่องนี้คือตัวกำหนดขนาดเครื่อง\n\n"
-             "ถ้าขึ้นพื้นสีส้ม = ตัวเลขดูสูงผิดปกติ ลองทบทวนอีกครั้ง",
+             "ถ้าขึ้นพื้นสีแดง = ตัวเลขดูสูงผิดปกติ ลองทบทวนอีกครั้ง",
     })
 
 # เตือนเมื่อช่วงพีคดูสูงผิดปกติเมื่อเทียบกับจำนวนคนใช้งานต่อวัน
@@ -459,7 +459,7 @@ for i, u in enumerate(o for o, _ in LISTS["T"][1]):
     if over:
         cond = f'$F{FIRST}="' + f'",$F{FIRST}="'.join(over) + '"'
         _pairs.append(f'AND($E{FIRST}="{u}",OR({cond}))')
-_wf, _wt = cf_style("FFEB9C", "9C5700")
+_wf, _wt = cf_style("FFC7CE", "9C0006")
 ws2.conditional_formatting.add(
     f"F{FIRST}:F{LAST}",
     FormulaRule(formula=["OR(" + ",".join(_pairs) + ")"], fill=_wf, font=_wt))
