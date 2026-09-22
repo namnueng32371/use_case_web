@@ -1,0 +1,5 @@
+# ไฟล์ Office เป็นไบนารี ห้าม git แปลง line ending (จะทำให้ไฟล์พัง)
+*.xlsx binary
+*.xlsm binary
+*.docx binary
+*.pptx binary
