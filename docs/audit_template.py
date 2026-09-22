@@ -49,6 +49,10 @@ ok(f"ตรวจรายการ dropdown ทั้งหมด {len(lists)} 
 print("\n=== 3. dropdown ที่ผูกกับ sheet 1 / 2 ชี้ไปที่ช่วงถูกต้องมั้ย ===")
 for ws in (w1, w2):
     for dv in ws.data_validations.dataValidation:
+        if dv.type is None:      # กล่องคำอธิบายอย่างเดียว ไม่ได้จำกัดค่า
+            if not (dv.prompt and dv.showInputMessage):
+                bad(f"{ws.title} {dv.sqref}: validation ว่างเปล่า ไม่มีทั้งรายการและคำอธิบาย")
+            continue
         m = re.match(r"DATA!\$([A-Z]+)\$(\d+):\$([A-Z]+)\$(\d+)$", dv.formula1 or "")
         if not m:
             bad(f"{ws.title}: formula1 ผิดรูปแบบ -> {dv.formula1}"); continue
@@ -65,12 +69,15 @@ for ws in (w1, w2):
         got = str(dv.sqref)
         if got != f"{col}{FIRST}:{col}{LAST}":
             warn(f"{ws.title} {col}: ผูกช่วง {got} (คาด {col}{FIRST}:{col}{LAST})")
-ok(f"sheet1 {len(w1.data_validations.dataValidation)} ชุด / "
-   f"sheet2 {len(w2.data_validations.dataValidation)} ชุด")
+def n_list(ws): return sum(1 for d in ws.data_validations.dataValidation if d.type)
+def n_tip(ws):  return sum(1 for d in ws.data_validations.dataValidation if not d.type)
+ok(f"sheet1 dropdown {n_list(w1)} ชุด + กล่องคำอธิบาย {n_tip(w1)} ช่อง / "
+   f"sheet2 dropdown {n_list(w2)} ชุด + กล่องคำอธิบาย {n_tip(w2)} ช่อง")
 
 print("\n=== 4. แถวตัวอย่าง (แถว 6) ต้องเป็นค่าที่มีในรายการจริง ===")
 for ws in (w1, w2):
     for dv in ws.data_validations.dataValidation:
+        if dv.type is None: continue
         col = str(dv.sqref).split(":")[0].rstrip("0123456789")
         v = ws[f"{col}6"].value
         if v is None: continue
