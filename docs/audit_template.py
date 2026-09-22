@@ -28,7 +28,7 @@ lists = {}
 for ci in range(1, 40):
     L = get_column_letter(ci)
     head = wd[f"{L}3"].value
-    if not head or L in ("AB", "AC"): continue   # AB/AC = บล็อกตั้งค่า ไม่ใช่รายการ dropdown
+    if not head or L in ("AH", "AI"): continue   # AH/AI = บล็อกตั้งค่า ไม่ใช่รายการ dropdown
     opts, scores = [], []
     r = 4
     while wd[f"{L}{r}"].value not in (None, ""):
@@ -104,7 +104,7 @@ _z = zipfile.ZipFile(PATH)
 (ok if _z.testzip() is None else bad)(f"โครงสร้างไฟล์ zip ปกติ ({len(_z.namelist())} ส่วน)")
 
 print("\n=== 5. หัวคอลัมน์และจำนวนช่อง ===")
-for ws, n in ((w1, 23), (w2, 19), (w3, 21)):
+for ws, n in ((w1, 23), (w2, 23), (w3, 21)):
     got = sum(1 for c in range(1, 40) if ws.cell(row=5, column=c).value)
     (ok if got == n else bad)(f"{ws.title}: {got} คอลัมน์ (คาด {n})")
     for c in range(1, got + 1):
@@ -126,15 +126,15 @@ for c, src in expect.items():
 
 print("\n=== 7. สูตรรวม / น้ำหนัก / เกณฑ์ ===")
 tot = w3.cell(row=FIRST, column=18).value
-for name, ref in [("Impact", "AC$4"), ("Feasibility", "AC$5"),
-                  ("Data", "AC$6"), ("Risk", "AC$7")]:
+for name, ref in [("Impact", "AI$4"), ("Feasibility", "AI$5"),
+                  ("Data", "AI$6"), ("Risk", "AI$7")]:
     (ok if ref in tot else bad)(f"สูตรคะแนนรวมอ้างน้ำหนัก {name} ที่ DATA!${ref}")
-wsum = sum(wd[f"AC{r}"].value for r in range(4, 8))
+wsum = sum(wd[f"AI{r}"].value for r in range(4, 8))
 (ok if abs(wsum - 1.0) < 1e-9 else bad)(f"น้ำหนักรวม = {wsum:.0%} (ต้องเป็น 100%)")
 lv = w3.cell(row=FIRST, column=19).value
-for ref in ("AC$10", "AC$11"):
+for ref in ("AI$10", "AI$11"):
     (ok if ref in lv else bad)(f"สูตรระดับอ้างเกณฑ์ที่ DATA!${ref}")
-(ok if wd["AC10"].value > wd["AC11"].value else bad)(
+(ok if wd["AI10"].value > wd["AI11"].value else bad)(
     f"เกณฑ์ สูง({wd['AC10'].value}) > กลาง({wd['AC11'].value})")
 (ok if "(6-Q" in tot.replace(" ", "") else bad)("Risk ถูกกลับด้านด้วย (6 - Risk)")
 (ok if ")*20," in tot else bad)("มีการคูณ 20 เพื่อขยายเป็นสเกล 100")
