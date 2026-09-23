@@ -1008,8 +1008,8 @@
       </div>
     </div>
 
-    <div style="border:1.5px solid var(--navy); border-radius:12px; padding:16px 18px 4px; margin:0 0 18px; background:#FBFAF6;">
-      <div style="font-size:11.5px; font-weight:700; color:var(--navy); letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ใจความสำคัญของ Use Case</div>
+    <div style="border:1px solid var(--border); border-left:4px solid #C55A11; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
+      <div style="font-size:11.5px; font-weight:700; color:#C55A11; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ผลกระทบ (Impact) — น้ำหนัก 35%</div>
       <div class="field">
         <label for="f-problem">ปัญหาหรือข้อจำกัดของงานในปัจจุบัน</label>
         <textarea id="f-problem" rows="2" placeholder="ตอนนี้เจอปัญหาอะไร ทำไมถึงอยากได้ AI มาช่วย"></textarea>
@@ -1028,17 +1028,9 @@
         <input type="text" id="f-attach-ref" placeholder="ลิงก์หรือชื่ออ้างอิงเอกสาร (กรณีไฟล์เกิน 10MB หรือเก็บไว้ที่อื่น)" style="margin-top:6px;">
       </div>
       <div class="field">
-        <label for="f-dataavailable">ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available)</label>
-        <textarea id="f-dataavailable" rows="2" placeholder="มีข้อมูลอะไรบ้าง เก็บที่ไหน ใครเป็นคนเก็บ"></textarea>
-      </div>
-      <div class="field">
         <label for="f-redesign">แนวทางการทำงานหลังนำ AI มาใช้ (Redesign)</label>
         <textarea id="f-redesign" rows="2" placeholder="อยากให้ AI ทำอะไร ผลลัพธ์ที่คาดหวังหน้าตาเป็นยังไง"></textarea>
       </div>
-    </div>
-
-    <div style="border:1px solid var(--border); border-left:4px solid #C55A11; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
-      <div style="font-size:11.5px; font-weight:700; color:#C55A11; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ผลกระทบ (Impact) — น้ำหนัก 35%</div>
       <div class="row2">
         <div class="field">
           <label for="f-timespent">เวลาที่ใช้กับงานนี้ในปัจจุบัน *</label>
@@ -1054,6 +1046,10 @@
 
     <div style="border:1px solid var(--border); border-left:4px solid #538135; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
       <div style="font-size:11.5px; font-weight:700; color:#538135; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ความพร้อมของข้อมูล (Data) — น้ำหนัก 25%</div>
+      <div class="field">
+        <label for="f-dataavailable">ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available)</label>
+        <textarea id="f-dataavailable" rows="2" placeholder="มีข้อมูลอะไรบ้าง เก็บที่ไหน ใครเป็นคนเก็บ"></textarea>
+      </div>
       <div class="row2">
         <div class="field">
           <label for="f-dataformat">รูปแบบการจัดเก็บข้อมูลในปัจจุบัน *</label>

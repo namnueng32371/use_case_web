@@ -11,19 +11,27 @@
 >    - เมื่อทำการแก้ไขโค้ด ตรวจสอบบั๊ก หรือสร้างไฟล์ใหม่ ให้คงสถานะไว้ใน Working Directory เพื่อให้ผู้ใช้ตรวจสอบก่อนเสมอ
 >    - ห้ามรันคำสั่ง `git commit`, `git push`, หรือแก้ไข Git history อัตโนมัติเด็ดขาด เว้นแต่จะมีคำสั่งชัดเจน เช่น *"commit ให้หน่อย"*, *"push ขึ้น GitHub เลย"*
 >
-> 2. **ห้ามรันสคริปต์ทดสอบ (`test_webapp.py`) โดยเด็ดขาด ถ้าผู้ใช้ (User) ไม่ได้สั่ง**
->    - ห้ามรันเทสอัตโนมัติในแต่ละรอบของการแก้ไข (โดยเฉพาะงานปรับแต่ง UI / CSS) เพื่อไม่ให้เสียเวลาและทำงานล่าช้า
->    - ให้รันคำสั่ง `python scripts/test_webapp.py` เฉพาะเมื่อผู้ใช้สั่งอย่างชัดเจนเท่านั้น เช่น *"เทสให้หน่อย"*, *"รัน test ให้ดู"*
+> 2. **เมื่อไหร่ที่ commit (และ/หรือ push) ได้รับอนุญาตแล้ว ให้ publish `artifact.html` ขึ้น Claude Artifact ตัวหลักด้วยเสมอ**
+>    - Artifact ตัวหลักคือ **"AI Use Case Prioritization Tool"** — publish โดยระบุ `url` ของ artifact เดิมเสมอ (ห้าม publish แบบไม่ใส่ `url` เพราะจะไปสร้างอันใหม่แยกหรือทับของเดิมผิดตัว — เคยเกิดปัญหานี้มาแล้ว ดู [CONTEXT.md](CONTEXT.md) หัวข้อ "ข้อควรรู้เรื่อง Artifact")
+>    - ลำดับที่ถูกต้องเมื่อผู้ใช้สั่ง "commit": (1) แก้ไฟล์ + ทดสอบให้เสร็จ (2) `git commit` + `git push` (3) publish `artifact.html` ขึ้น Artifact ตัวหลัก (4) รายงานผลทั้งลิงก์ commit และลิงก์ Artifact ให้ผู้ใช้
+>    - ถ้าผู้ใช้สั่งแค่ "commit" เฉยๆ โดยไม่พูดถึง artifact ให้ถือว่ารวม publish artifact ด้วยเสมอ (ไม่ต้องถามซ้ำ)
+>
+> 3. **`artifact.html` และ `AI_Use_Case_Program12.html` ต้องแก้คู่กันเสมอ**
+>    - ทั้งสองไฟล์เป็นแอปตัวเดียวกัน มีโครงสร้าง field/ฟังก์ชันเดียวกัน แต่ **ไม่ได้ sync กันอัตโนมัติและมีเนื้อหาต่างกันเล็กน้อยในบางจุด** — ห้ามสมมติว่าเลขบรรทัดหรือข้อความตรงกันเป๊ะ ให้ตรวจสอบเนื้อหาจริงของแต่ละไฟล์ก่อนแก้ทุกครั้ง (grep/read ก่อน edit)
+>    - แก้ไฟล์หนึ่งแล้วลืมอีกไฟล์ = ฟีเจอร์ไม่ตรงกันระหว่างเวอร์ชัน Artifact กับเวอร์ชันไฟล์เปล่า
 
 ---
 
 ## 1. ภาพรวมของโปรเจกต์ (Project Overview)
 
-โปรเจกต์นี้คือ **AI Use Case Prioritization Tool**
-* **Frontend**: หน้าเว็บไฟล์เดี่ยว (`AI_Use_Case_Program12.html`) พัฒนาด้วย Vanilla HTML/CSS/JavaScript
-* **Backend**: Flask API (`server.py`) ที่รองรับทั้งการรันในเครื่อง Local และการ Deploy ขึ้น **Railway** (Production)
-* **Database**: MySQL จัดเก็บข้อมูล Use Cases ในรูปแบบ JSON Payload ในตาราง `use_cases`
-* **API Contract**: การบันทึกข้อมูลจะใช้รูปแบบ "แทนที่ทั้งก้อน" (`PUT /api/usecases`) เพื่อความเรียบง่ายและตรงกับพฤติกรรมของ Frontend
+โปรเจกต์นี้คือ **AI Use Case Prioritization Tool** — เครื่องมือช่วยเก็บ วิเคราะห์ และจัดลำดับความสำคัญของ use case AI ในองค์กร (โรงงานผลิตยาง/พลาสติก)
+
+* **สถาปัตยกรรม**: **ไม่มี Backend/Database แยกต่างหากแล้ว** — เดิมเคยเป็น Flask + MySQL แต่ถูกย้ายมาเป็น **Claude Artifact เพียวๆ** ทั้งหมด (ไฟล์เดี่ยว HTML/CSS/JavaScript, ไม่มี server, ไม่มี MySQL, ไม่มี Railway)
+* **เก็บข้อมูลที่ไหน**: ใช้ `window.claude.use('db')` (Artifact's shared database) ผ่าน `claudeDb.doc('usecases/all').get()/.set({items:useCases})` — ข้อมูลอยู่ในตัว Artifact เอง
+* **สองไฟล์ HTML คู่กัน**:
+  - `artifact.html` — เวอร์ชันสำหรับ publish ขึ้น Claude Artifact (ไม่มี `<!DOCTYPE>`/`<html>` wrapper)
+  - `AI_Use_Case_Program12.html` — เวอร์ชันไฟล์เต็มหน้า เปิดตรงจากเครื่อง/เบราว์เซอร์ได้โดยไม่ต้องมี server
+* **Excel Template**: `docs/AI_UseCase_Template_v2.xlsx` เป็น template คู่ขนานที่แจกให้แผนกกรอกแบบออฟไลน์ — สร้างจากสคริปต์ `docs/build_template.py` โครงสร้าง field ต้องตรงกับฟอร์มในเว็บแอปเสมอ
 
 ---
 
@@ -31,59 +39,66 @@
 
 ```
 use_case_web/
-├── server.py                   # Flask backend & REST API
-├── AI_Use_Case_Program12.html  # Frontend single-page app
-├── schema.sql                  # MySQL database schema
-├── Procfile                    # คำสั่งสำหรับ Production บน Railway (Gunicorn)
-├── runtime.txt                 # เวอร์ชัน Python (3.12.x)
-├── requirements.txt            # Python dependencies (Flask, PyMySQL, gunicorn)
-├── .gitignore                  # กรองไฟล์ที่ไม่ต้องการเข้า Git
-├── AGENTS.md                   # คู่มือสำหรับ AI Agent (ไฟล์นี้)
-├── README.md                   # คู่มือสำหรับผู้ใช้ทั่วไป
-├── CONTEXT.md                  # ประวัติและข้อควรระวังทางสถาปัตยกรรม
+├── artifact.html                    # เวอร์ชัน publish ขึ้น Claude Artifact (ตัวหลักที่ผู้ใช้ใช้งานจริง)
+├── AI_Use_Case_Program12.html       # เวอร์ชันไฟล์เต็มหน้า เปิดตรงได้โดยไม่ต้องมี server
+├── AGENTS.md                        # คู่มือสำหรับ AI Agent (ไฟล์นี้)
+├── CONTEXT.md                       # ประวัติ ข้อตกลง และบรีฟงานแบบละเอียด (อ่านก่อนเริ่มงานใหญ่)
+├── PRODUCT.md                       # มุมมองผลิตภัณฑ์/ธุรกิจ
+├── README.md                        # คู่มือสำหรับผู้ใช้ทั่วไป
+├── .gitignore
 │
-├── docs/                       # เอกสารอ้างอิงและชุดข้อมูล
-│   ├── seed_data.sql           # ข้อมูล Use Cases ทั้งหมดที่ใช้ Sync/Backup
-│   └── use_cases_source/       # ไฟล์ต้นฉบับ (Excel / PPTX)
+├── data/                            # ข้อมูล export/backup
+├── backup_ai_usecase_db_*.sql       # backup โครงสร้าง+ข้อมูลจากยุค MySQL (เผื่อกู้คืน)
 │
-└── scripts/                    # สคริปต์ช่วยเหลือสำหรับ Developer
-    ├── start_all.bat           # ดับเบิลคลิกเพื่อรัน MySQL + Server บน Windows Local
-    ├── setup_mysql.ps1         # สคริปต์ติดตั้ง MySQL Service บน Windows
-    ├── test_webapp.py          # ชุดทดสอบระบบ API และหน้าเว็บ (25 Test Cases)
-    ├── export_to_sql.py        # ดึงข้อมูลจาก Local DB ออกมาเป็น docs/seed_data.sql
-    └── push_seed.py            # ดันข้อมูล docs/seed_data.sql ขึ้น Railway Production
+└── docs/                            # เอกสารอ้างอิงและ template
+    ├── AI_UseCase_Template_v2.xlsx  # Template Excel ที่แจกให้แผนกกรอก (ไฟล์ที่ส่งมอบจริง)
+    ├── build_template.py            # สคริปต์สร้าง Excel template ด้านบน (ห้ามแก้ไฟล์ .xlsx มือ)
+    ├── TEMPLATE_GUIDE.md            # คู่มืออธิบายทุกคอลัมน์ใน template
+    ├── SCORING.md                   # ที่มาของสูตรคะแนนและเหตุผลที่ตัดบางปัจจัยออก
+    ├── dept_codes.json
+    └── use_cases_source*/           # ไฟล์ Excel ต้นฉบับของแต่ละแผนก (ก่อนทำ template รวม)
 ```
+
+> ไม่มี `server.py`, `schema.sql`, `requirements.txt`, `Procfile`, `runtime.txt`, หรือโฟลเดอร์ `scripts/` แล้ว — ถูกลบไปตอนย้ายจาก Flask+MySQL มาเป็น Artifact-only ถ้าเจอไฟล์เหล่านี้กลับมาอีกหรือเอกสารเก่าอ้างถึง ให้ถือว่าเอกสารนั้นล้าสมัย
 
 ---
 
-## 3. สคริปต์และขั้นตอนการทำงาน (Workflows)
+## 3. ขั้นตอนการทำงาน (Workflows)
 
-### 3.1 การรันระบบในเครื่อง (Local Development)
-- รันผ่าน `scripts/start_all.bat` (จะเปิด MySQL และ Flask server ที่พอร์ต `8765`)
-- เข้าใช้งานได้ที่ `http://localhost:8765` หรือ `http://127.0.0.1:8765`
+### 3.1 การแก้ไขฟอร์ม/ฟีเจอร์ในเว็บแอป
+1. แก้ `artifact.html` ก่อน (เป็นตัวอ้างอิงหลัก)
+2. mirror การแก้ไขแบบเดียวกันไปที่ `AI_Use_Case_Program12.html` — **ตรวจเนื้อหาจริงก่อนแก้ทุกครั้ง** เพราะสองไฟล์เนื้อหาไม่ตรงกันเป๊ะ
+3. ทดสอบผ่านเบราว์เซอร์ (เปิดไฟล์ตรงๆ หรือใช้ preview tool) — เช็ค console error, ทดสอบ add/edit/save use case จริง
+4. รายงานผลแล้วรอคำสั่งก่อน commit (ดูกฎเหล็กข้อ 1)
 
-### 3.2 การทดสอบระบบ (Testing)
-- **ไม่ต้องรันเทสอัตโนมัติในแต่ละรอบของการแก้ไข**
-- รันคำสั่ง `python scripts/test_webapp.py` เฉพาะเมื่อผู้ใช้สั่งให้ทดสอบเท่านั้น เพื่อยืนยันว่า Endpoint ต่างๆ ยังทำงานสมบูรณ์ (ต้องผ่าน 25/25 PASS)
+### 3.2 การแก้ไข Excel Template
+**ห้ามแก้มือใน Excel** ให้แก้ที่ `docs/build_template.py` แล้วรันสคริปต์สร้างใหม่เสมอ เพราะไฟล์มีสูตรและ dropdown หลายสิบชุดที่ต้องตรงกันทุกจุด
 
-### 3.3 การอัปเดตข้อมูล Use Cases ขึ้น Production (Railway)
-1. Export ข้อมูลล่าสุดใน Local ลงไฟล์:
-   ```powershell
-   python scripts\export_to_sql.py
-   ```
-2. ดันข้อมูลขึ้น Railway โดยตรง (รองรับ UTF-8 ภาษาไทยสมบูรณ์):
-   ```powershell
-   python scripts\push_seed.py
-   ```
+```bash
+python docs/build_template.py
+```
+
+หลังรันเสร็จ **ต้องเปิดด้วย Excel ตัวจริงยืนยัน** ไม่ใช่เชื่อการอ่านไฟล์ด้วย Python อย่างเดียว (ดูรายละเอียดเช็คลิสต์ใน [CONTEXT.md](CONTEXT.md) หัวข้อ "สิ่งที่ต้องตรวจทุกครั้งหลังแก้ template")
+
+### 3.3 การ commit + publish ขึ้น Artifact
+เมื่อผู้ใช้สั่ง commit แล้ว ให้ทำตามลำดับนี้เสมอ (ดูกฎเหล็กข้อ 2):
+1. `git add` เฉพาะไฟล์ที่เกี่ยวข้อง
+2. `git commit` พร้อมข้อความอธิบาย "ทำไม" ไม่ใช่แค่ "ทำอะไร"
+3. `git push` (ถ้าผู้ใช้สั่งหรืออนุญาตไว้)
+4. **Publish `artifact.html` ขึ้น Artifact ตัวหลัก** โดยระบุ `url` เดิมเสมอ
+5. รายงานทั้งผล commit/push และลิงก์ Artifact ให้ผู้ใช้
 
 ---
 
 ## 4. ข้อควรระวังในการแก้ไขโค้ด (Caution & Gotchas)
 
-1. **ระวังการแก้ไขไฟล์ `AI_Use_Case_Program12.html`**:
-   - ในไฟล์นี้มี JavaScript strings หลายจุดที่จำลองเอกสาร เช่น Word Document (`.doc`) ซึ่งมีแท็ก `</body>` และ `</html>` อยู่ในเนื้อหาข้อความ String Literal
-   - **ห้าม** ใช้การค้นหาแบบง่ายๆ เช่น `replace("</body>", ...)` เพราะจะไปแทรกโค้ดเข้ากลาง String Literal ทำให้เกิด JavaScript SyntaxError
-2. **ตัวแปร Environment Variables สำหรับ Railway**:
-   - Production ใช้ตัวแปร: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (ค่า default ชี้ไปที่ `127.0.0.1` เมื่อรัน local)
+1. **ระวัง JavaScript string literal ที่มี `</body>`/`</html>` อยู่ข้างใน**:
+   - ทั้ง `artifact.html` และ `AI_Use_Case_Program12.html` มีฟังก์ชันสร้าง Word document (`.doc`) ที่ประกอบ string HTML เต็มรูปแบบ (มี `<head>`, `</body></html>` อยู่ใน string literal เอง)
+   - **ห้าม** ใช้การค้นหา/แทนที่แบบง่ายๆ (เช่น `replace("</body>", ...)`) เพราะจะไปแทรกโค้ดกลาง string literal ทำให้เกิด JavaScript SyntaxError — ใช้ Edit tool แบบระบุ context ให้ชัดเจนแทน
+2. **field ในฟอร์มเว็บแอป ต้องตรงกับคอลัมน์ใน Excel template เสมอ**:
+   - ห้ามสร้างหัวข้อ/กล่องใหม่ในฟอร์มที่ซ้ำความหมายกับคอลัมน์ที่มีอยู่แล้วใน template — ถ้าจะเพิ่ม field ใหม่ ให้เพิ่มใน `docs/build_template.py` (sheet 1/2) คู่กับใน `DATA_LISTS`/ฟอร์มของทั้งสองไฟล์ HTML ด้วย
+   - รายชื่อ dropdown (บริษัท, หน่วยงาน ฯลฯ) ต้องแก้พร้อมกันทั้ง 3 ที่: `build_template.py` (LISTS), `artifact.html` (DATA_LISTS), `AI_Use_Case_Program12.html` (DATA_LISTS)
 3. **Encoding ภาษาไทยบน Windows**:
-   - ให้ระบุ `encoding='utf-8'` เสมอเมื่อเปิดอ่านหรือเขียนไฟล์ใน Python
+   - ให้ระบุ `encoding='utf-8'` เสมอเมื่อเปิดอ่านหรือเขียนไฟล์ด้วย Python — คอนโซล Windows (PowerShell/cmd) มักแสดงภาษาไทยเพี้ยน (cp874) ทั้งที่ไฟล์จริงเป็น UTF-8 ปกติ ให้ตรวจด้วยการ redirect output ไปไฟล์แล้วอ่านด้วย UTF-8 แทนการเชื่อสายตาจาก terminal ตรงๆ
+4. **อย่าลบไฟล์ backup ยุค MySQL โดยไม่ถาม**:
+   - `backup_ai_usecase_db_*.sql` และ `data/use_cases_export.json` เป็น backup ข้อมูลจริงก่อนย้ายมา Artifact เก็บไว้เผื่อกู้คืน ห้ามลบเว้นแต่ผู้ใช้สั่ง
