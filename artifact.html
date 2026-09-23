@@ -108,6 +108,10 @@
   .panel h2{font-size:15px; font-weight:600; margin:0 0 16px; color:var(--navy);}
   .field{margin-bottom:14px;}
   .field label{display:block; font-size:13px; font-weight:500; margin-bottom:5px; color:var(--text);}
+  .field select{
+    width:100%; height:36px; border:1px solid var(--border); border-radius:8px; padding:0 10px;
+    font-size:13px; font-family:inherit; color:var(--text); background:#fff;
+  }
   .field input[type=text], .field textarea{
     width:100%; border:1px solid var(--border); border-radius:8px; padding:8px 10px;
     font-size:13px; font-family:inherit; color:var(--text); resize:vertical;
@@ -973,36 +977,46 @@
         <input type="text" id="f-name" placeholder="เช่น แชทบอทตอบคำถามลูกค้า">
       </div>
       <div class="field">
-        <label for="f-dept">แผนก / หน่วยงาน</label>
-        <input type="text" id="f-dept" placeholder="เช่น ฝ่ายบริการลูกค้า">
+        <label for="f-company">บริษัท</label>
+        <select id="f-company" data-list="company"></select>
       </div>
     </div>
     <div class="error-msg" id="f-error">กรุณากรอกชื่อ use case</div>
-    <div class="field">
-      <label for="f-owner">ผู้รับผิดชอบ / เจ้าของ use case</label>
-      <input type="text" id="f-owner" placeholder="ชื่อผู้รับผิดชอบ">
+    <div class="row2">
+      <div class="field">
+        <label for="f-dept">หน่วยงานที่ใช้งาน</label>
+        <input type="text" id="f-dept" placeholder="เช่น ฝ่ายบริการลูกค้า">
+      </div>
+      <div class="field">
+        <label for="f-owner">ผู้รับผิดชอบ (Owner)</label>
+        <input type="text" id="f-owner" placeholder="ชื่อผู้รับผิดชอบ">
+      </div>
     </div>
     <div style="border:1px solid var(--border); border-radius:10px; padding:14px 16px 4px; margin:0 0 18px; background:#FAFAF8;">
-      <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">อ้างอิงกระบวนการคุณภาพ (QWP / Control / kQI) <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่บังคับ</span></div>
+      <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">อ้างอิงระบบคุณภาพ (QWP / SQP) <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่บังคับ ไม่นำไปคิดคะแนน</span></div>
       <div class="field">
-        <label for="f-qwp">QWP อ้างอิง (รหัส/ชื่อเอกสาร)</label>
-        <input type="text" id="f-qwp" placeholder="เช่น รหัส/ชื่อเอกสาร QWP ที่อ้างอิง">
+        <label for="f-qwp">เอกสาร QWP ที่อ้างอิง (รหัส/ชื่อเอกสาร)</label>
+        <input type="text" id="f-qwp" placeholder="เช่น QWP-PRD-012 ตรวจสอบคุณภาพชิ้นงานก่อนส่งมอบ">
       </div>
       <div class="field">
-        <label for="f-kqi2">kQI / QI ที่เกี่ยวข้อง</label>
-        <textarea id="f-kqi2" rows="2" placeholder="Key Quality Indicator / Quality Indicator ของขั้นตอนนั้น"></textarea>
+        <label for="f-kqi2">ตัวชี้วัด kQI / QI ที่เกี่ยวข้อง</label>
+        <textarea id="f-kqi2" rows="2" placeholder="เช่น kQI-2 อัตราของเสียที่หลุดถึงลูกค้า"></textarea>
       </div>
       <div class="field">
-        <label for="f-refstep">ขั้นตอนที่เกี่ยวข้อง</label>
-        <textarea id="f-refstep" rows="2" placeholder="ขั้นตอนใน QWP ที่ use case นี้เกี่ยวข้อง"></textarea>
+        <label for="f-refstep">ขั้นตอนใน SQP ที่เกี่ยวข้อง</label>
+        <textarea id="f-refstep" rows="2" placeholder="เช่น ขั้นตอนที่ 4 ตรวจสอบชิ้นงานหลังถอดจากแม่พิมพ์"></textarea>
       </div>
     </div>
 
     <div style="border:1.5px solid var(--navy); border-radius:12px; padding:16px 18px 4px; margin:0 0 18px; background:#FBFAF6;">
       <div style="font-size:11.5px; font-weight:700; color:var(--navy); letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ใจความสำคัญของ Use Case</div>
       <div class="field">
-        <label for="f-solution">วิธีการเดิมที่ทำอยู่ (Existing Work)</label>
-        <textarea id="f-solution" rows="2" placeholder="อธิบายวิธีการ/ขั้นตอนที่ทำอยู่ในปัจจุบัน"></textarea>
+        <label for="f-problem">ปัญหาหรือข้อจำกัดของงานในปัจจุบัน</label>
+        <textarea id="f-problem" rows="2" placeholder="ตอนนี้เจอปัญหาอะไร ทำไมถึงอยากได้ AI มาช่วย"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-solution">วิธีการปฏิบัติงานในปัจจุบัน (Existing Work)</label>
+        <textarea id="f-solution" rows="2" placeholder="ตอนนี้ทำงานนี้ยังไง ใครทำ ใช้เครื่องมืออะไร"></textarea>
       </div>
       <div class="field">
         <label>แนบเอกสารที่ใช้ (วิธีการเดิมที่ทำอยู่)</label>
@@ -1014,74 +1028,217 @@
         <input type="text" id="f-attach-ref" placeholder="ลิงก์หรือชื่ออ้างอิงเอกสาร (กรณีไฟล์เกิน 10MB หรือเก็บไว้ที่อื่น)" style="margin-top:6px;">
       </div>
       <div class="field">
-        <label for="f-dataavailable">ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</label>
-        <textarea id="f-dataavailable" rows="2" placeholder="ระบุว่ามีข้อมูลอะไร มาจากระบบ/แหล่งใด และใครดูแล — ที่จะนำมาใช้หรือให้ AI ดูเพื่อทำงาน เช่น ข้อมูลยอดขายรายวันจากระบบ ERP ดูแลโดยฝ่ายบัญชี"></textarea>
+        <label for="f-dataavailable">ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available)</label>
+        <textarea id="f-dataavailable" rows="2" placeholder="มีข้อมูลอะไรบ้าง เก็บที่ไหน ใครเป็นคนเก็บ"></textarea>
       </div>
       <div class="field">
-        <label for="f-redesign">แนวทางหลังนำ AI มาใช้ (Redesign)</label>
-        <textarea id="f-redesign" rows="2" placeholder="อธิบายว่าเมื่อนำ AI มาใช้แล้ว ขั้นตอน/ผลลัพธ์จะเปลี่ยนไปเป็นอย่างไร"></textarea>
+        <label for="f-redesign">แนวทางการทำงานหลังนำ AI มาใช้ (Redesign)</label>
+        <textarea id="f-redesign" rows="2" placeholder="อยากให้ AI ทำอะไร ผลลัพธ์ที่คาดหวังหน้าตาเป็นยังไง"></textarea>
       </div>
     </div>
 
-    <div class="field">
-      <label for="f-aitype">ลักษณะของงาน/ข้อมูล (ใช้แนะนำประเภท AI)</label>
-      <div style="display:flex; gap:8px;">
-        <select id="f-aitype" style="flex:1; height:36px; border:1px solid var(--border); border-radius:8px; background:#fff; padding:0 10px; font-size:13px; color:var(--text); font-family:inherit;">
-          <option value="">ยังไม่ระบุ</option>
-          <optgroup label="ตามชนิดข้อมูล/งาน">
-            <option value="text">ข้อความ / ภาษา &rarr; NLP และ LLM</option>
-            <option value="vision">รูปภาพ / วิดีโอ &rarr; Computer vision</option>
-            <option value="audio">เสียง &rarr; Speech AI</option>
-            <option value="numeric">ตัวเลข / time series &rarr; Predictive ML</option>
-            <option value="repetitive">งานทำซ้ำ มีกฎตายตัว &rarr; RPA ผสาน AI</option>
-            <option value="generative">ต้องการเนื้อหาใหม่ &rarr; Generative AI</option>
-            <option value="recommend">ต้องการแนะนำ/จับคู่ &rarr; Recommendation AI</option>
-          </optgroup>
-          <optgroup label="งานเฉพาะทาง">
-            <option value="imagegen">สร้างภาพจากคำสั่ง &rarr; Image generation</option>
-            <option value="rag">ค้นหา/ถามตอบจากเอกสาร &rarr; Embedding / RAG</option>
-            <option value="knowledge">ผู้ช่วยความรู้ภายในองค์กร &rarr; Knowledge assistant</option>
-            <option value="finetune">ปรับโมเดลเฉพาะองค์กร &rarr; Fine-tuning</option>
-            <option value="batch">ประมวลผลข้อมูลจำนวนมาก &rarr; Batch inference</option>
-            <option value="demand">พยากรณ์ความต้องการสินค้า &rarr; Demand forecasting</option>
-            <option value="maintenance">คาดการณ์การซ่อมบำรุง &rarr; Predictive maintenance</option>
-            <option value="anomaly">ตรวจจับความผิดปกติ/ทุจริต &rarr; Anomaly detection</option>
-            <option value="agent">งานอัตโนมัติหลายขั้นตอน &rarr; AI agent / automation</option>
-          </optgroup>
-        </select>
-        <button type="button" class="btn-secondary" id="analyze-btn">วิเคราะห์อัตโนมัติ</button>
+    <div style="border:1px solid var(--border); border-left:4px solid #C55A11; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
+      <div style="font-size:11.5px; font-weight:700; color:#C55A11; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ผลกระทบ (Impact) — น้ำหนัก 35%</div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-timespent">เวลาที่ใช้กับงานนี้ในปัจจุบัน *</label>
+          <select id="f-timespent" data-list="timeSpent"></select>
+          <div class="slider-hint">นับรวมทุกคนในหน่วยงาน เช่น 3 คน x 6 ชม. = 18 ชม./สัปดาห์</div>
+        </div>
+        <div class="field">
+          <label for="f-lossvalue">มูลค่าความสูญเสียต่อปี *</label>
+          <select id="f-lossvalue" data-list="lossValue"></select>
+        </div>
       </div>
-      <div class="status" id="analyze-status"></div>
     </div>
 
-    <div class="field" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 14px;">
-      <button type="button" class="btn-secondary" id="score-ai-btn">ให้ AI แนะนำคะแนน (ไม่เปลี่ยนของเดิม)</button>
-      <span class="status" id="score-ai-status" style="height:auto; margin:0;"></span>
+    <div style="border:1px solid var(--border); border-left:4px solid #538135; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
+      <div style="font-size:11.5px; font-weight:700; color:#538135; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ความพร้อมของข้อมูล (Data) — น้ำหนัก 25%</div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-dataformat">รูปแบบการจัดเก็บข้อมูลในปัจจุบัน *</label>
+          <select id="f-dataformat" data-list="dataFormat"></select>
+        </div>
+        <div class="field">
+          <label for="f-datahistory">ระยะเวลาข้อมูลย้อนหลังที่มี *</label>
+          <select id="f-datahistory" data-list="dataHistory"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-datavolume">ปริมาณข้อมูลโดยประมาณ</label>
+        <input type="text" id="f-datavolume" placeholder="นับเป็นรายการ: รูป/ใบ/ไฟล์/ครั้ง/ล็อต แล้วแต่งาน เฉพาะที่รู้คำตอบแล้ว">
+      </div>
+      <div class="field">
+        <label for="f-datarights">สิทธิ์ในการนำข้อมูลมาใช้พัฒนา AI *</label>
+        <select id="f-datarights" data-list="dataRights"></select>
+      </div>
     </div>
-    <div class="slider-row">
-      <div class="top"><label for="f-impact">ผลกระทบทางธุรกิจ <span class="w">(น้ำหนัก 35%)</span></label><span class="v" id="f-impact-out">3</span></div>
-      <input type="range" id="f-impact" min="1" max="5" step="1" value="3">
-      <div class="slider-hint">1 = ผลกระทบน้อยมาก &nbsp;→&nbsp; 5 = ผลกระทบสูงมากต่อธุรกิจ</div>
-      <div class="slider-desc" id="f-impact-desc"></div>
+
+    <div style="border:1px solid var(--border); border-left:4px solid #7030A0; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
+      <div style="font-size:11.5px; font-weight:700; color:#7030A0; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ความเป็นไปได้ (Feasibility) — น้ำหนัก 25%</div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-needconnect">ความจำเป็นในการเชื่อมต่อกับระบบเดิม *</label>
+          <select id="f-needconnect" data-list="needConnect"></select>
+        </div>
+        <div class="field">
+          <label for="f-adminowner">ผู้ดูแลระบบหลังส่งมอบ *</label>
+          <select id="f-adminowner" data-list="adminOwner"></select>
+        </div>
+      </div>
     </div>
-    <div class="slider-row">
-      <div class="top"><label for="f-feasibility">ความเป็นไปได้ทางเทคนิค <span class="w">(น้ำหนัก 25%)</span></label><span class="v" id="f-feasibility-out">3</span></div>
-      <input type="range" id="f-feasibility" min="1" max="5" step="1" value="3">
-      <div class="slider-hint">1 = ทำได้ยากมาก &nbsp;→&nbsp; 5 = ทำได้ง่าย เทคโนโลยีพร้อม</div>
-      <div class="slider-desc" id="f-feasibility-desc"></div>
+
+    <div style="border:1px solid var(--border); border-left:4px solid #BF3131; border-radius:10px; padding:14px 16px 4px; margin:0 0 16px; background:#fff;">
+      <div style="font-size:11.5px; font-weight:700; color:#BF3131; letter-spacing:.4px; text-transform:uppercase; margin-bottom:12px;">ความเสี่ยง (Risk) — น้ำหนัก 15% (กลับด้าน)</div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-aierror">ผลกระทบเมื่อ AI ให้ผลลัพธ์ผิดพลาด *</label>
+          <select id="f-aierror" data-list="aiErrorImpact"></select>
+        </div>
+        <div class="field">
+          <label for="f-reviewneed">การตรวจสอบผลลัพธ์โดยบุคลากร *</label>
+          <select id="f-reviewneed" data-list="reviewNeed"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-confidentiality">ระดับชั้นความลับของข้อมูล *</label>
+        <select id="f-confidentiality" data-list="confidentiality"></select>
+      </div>
     </div>
-    <div class="slider-row">
-      <div class="top"><label for="f-data">ความพร้อมของข้อมูล <span class="w">(น้ำหนัก 25%)</span></label><span class="v" id="f-data-out">3</span></div>
-      <input type="range" id="f-data" min="1" max="5" step="1" value="3">
-      <div class="slider-hint">1 = แทบไม่มีข้อมูล &nbsp;→&nbsp; 5 = ข้อมูลพร้อม สะอาด ครบถ้วน</div>
-      <div class="slider-desc" id="f-data-desc"></div>
+
+    <div style="border:1px solid var(--border); border-radius:10px; padding:14px 16px 4px; margin:0 0 18px; background:#FAFAF8;">
+      <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">แผน <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่นำไปคิดคะแนน</span></div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-deptpriority">ระดับความสำคัญตามความเห็นหน่วยงาน</label>
+          <select id="f-deptpriority" data-list="deptPriority"></select>
+        </div>
+        <div class="field">
+          <label for="f-targettimeline">กำหนดเวลาที่ต้องการใช้งาน</label>
+          <input type="text" id="f-targettimeline" placeholder="เช่น ไตรมาส 2 ปี 2570">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-remark">หมายเหตุ</label>
+        <textarea id="f-remark" rows="2"></textarea>
+      </div>
     </div>
-    <div class="slider-row">
-      <div class="top"><label for="f-risk">ความเสี่ยง / ความซับซ้อน <span class="w">(น้ำหนัก 15%, ยิ่งสูงยิ่งเสี่ยง)</span></label><span class="v" id="f-risk-out">3</span></div>
-      <input type="range" id="f-risk" min="1" max="5" step="1" value="3">
-      <div class="slider-hint">1 = เสี่ยง/ซับซ้อนน้อยมาก &nbsp;→&nbsp; 5 = เสี่ยง/ซับซ้อนสูงมาก</div>
-      <div class="slider-desc" id="f-risk-desc"></div>
-    </div>
+
+    <div class="field" id="score-preview" style="border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin:0 0 18px; background:var(--bg);"></div>
+
+    <details style="border:1px solid var(--border); border-radius:10px; margin:0 0 18px; background:#fff;">
+      <summary style="cursor:pointer; padding:12px 16px; font-size:13px; font-weight:600; color:var(--navy);">รายละเอียดเทคนิค (ใช้กำหนด Spec Hardware) — ไม่บังคับตอนเริ่มต้น</summary>
+      <div style="padding:4px 16px 16px;">
+        <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.4px; margin:12px 0 8px;">โซน A — หน่วยงานผู้ใช้กรอก</div>
+        <div class="field">
+          <label for="f-triggertype">ลักษณะการเริ่มทำงานของระบบ</label>
+          <select id="f-triggertype" data-list="triggerType"></select>
+          <div class="slider-hint">ตอบก่อนช่องอื่น เพราะบอกว่าช่องที่เหลือต้องกรอกยังไง — งานที่ระบบสั่งเองจะไม่มี &ldquo;ผู้ใช้งาน&rdquo; ให้กรอกคนที่เข้ามาดูผลแทน</div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-inputtype">ประเภทข้อมูลนำเข้า (Input)</label>
+            <select id="f-inputtype" data-list="inputType"></select>
+          </div>
+          <div class="field">
+            <label>ประเภทงาน AI</label>
+            <input type="text" id="f-aikind-preview" disabled placeholder="ระบบคำนวณให้จากช่องซ้าย" style="background:var(--bg); color:var(--text-muted);">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-usersperday">จำนวนผู้ใช้งานต่อวัน</label>
+            <select id="f-usersperday" data-list="usersPerDay"></select>
+          </div>
+          <div class="field">
+            <label for="f-peakconcurrent">ผู้ใช้งานพร้อมกันสูงสุด (Peak Concurrent)</label>
+            <select id="f-peakconcurrent" data-list="peakConcurrent"></select>
+            <div class="slider-hint" id="f-peak-warn" style="display:none; color:#A32D2D;">ตัวเลขดูสูงผิดปกติเมื่อเทียบกับผู้ใช้งานต่อวัน ลองทบทวนอีกครั้ง</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-itemsperday">ปริมาณรายการที่ต้องประมวลผลต่อวัน</label>
+            <select id="f-itemsperday" data-list="itemsPerDay"></select>
+            <div class="slider-hint">1 รายการ = 1 ชิ้น/ล็อต/คำถาม/เคส แล้วแต่ประเภทงาน ไม่ใช่จำนวนครั้งที่สั่งงาน</div>
+          </div>
+          <div class="field">
+            <label for="f-pointscount">จุดตรวจหรือกล้องที่ทำงานพร้อมกัน (งานภาพ)</label>
+            <select id="f-pointscount" data-list="pointsCount"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-language">ภาษาที่ต้องรองรับ</label>
+            <select id="f-language" data-list="language"></select>
+          </div>
+          <div class="field">
+            <label for="f-responsetime">เวลาตอบสนองที่ยอมรับได้</label>
+            <select id="f-responsetime" data-list="responseTime"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-servicehours">ช่วงเวลาที่ต้องให้บริการ</label>
+            <select id="f-servicehours" data-list="serviceHours"></select>
+          </div>
+          <div class="field">
+            <label for="f-slowdown">ผลกระทบเมื่อระบบตอบสนองช้าลงในช่วงใช้งานหนาแน่น</label>
+            <select id="f-slowdown" data-list="slowdownImpact"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-retention">ระยะเวลาการจัดเก็บข้อมูล</label>
+            <select id="f-retention" data-list="retentionPeriod"></select>
+          </div>
+          <div class="field">
+            <label for="f-budget">งบประมาณที่ตั้งไว้ (บาท) — หากมี</label>
+            <input type="text" id="f-budget" placeholder="เช่น 500000">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-constraints">ข้อจำกัดอื่นๆ และหมายเหตุ</label>
+          <textarea id="f-constraints" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-providedby">ผู้ให้ข้อมูล (หน่วยงาน)</label>
+          <input type="text" id="f-providedby">
+        </div>
+
+        <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.4px; margin:16px 0 8px; padding-top:12px; border-top:1px dashed var(--border);">โซน B — ทีม AI / IT ดำเนินการภายหลัง</div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-dailyinputsize">ปริมาณข้อมูลนำเข้าต่อวัน</label>
+            <select id="f-dailyinputsize" data-list="dailyInputSize"></select>
+          </div>
+          <div class="field">
+            <label for="f-corpussize">ขนาดคลังเอกสารทั้งหมด (สำหรับงานสืบค้น/RAG)</label>
+            <select id="f-corpussize" data-list="corpusSize"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-imageresolution">ความละเอียดของภาพ</label>
+            <select id="f-imageresolution" data-list="imageResolution"></select>
+          </div>
+          <div class="field">
+            <label for="f-installlocation">รูปแบบการติดตั้ง (Server ภายในองค์กรเท่านั้น)</label>
+            <select id="f-installlocation" data-list="installLocation"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-modeladapt">ความจำเป็นในการปรับโมเดลด้วยข้อมูลขององค์กร</label>
+            <select id="f-modeladapt" data-list="modelAdaptation"></select>
+          </div>
+          <div class="field">
+            <label for="f-retrainfreq">ความถี่ในการฝึกโมเดลใหม่</label>
+            <select id="f-retrainfreq" data-list="retrainFrequency"></select>
+          </div>
+        </div>
+      </div>
+    </details>
 
     <div class="form-actions">
       <button class="btn-primary" id="save-btn">บันทึก</button>
@@ -2703,9 +2860,233 @@
     }
   }
 
+  // ===== รายการตัวเลือก (dropdown) — ตรงกับ docs/AI_UseCase_Template_v2.xlsx sheet DATA เป๊ะๆ =====
+  // แต่ละ opts เป็น [label] หรือ [label, score(1-5)] — ไม่มี score = ไม่นำไปคิดคะแนน
+  var DATA_LISTS = {
+    company: { title:'บริษัท', opts:[['บริษัท แกรนด์เอสเค คอร์ปอเรชั่น จำกัด'],['บริษัท เอส.เค.โพลีเมอร์ จำกัด'],['บริษัท ไทยรับเทค จำกัด'],['บริษัท โพลีเมท จำกัด'],['บริษัท จีทีเค สมาร์ท โซลูชั่น จำกัด'],['อื่นๆ']] },
+    dataFormat: { title:'รูปแบบการจัดเก็บข้อมูลปัจจุบัน', opts:[
+      ['เอกสารกระดาษ / บันทึกด้วยลายมือ - ต้องแปลงเป็นดิจิทัลก่อน',1],
+      ['ไฟล์ Excel / CSV - นำไปใช้ได้ทันที',4],
+      ['ฐานข้อมูลในระบบ (ERP / MES / SQL) - ดึงข้อมูลอัตโนมัติได้',5],
+      ['ภาพถ่าย / ไฟล์รูปภาพ',3],
+      ['ไฟล์เสียง / วิดีโอ',2],
+      ['ยังไม่มีการจัดเก็บ - ต้องเริ่มเก็บใหม่',1]
+    ]},
+    dataHistory: { title:'ระยะเวลาข้อมูลย้อนหลังที่มี', opts:[
+      ['ไม่มีข้อมูลย้อนหลัง - ต้องเริ่มเก็บใหม่',1],
+      ['น้อยกว่า 1 ปี - อาจไม่เพียงพอต่อการฝึกโมเดล',2],
+      ['1 - 3 ปี - เพียงพอในระดับหนึ่ง',4],
+      ['มากกว่า 3 ปี - เพียงพอ',5]
+    ]},
+    dataRights: { title:'สิทธิ์ในการนำข้อมูลมาใช้', opts:[
+      ['ได้ทันที - ข้อมูลอยู่ในความดูแลของหน่วยงาน',5],
+      ['ต้องขออนุมัติก่อน - อยู่ในความดูแลของหน่วยงานอื่นหรือ IT',3],
+      ['ไม่สามารถขอได้ หรือยังไม่แน่ใจ - เป็นของลูกค้าหรือผู้ขาย',1]
+    ]},
+    needConnect: { title:'การเชื่อมต่อกับระบบเดิม', opts:[
+      ['ไม่จำเป็น - ระบบทำงานแยกอิสระได้',5],
+      ['จำเป็นบางส่วน - เชื่อมต่อผ่านการนำเข้า/ส่งออกไฟล์เป็นรอบ',3],
+      ['จำเป็น - ต้องอ่านและเขียนข้อมูลกับระบบเดิมแบบทันที',1],
+      ['ยังไม่สามารถระบุได้ - ต้องหารือกับฝ่าย IT',2]
+    ]},
+    adminOwner: { title:'ผู้ดูแลระบบหลังส่งมอบ', opts:[
+      ['มี - หน่วยงานมีผู้รับผิดชอบดูแลต่อ (ระบุชื่อในหมายเหตุ)',5],
+      ['ยังไม่แน่ใจ - อยู่ระหว่างจัดหาผู้รับผิดชอบ',3],
+      ['ไม่มี - ต้องพึ่งพาหน่วยงานภายนอกตลอด',1]
+    ]},
+    aiErrorImpact: { title:'ผลกระทบเมื่อ AI ผิดพลาด', opts:[
+      ['ต่ำ - ตรวจพบและแก้ไขได้ทันที ไม่กระทบผู้อื่น',1],
+      ['ปานกลาง - เสียเวลาดำเนินการใหม่ หรือเกิดต้นทุนเพิ่ม',3],
+      ['สูง - ของเสียถึงมือลูกค้า เกิดอันตราย หรือผิดข้อกำหนดกฎหมาย',5]
+    ]},
+    reviewNeed: { title:'การตรวจสอบผลลัพธ์โดยบุคลากร', opts:[
+      ['ไม่จำเป็น - ใช้ผลลัพธ์จาก AI ได้ทันที',1],
+      ['สุ่มตรวจบางส่วน - เฉพาะรายการที่ AI ไม่มั่นใจ',2],
+      ['ตรวจสอบทุกรายการ - บุคลากรต้องตรวจซ้ำทั้งหมด',4]
+    ]},
+    confidentiality: { title:'ระดับชั้นความลับของข้อมูล', opts:[
+      ['สาธารณะ - เปิดเผยได้ ไม่มีผลกระทบ',1],
+      ['ภายในองค์กร - ห้ามเผยแพร่ออกนอกบริษัท',2],
+      ['ลับ - ต้องจำกัดสิทธิ์การเข้าถึง',4],
+      ['ลับที่สุด - มีข้อมูลส่วนบุคคล อยู่ภายใต้ PDPA',5]
+    ]},
+    deptPriority: { title:'ระดับความสำคัญตามความเห็นผู้ใช้', opts:[
+      ['สูง - ต้องการเร่งด่วน'],['ปานกลาง - ภายในไตรมาส 2 ถึง 3'],['ต่ำ - ดำเนินการได้ภายหลัง']
+    ]},
+    timeSpent: { title:'เวลาที่ใช้กับงานนี้ในปัจจุบัน', opts:[
+      ['น้อยกว่า 4 ชั่วโมง/สัปดาห์ (ไม่ถึงครึ่งวันทำงาน)',1],
+      ['4 - 10 ชั่วโมง/สัปดาห์ (ประมาณ 1 วันทำงาน)',2],
+      ['10 - 20 ชั่วโมง/สัปดาห์ (ประมาณ 2 วันทำงาน)',3],
+      ['20 - 40 ชั่วโมง/สัปดาห์ (เทียบเท่าบุคลากร 1 คนเต็มเวลา)',4],
+      ['มากกว่า 40 ชั่วโมง/สัปดาห์ (มากกว่า 1 คนเต็มเวลา)',5]
+    ]},
+    lossValue: { title:'มูลค่าความสูญเสียต่อปี', opts:[
+      ['ไม่สามารถประเมินเป็นตัวเงินได้ หรือไม่มีความสูญเสียโดยตรง'],
+      ['น้อยกว่า 100,000 บาท/ปี',2],
+      ['100,000 - 500,000 บาท/ปี',3],
+      ['500,000 - 2,000,000 บาท/ปี',4],
+      ['มากกว่า 2,000,000 บาท/ปี',5]
+    ]},
+    inputType: { title:'ประเภทข้อมูลนำเข้า', opts:[
+      ['ข้อความ / เอกสาร'],['ภาพถ่าย'],['เสียง'],['วิดีโอ'],['ตัวเลข / ตาราง'],['ผสมหลายประเภท']
+    ]},
+    language: { title:'ภาษาที่ต้องรองรับ', opts:[
+      ['ไทย'],['อังกฤษ'],['ไทยและอังกฤษ'],['ไม่เกี่ยวข้องกับภาษา']
+    ]},
+    responseTime: { title:'เวลาตอบสนองที่ยอมรับได้', opts:[
+      ['ทันที - ไม่เกิน 2 วินาที (ตอบกลับในกระบวนการทันที)'],
+      ['เร็ว - 2 ถึง 10 วินาที (ผู้ใช้รอที่หน้าจอได้)'],
+      ['ภายในไม่กี่นาที'],
+      ['ภายใน 1 ชั่วโมง หรือภายในรอบกะ'],
+      ['ภายในรอบวัน - ประมวลผลกลางคืน เสร็จก่อนเริ่มงานเช้า']
+    ]},
+    serviceHours: { title:'ช่วงเวลาที่ต้องให้บริการ', opts:[
+      ['เวลาทำการ 8:00 - 18:00 น.'],['ขยายเวลา 6:00 - 22:00 น.'],['ตลอด 24 ชั่วโมง ทุกวัน']
+    ]},
+    imageResolution: { title:'ความละเอียดของภาพ', opts:[
+      ['ไม่เกี่ยวข้อง'],['ต่ำกว่า 1 ล้านพิกเซล'],['1 - 5 ล้านพิกเซล'],['5 - 12 ล้านพิกเซล'],['มากกว่า 12 ล้านพิกเซล']
+    ]},
+    modelAdaptation: { title:'การปรับโมเดลด้วยข้อมูลองค์กร', opts:[
+      ['ไม่จำเป็น - ใช้โมเดลสำเร็จรูปได้ (งานความรู้ทั่วไป)'],
+      ['ไม่ต้องฝึกโมเดล แต่ให้เข้าถึงเอกสารขององค์กร (RAG)'],
+      ['จำเป็น - ต้อง Fine-tune ด้วยข้อมูลหรือภาพขององค์กร'],
+      ['ยังไม่สามารถระบุได้']
+    ]},
+    usersPerDay: { title:'จำนวนผู้ใช้งานต่อวัน', opts:[
+      ['1 - 10 คน'],['11 - 50 คน'],['51 - 200 คน'],['201 - 1,000 คน'],['มากกว่า 1,000 คน']
+    ]},
+    peakConcurrent: { title:'ผู้ใช้งานพร้อมกันสูงสุด', opts:[
+      ['1 - 2 คน'],['3 - 5 คน'],['6 - 20 คน'],['21 - 50 คน'],['มากกว่า 50 คน']
+    ]},
+    itemsPerDay: { title:'ปริมาณรายการที่ประมวลผลต่อวัน', opts:[
+      ['น้อยกว่า 100 รายการ'],['100 - 1,000 รายการ'],['1,000 - 10,000 รายการ'],['10,000 - 100,000 รายการ'],['มากกว่า 100,000 รายการ']
+    ]},
+    dailyInputSize: { title:'ปริมาณข้อมูลนำเข้าต่อวัน', opts:[
+      ['น้อยกว่า 1 GB'],['1 - 10 GB'],['10 - 100 GB'],['มากกว่า 100 GB']
+    ]},
+    corpusSize: { title:'ขนาดคลังเอกสารทั้งหมด', opts:[
+      ['ไม่เกี่ยวข้อง - ไม่ใช่งานสืบค้นเอกสาร'],['น้อยกว่า 1 GB'],['1 - 10 GB'],['10 - 100 GB'],['มากกว่า 100 GB']
+    ]},
+    pointsCount: { title:'จุดตรวจที่ทำงานพร้อมกัน', opts:[
+      ['ไม่เกี่ยวข้อง - ไม่ใช่งานประมวลผลภาพ'],['1 จุด'],['2 - 3 จุด'],['4 - 8 จุด'],['มากกว่า 8 จุด']
+    ]},
+    installLocation: { title:'รูปแบบการติดตั้ง', opts:[
+      ['ติดตั้งที่ Server กลาง - ส่งข้อมูลผ่านเครือข่ายได้'],
+      ['ต้องติดตั้งที่หน้างาน - ติดตั้งข้างเครื่องจักรหรือสายพาน'],
+      ['ยังไม่สามารถระบุได้']
+    ]},
+    retentionPeriod: { title:'ระยะเวลาการจัดเก็บข้อมูล', opts:[
+      ['1 ปี'],['2 - 3 ปี'],['5 ปี'],['จัดเก็บถาวร - ห้ามลบ ตามข้อกำหนดลูกค้าหรือกฎหมาย']
+    ]},
+    retrainFrequency: { title:'ความถี่ในการฝึกโมเดลใหม่', opts:[
+      ['ไม่ต้องฝึกโมเดล - ใช้โมเดลสำเร็จรูป'],['ครั้งเดียว - ฝึกเสร็จแล้วใช้งานต่อเนื่อง'],['ปีละครั้ง'],['ทุกไตรมาส'],['ทุกเดือนหรือถี่กว่านั้น'],['ยังไม่สามารถระบุได้']
+    ]},
+    triggerType: { title:'ลักษณะการเริ่มทำงานของระบบ', opts:[
+      ['ผู้ใช้เรียกใช้งานเอง - เปิดใช้เป็นครั้งคราว'],
+      ['ทำงานอัตโนมัติต่อเนื่อง - ระบบทำงานเอง ไม่มีผู้เรียกใช้'],
+      ['ประมวลผลตามรอบเวลา - เช่น ทุกคืน หรือทุกสัปดาห์'],
+      ['ทำงานเมื่อเกิดเหตุการณ์ - เช่น มีใบ NC เข้าสู่ระบบ']
+    ]},
+    slowdownImpact: { title:'ผลกระทบเมื่อระบบตอบสนองช้าลง', opts:[
+      ['ไม่กระทบ - รอได้ ใช้งานได้ตามปกติ'],
+      ['กระทบบ้าง - ช่วงเร่งด่วนต้องได้รับความสำคัญก่อน'],
+      ['กระทบมาก - ไม่สามารถล่าช้าหรือหยุดได้ (อยู่ในสายการผลิต)'],
+      ['ยังไม่สามารถระบุได้']
+    ]}
+  };
+
+  function listOptions(key){ return (DATA_LISTS[key] && DATA_LISTS[key].opts) || []; }
+  // คะแนนของค่าที่เลือก: number = คิดคะแนน, null = เลือกแล้วแต่ไม่คิดคะแนน (เช่น "ประเมินเป็นตัวเงินไม่ได้"),
+  // undefined = ยังไม่ได้เลือก (นับเป็นช่องว่าง)
+  function scoreOf(key, value){
+    if(!value) return undefined;
+    var opts = listOptions(key);
+    for(var i=0;i<opts.length;i++){ if(opts[i][0]===value) return opts[i].length>1 ? opts[i][1] : null; }
+    return undefined;
+  }
+  function populateSelect(id, key){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var html = '<option value="">-- ยังไม่ได้เลือก --</option>';
+    listOptions(key).forEach(function(o){
+      var v = escapeHtml(o[0]);
+      html += '<option value="'+v+'">'+v+'</option>';
+    });
+    el.innerHTML = html;
+  }
+  function populateAllSelects(){
+    Object.keys(DATA_LISTS).forEach(function(key){
+      document.querySelectorAll('select[data-list="'+key+'"]').forEach(function(el){ populateSelect(el.id, key); });
+    });
+  }
+
+  // ===== คะแนน 4 ปัจจัย — สูตรตรงกับ docs/AI_UseCase_Template_v2.xlsx sheet 3 เป๊ะๆ =====
+  // ช่องบังคับ 10 ช่อง: timeSpent, lossValue, dataFormat, dataHistory, dataRights,
+  // needConnect, adminOwner, aiErrorImpact, reviewNeed, confidentiality
+  var SCORE_FIELDS = ['timeSpent','lossValue','dataFormat','dataHistory','dataRights','needConnect','adminOwner','aiErrorImpact','reviewNeed','confidentiality'];
+
+  function countMissingFields(uc){
+    return SCORE_FIELDS.filter(function(k){ return !uc[k]; }).length;
+  }
+  function avgOrNull(arr){
+    var vals = arr.filter(function(v){ return v!=null; });
+    if(!vals.length) return null;
+    return vals.reduce(function(a,b){ return a+b; },0)/vals.length;
+  }
+  function computeScoreDetail(uc){
+    var missing = countMissingFields(uc);
+    var d = scoreOf('timeSpent', uc.timeSpent);
+    var e = scoreOf('lossValue', uc.lossValue);
+    var impact = null;
+    if(d==null && e==null) impact = null;
+    else if(d==null) impact = e;
+    else if(e==null) impact = d;
+    else impact = Math.round((d+e)/2);
+
+    var dataScore = avgOrNull([scoreOf('dataFormat',uc.dataFormat), scoreOf('dataHistory',uc.dataHistory), scoreOf('dataRights',uc.dataRights)]);
+    if(dataScore!=null) dataScore = Math.round(dataScore);
+
+    var feasibility = avgOrNull([scoreOf('needConnect',uc.needConnect), scoreOf('adminOwner',uc.adminOwner)]);
+    if(feasibility!=null) feasibility = Math.round(feasibility);
+
+    var risk = avgOrNull([scoreOf('aiErrorImpact',uc.aiErrorImpact), scoreOf('reviewNeed',uc.reviewNeed), scoreOf('confidentiality',uc.confidentiality)]);
+    if(risk!=null) risk = Math.round(risk);
+
+    var total = null;
+    if(missing===0 && impact!=null && dataScore!=null && feasibility!=null && risk!=null){
+      total = Math.round((impact*0.35 + feasibility*0.25 + dataScore*0.25 + (6-risk)*0.15)*20*10)/10;
+    }
+    return { missing:missing, impact:impact, data:dataScore, feasibility:feasibility, risk:risk, total:total };
+  }
+
+  // คืนค่าคะแนนเป็นตัวเลขเสมอ (0 เมื่อข้อมูลไม่ครบ) เพื่อไม่ให้ฟังก์ชันเดิมที่พึ่งพา computeScore() พัง —
+  // ให้เรียก computeScoreDetail(uc).missing ควบคู่เพื่อรู้ว่าคะแนนนี้ยังไม่สมบูรณ์
   function computeScore(uc){
-    var raw = uc.impact*0.35 + uc.feasibility*0.25 + uc.data*0.25 + (6-uc.risk)*0.15;
-    return Math.round(raw*20);
+    var d = computeScoreDetail(uc);
+    return d.total==null ? 0 : d.total;
+  }
+
+  function deriveLegacyAiType(uc){
+    // แปลงประเภทข้อมูลนำเข้า (ช่อง E ใหม่) + การปรับโมเดล ให้เป็น key เดิมของ AI_CATEGORIES
+    // เพื่อให้ฟีเจอร์เดิม (เอกสาร/แผนงาน/Flow/CSV) ที่อิง aiType ยังทำงานได้โดยไม่ต้องให้ผู้ใช้เลือกเอง
+    var t = uc.inputType, m = uc.modelAdaptation;
+    if(!t) return '';
+    if(t==='ข้อความ / เอกสาร'){
+      if(m && m.indexOf('RAG')>=0) return 'rag';
+      return 'text';
+    }
+    if(t==='ภาพถ่าย' || t==='วิดีโอ') return 'vision';
+    if(t==='เสียง') return 'audio';
+    if(t==='ตัวเลข / ตาราง') return 'numeric';
+    return 'agent'; // ผสมหลายประเภท
+  }
+  function aiKindLabel(inputType){
+    if(inputType==='ข้อความ / เอกสาร') return 'งานภาษา (LLM)';
+    if(inputType==='ภาพถ่าย' || inputType==='วิดีโอ') return 'งานภาพ (Vision)';
+    if(inputType==='เสียง') return 'งานเสียง';
+    if(inputType==='ตัวเลข / ตาราง') return 'งานตัวเลข (ML)';
+    if(inputType) return 'ผสม - ต้องดูรายละเอียด';
+    return '';
   }
 
   function priorityInfo(score){
@@ -2914,19 +3295,27 @@
       container.innerHTML = '<div class="empty">ไม่พบ use case ที่ตรงกับตัวกรองนี้</div>';
     } else {
       container.innerHTML = list.map(function(uc){
-        var score = computeScore(uc);
+        var detail = computeScoreDetail(uc);
+        var incomplete = detail.missing > 0;
+        var score = detail.total==null ? 0 : detail.total;
         var p = priorityInfo(score);
         var cat = getCategory(uc.aiType);
+        var chipHtml = incomplete
+          ? '<div class="score-chip" style="background:#FBEAEA; color:#A32D2D;">'
+            + '<span class="score-chip-num" style="font-size:13px;">ข้อมูล</span>'
+            + '<span class="score-chip-label">ไม่ครบ ('+detail.missing+')</span>'
+            + '</div>'
+          : '<div class="score-chip score-chip--'+p.key+'">'
+            + '<span class="score-chip-num">'+score+'</span>'
+            + '<span class="score-chip-label">'+p.icon+p.label+'</span>'
+            + '</div>';
         return '<div class="card" data-id="'+uc.id+'">'
           + '<div class="card-header">'
           + '<div class="card-heading">'
           + '<p class="name">'+escapeHtml(uc.name)+'</p>'
           + '<p class="dept">'+escapeHtml(uc.dept||'ไม่ระบุแผนก')+(uc.owner?' · '+escapeHtml(uc.owner):'')+'</p>'
           + '</div>'
-          + '<div class="score-chip score-chip--'+p.key+'">'
-          + '<span class="score-chip-num">'+score+'</span>'
-          + '<span class="score-chip-label">'+p.icon+p.label+'</span>'
-          + '</div>'
+          + chipHtml
           + '</div>'
           + (uc.solution ? '<p class="problem">'+escapeHtml(uc.solution)+'</p>' : '')
           + (cat ? '<div class="card-tags"><span class="badge ai">'+escapeHtml(cat.aiType)+'</span></div>' : '')
@@ -3014,8 +3403,9 @@
   }
 
   function buildDocBody(uc){
-    var score = computeScore(uc);
-    var p = priorityInfo(score);
+    var scoreDetail = computeScoreDetail(uc);
+    var score = scoreDetail.total==null ? 0 : scoreDetail.total;
+    var p = scoreDetail.total==null ? {label:'ข้อมูลไม่ครบ', hex:'#6B6A63'} : priorityInfo(score);
     var cat = getCategory(uc.aiType);
     var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
     return ''
@@ -3052,12 +3442,12 @@
       + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
       + '<div class="doc-section"><h3>9. การประเมินและให้คะแนน</h3>'
       + '<table class="doc-table"><tr><th>เกณฑ์</th><th>น้ำหนัก</th><th>คะแนน (1-5)</th></tr>'
-      + '<tr><td>ผลกระทบทางธุรกิจ</td><td>35%</td><td>'+uc.impact+'</td></tr>'
-      + '<tr><td>ความเป็นไปได้ทางเทคนิค</td><td>25%</td><td>'+uc.feasibility+'</td></tr>'
-      + '<tr><td>ความพร้อมของข้อมูล</td><td>25%</td><td>'+uc.data+'</td></tr>'
-      + '<tr><td>ความเสี่ยง / ความซับซ้อน</td><td>15%</td><td>'+uc.risk+'</td></tr>'
+      + '<tr><td>ผลกระทบทางธุรกิจ (Impact)</td><td>35%</td><td>'+fillOrDash(scoreDetail.impact)+'</td></tr>'
+      + '<tr><td>ความเป็นไปได้ (Feasibility)</td><td>25%</td><td>'+fillOrDash(scoreDetail.feasibility)+'</td></tr>'
+      + '<tr><td>ความพร้อมของข้อมูล (Data)</td><td>25%</td><td>'+fillOrDash(scoreDetail.data)+'</td></tr>'
+      + '<tr><td>ความเสี่ยง (Risk)</td><td>15%</td><td>'+fillOrDash(scoreDetail.risk)+'</td></tr>'
       + '</table>'
-      + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
       + '</div>'
       + '<div class="doc-section"><h3>10. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
       + '<div class="doc-section"><h3>11. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
@@ -3877,8 +4267,9 @@
   }
 
   function buildDocBodyInline(uc){
-    var score = computeScore(uc);
-    var p = priorityInfo(score);
+    var scoreDetail = computeScoreDetail(uc);
+    var score = scoreDetail.total==null ? 0 : scoreDetail.total;
+    var p = scoreDetail.total==null ? {label:'ข้อมูลไม่ครบ', hex:'#6B6A63'} : priorityInfo(score);
     var cat = getCategory(uc.aiType);
     var today = new Date().toLocaleDateString('th-TH', {year:'numeric', month:'long', day:'numeric'});
     var TD = 'border:1px solid #CCCCCC; padding:6px 10px; text-align:left; font-size:11pt; font-family:Arial,sans-serif;';
@@ -3929,12 +4320,12 @@
       + '<h3 style="'+H3+'">9. การประเมินและให้คะแนน</h3>'
       + tbl(
           '<tr><td style="'+TH+'">เกณฑ์</td><td style="'+TH+'">น้ำหนัก</td><td style="'+TH+'">คะแนน (1-5)</td></tr>'
-          + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+uc.impact+'</td></tr>'
-          + '<tr><td style="'+TD+'">ความเป็นไปได้ทางเทคนิค</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+uc.feasibility+'</td></tr>'
-          + '<tr><td style="'+TD+'">ความพร้อมของข้อมูล</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+uc.data+'</td></tr>'
-          + '<tr><td style="'+TD+'">ความเสี่ยง / ความซับซ้อน</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+uc.risk+'</td></tr>'
+          + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ (Impact)</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.impact)+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความเป็นไปได้ (Feasibility)</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.feasibility)+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความพร้อมของข้อมูล (Data)</td><td style="'+TD+'">25%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.data)+'</td></tr>'
+          + '<tr><td style="'+TD+'">ความเสี่ยง (Risk)</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.risk)+'</td></tr>'
         )
-      + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+score+' / 100 &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
+      + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
       + '<h3 style="'+H3+'">10. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
       + '<h3 style="'+H3+'">11. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
       + '<h3 style="'+H3+'">12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
@@ -3986,26 +4377,92 @@
     };
   }
 
-  function openAdd(){
-    editingId = null;
-    document.getElementById('form-title').textContent = 'เพิ่ม use case ใหม่';
+  // ฟิลด์ข้อความ/ข้อความยาว: [id, ชื่อ property ใน use case]
+  var FORM_TEXT_FIELDS = [
+    ['f-dept','dept'], ['f-owner','owner'], ['f-qwp','qwp'], ['f-kqi2','kqi'], ['f-refstep','refStep'],
+    ['f-problem','problem'], ['f-solution','solution'], ['f-dataavailable','dataAvailable'], ['f-redesign','redesignDesc'],
+    ['f-datavolume','dataVolume'], ['f-targettimeline','targetTimeline'], ['f-remark','remark'],
+    ['f-budget','budget'], ['f-constraints','constraints'], ['f-providedby','providedBy']
+  ];
+  // ฟิลด์ dropdown: [id, ชื่อ property ใน use case] — ค่าเป็น label ตรงตัวจาก DATA_LISTS
+  var FORM_SELECT_FIELDS = [
+    ['f-company','company'], ['f-timespent','timeSpent'], ['f-lossvalue','lossValue'],
+    ['f-dataformat','dataFormat'], ['f-datahistory','dataHistory'], ['f-datarights','dataRights'],
+    ['f-needconnect','needConnect'], ['f-adminowner','adminOwner'],
+    ['f-aierror','aiErrorImpact'], ['f-reviewneed','reviewNeed'], ['f-confidentiality','confidentiality'],
+    ['f-deptpriority','deptPriority'],
+    ['f-triggertype','triggerType'], ['f-inputtype','inputType'], ['f-usersperday','usersPerDay'],
+    ['f-peakconcurrent','peakConcurrent'], ['f-itemsperday','itemsPerDay'], ['f-pointscount','pointsCount'],
+    ['f-language','language'], ['f-responsetime','responseTime'], ['f-servicehours','serviceHours'],
+    ['f-slowdown','slowdownImpact'], ['f-retention','retentionPeriod'],
+    ['f-dailyinputsize','dailyInputSize'], ['f-corpussize','corpusSize'], ['f-imageresolution','imageResolution'],
+    ['f-installlocation','installLocation'], ['f-modeladapt','modelAdaptation'], ['f-retrainfreq','retrainFrequency']
+  ];
+
+  function updateAiKindPreview(){
+    var el = document.getElementById('f-aikind-preview');
+    var sel = document.getElementById('f-inputtype');
+    if(el && sel) el.value = aiKindLabel(sel.value) || '';
+  }
+  function updatePeakWarning(){
+    var warn = document.getElementById('f-peak-warn');
+    if(!warn) return;
+    var usersVal = document.getElementById('f-usersperday').value;
+    var peakVal = document.getElementById('f-peakconcurrent').value;
+    var usersOpts = listOptions('usersPerDay'), peakOpts = listOptions('peakConcurrent');
+    var usersIdx = -1, peakIdx = -1;
+    usersOpts.forEach(function(o,i){ if(o[0]===usersVal) usersIdx=i; });
+    peakOpts.forEach(function(o,i){ if(o[0]===peakVal) peakIdx=i; });
+    var hiCap = [10,50,200,1000,Infinity], loFloor = [1,3,6,21,51];
+    var bad = usersIdx>=0 && peakIdx>=0 && loFloor[peakIdx] > hiCap[usersIdx]*0.5;
+    warn.style.display = bad ? 'block' : 'none';
+  }
+  function updateScorePreview(){
+    var box = document.getElementById('score-preview');
+    if(!box) return;
+    var uc = {};
+    ['timeSpent','lossValue','dataFormat','dataHistory','dataRights','needConnect','adminOwner','aiErrorImpact','reviewNeed','confidentiality'].forEach(function(k){
+      var idMap = { timeSpent:'f-timespent', lossValue:'f-lossvalue', dataFormat:'f-dataformat', dataHistory:'f-datahistory',
+        dataRights:'f-datarights', needConnect:'f-needconnect', adminOwner:'f-adminowner', aiErrorImpact:'f-aierror',
+        reviewNeed:'f-reviewneed', confidentiality:'f-confidentiality' };
+      uc[k] = document.getElementById(idMap[k]).value;
+    });
+    var d = computeScoreDetail(uc);
+    if(d.missing>0){
+      box.innerHTML = '<b style="color:#A32D2D;">ข้อมูลไม่ครบ</b> — ยังขาดอีก '+d.missing+' ช่อง (เครื่องหมาย *) กรอกให้ครบเพื่อให้ระบบคำนวณคะแนน';
+      return;
+    }
+    var p = priorityInfo(d.total);
+    box.innerHTML = 'Impact '+d.impact+' &middot; Data '+d.data+' &middot; Feasibility '+d.feasibility+' &middot; Risk '+d.risk
+      + ' &rarr; <b style="color:'+p.hex+';">คะแนนรวม '+d.total+' ('+p.label+')</b>';
+  }
+  function onScoreFieldsChanged(){ updateScorePreview(); updatePeakWarning(); }
+
+  function clearForm(){
     document.getElementById('f-name').value='';
-    document.getElementById('f-dept').value='';
-    document.getElementById('f-owner').value='';
-    document.getElementById('f-solution').value='';
-    document.getElementById('f-aitype').value='';
-    document.getElementById('analyze-status').textContent='';
-    document.getElementById('score-ai-status').textContent='';
-    document.getElementById('f-dataavailable').value='';
-    document.getElementById('f-redesign').value='';
-    document.getElementById('f-qwp').value='';
-    document.getElementById('f-refstep').value='';
-    document.getElementById('f-kqi2').value='';
-    document.getElementById('f-attach-file').value='';
+    FORM_TEXT_FIELDS.forEach(function(p){ document.getElementById(p[0]).value=''; });
+    FORM_SELECT_FIELDS.forEach(function(p){ document.getElementById(p[0]).value=''; });
     document.getElementById('f-attach-ref').value='';
     document.getElementById('f-attach-status').textContent='';
     currentAttachment = null;
-    setSliders(3,3,3,3);
+    updateAiKindPreview(); updatePeakWarning(); updateScorePreview();
+  }
+  function fillForm(uc){
+    document.getElementById('f-name').value = uc.name||'';
+    FORM_TEXT_FIELDS.forEach(function(p){ document.getElementById(p[0]).value = uc[p[1]]||''; });
+    FORM_SELECT_FIELDS.forEach(function(p){ document.getElementById(p[0]).value = uc[p[1]]||''; });
+    document.getElementById('f-attach-ref').value = uc.attachRef||'';
+    currentAttachment = uc.attachment || null;
+    document.getElementById('f-attach-status').style.color = 'var(--teal)';
+    document.getElementById('f-attach-status').textContent = currentAttachment ? ('ไฟล์แนบปัจจุบัน: ' + currentAttachment.name + ' (เลือกไฟล์ใหม่เพื่อแทนที่)') : '';
+    updateAiKindPreview(); updatePeakWarning(); updateScorePreview();
+  }
+
+  function openAdd(){
+    editingId = null;
+    document.getElementById('form-title').textContent = 'เพิ่ม use case ใหม่';
+    clearForm();
+    document.getElementById('f-attach-file').value='';
     document.getElementById('f-error').style.display='none';
     document.getElementById('status-msg').textContent='';
     document.getElementById('form-panel').classList.add('open');
@@ -4017,135 +4474,12 @@
     if(!uc) return;
     editingId = id;
     document.getElementById('form-title').textContent = 'แก้ไข use case';
-    document.getElementById('f-name').value = uc.name;
-    document.getElementById('f-dept').value = uc.dept||'';
-    document.getElementById('f-owner').value = uc.owner||'';
-    document.getElementById('f-solution').value = uc.solution||'';
-    document.getElementById('f-aitype').value = uc.aiType||'';
-    document.getElementById('analyze-status').textContent='';
-    document.getElementById('score-ai-status').textContent='';
-    document.getElementById('f-dataavailable').value = uc.dataAvailable||'';
-    document.getElementById('f-redesign').value = uc.redesignDesc||'';
-    document.getElementById('f-qwp').value = uc.qwp||'';
-    document.getElementById('f-refstep').value = uc.refStep||'';
-    document.getElementById('f-kqi2').value = uc.kqi||'';
+    fillForm(uc);
     document.getElementById('f-attach-file').value='';
-    document.getElementById('f-attach-ref').value = uc.attachRef||'';
-    currentAttachment = uc.attachment || null;
-    document.getElementById('f-attach-status').style.color = 'var(--teal)';
-    document.getElementById('f-attach-status').textContent = currentAttachment ? ('ไฟล์แนบปัจจุบัน: ' + currentAttachment.name + ' (เลือกไฟล์ใหม่เพื่อแทนที่)') : '';
-    setSliders(uc.impact, uc.feasibility, uc.data, uc.risk);
     document.getElementById('f-error').style.display='none';
     document.getElementById('status-msg').textContent='';
     document.getElementById('form-panel').classList.add('open');
     document.getElementById('form-panel').scrollIntoView({behavior:'smooth', block:'start'});
-  }
-
-  var SLIDER_LEVELS = {
-    impact: {
-      title: 'ผลกระทบทางธุรกิจ',
-      levels: {
-        1: 'น้อยมาก — ช่วยงานเล็ก ๆ ภายในทีมเดียว แทบไม่กระทบรายได้ ต้นทุน หรือลูกค้า ถึงไม่ทำก็แทบไม่ต่าง',
-        2: 'น้อย — ช่วยให้สะดวกขึ้นบ้าง ลดงานซ้ำเล็กน้อย แต่ยังวัดเป็นตัวเงินได้ยาก',
-        3: 'ปานกลาง — เห็นผลชัดในหน่วยงาน เช่น ประหยัดเวลา/ต้นทุนพอสมควร หรือเพิ่มความพึงพอใจลูกค้าได้บ้าง',
-        4: 'สูง — ส่งผลต่อตัวเลขสำคัญของธุรกิจอย่างชัดเจน เช่น เพิ่มยอดขาย ลดต้นทุน หรือยกระดับบริการหลายหน่วยงาน',
-        5: 'สูงมาก — เปลี่ยนเกมธุรกิจ กระทบรายได้/ต้นทุน/ความสามารถแข่งขันในระดับองค์กรอย่างมีนัยสำคัญ'
-      }
-    },
-    feasibility: {
-      title: 'ความเป็นไปได้ทางเทคนิค',
-      levels: {
-        1: 'ยากมาก — เทคโนโลยียังไม่พร้อม ทีมไม่มีความเชี่ยวชาญ ต้องวิจัย/ทดลองหนักก่อนเริ่มได้',
-        2: 'ยาก — พอมีแนวทาง แต่ซับซ้อน ต้องหาคนหรือเครื่องมือเพิ่ม และมีความไม่แน่นอนสูง',
-        3: 'ปานกลาง — ทำได้ด้วยเทคโนโลยีที่มี แต่ต้องใช้ความพยายามและเวลาพอสมควร',
-        4: 'ทำได้ดี — มีเครื่องมือ/บริการสำเร็จรูปรองรับ ทีมพอมีประสบการณ์ เริ่มได้ไม่ยาก',
-        5: 'ง่าย — เทคโนโลยีพร้อมใช้ทันที มีตัวอย่าง/บริการสำเร็จรูปชัดเจน ทีมทำได้เลย'
-      }
-    },
-    data: {
-      title: 'ความพร้อมของข้อมูล',
-      levels: {
-        1: 'แทบไม่มี — ยังไม่มีข้อมูลที่ใช้ได้ ต้องเริ่มเก็บใหม่ทั้งหมด',
-        2: 'น้อย — มีข้อมูลบ้างแต่กระจัดกระจาย ไม่ครบ คุณภาพต่ำ ต้องทำความสะอาดมาก',
-        3: 'ปานกลาง — มีข้อมูลพอเริ่มได้ แต่ต้องจัดระเบียบ/เติมเต็มบางส่วนก่อนใช้จริง',
-        4: 'ดี — ข้อมูลค่อนข้างครบ คุณภาพใช้ได้ เข้าถึงได้ ต้องเตรียมเพิ่มเล็กน้อย',
-        5: 'พร้อมมาก — ข้อมูลครบถ้วน สะอาด เป็นระเบียบ เข้าถึงได้ทันที พร้อมนำไปใช้เลย'
-      }
-    },
-    risk: {
-      title: 'ความเสี่ยง / ความซับซ้อน',
-      levels: {
-        1: 'น้อยมาก — งานตรงไปตรงมา ผลกระทบถ้าผิดพลาดต่ำ ควบคุมได้ง่าย',
-        2: 'น้อย — มีจุดต้องระวังบ้าง แต่จัดการได้ไม่ยาก',
-        3: 'ปานกลาง — มีความซับซ้อนหรือความเสี่ยงพอสมควร เช่น เกี่ยวกับข้อมูลสำคัญหรือหลายระบบ ต้องวางแผนรับมือ',
-        4: 'สูง — ซับซ้อน เกี่ยวข้องหลายฝ่าย/ระบบ หรือมีความเสี่ยงด้านข้อมูล/กฎระเบียบที่ต้องจัดการอย่างรอบคอบ',
-        5: 'สูงมาก — ซับซ้อนมากหรือเสี่ยงสูง เช่น กระทบข้อมูลลับ ความปลอดภัย หรือการปฏิบัติตามกฎหมาย ต้องมีมาตรการเข้มงวด'
-      }
-    }
-  };
-
-  function updateSliderDesc(id, val){
-    var cfg = SLIDER_LEVELS[id];
-    var el = document.getElementById('f-'+id+'-desc');
-    if(!cfg || !el) return;
-    el.textContent = 'คะแนน ' + val + ' — ' + cfg.levels[val];
-  }
-
-  function setSliders(i,f,d,r){
-    document.getElementById('f-impact').value=i; document.getElementById('f-impact-out').textContent=i; updateSliderDesc('impact', i);
-    document.getElementById('f-feasibility').value=f; document.getElementById('f-feasibility-out').textContent=f; updateSliderDesc('feasibility', f);
-    document.getElementById('f-data').value=d; document.getElementById('f-data-out').textContent=d; updateSliderDesc('data', d);
-    document.getElementById('f-risk').value=r; document.getElementById('f-risk-out').textContent=r; updateSliderDesc('risk', r);
-  }
-
-  function sliderRubricText(){
-    return ['impact','feasibility','data','risk'].map(function(k){
-      var cfg = SLIDER_LEVELS[k];
-      var lvls = Object.keys(cfg.levels).map(function(lv){ return lv+'='+cfg.levels[lv]; }).join(' | ');
-      return cfg.title + ': ' + lvls;
-    }).join('\n');
-  }
-
-  async function analyzeScoresAI(){
-    var statusEl = document.getElementById('score-ai-status');
-    var btn = document.getElementById('score-ai-btn');
-    var name = document.getElementById('f-name').value.trim();
-    if(!name){
-      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'กรุณากรอกชื่อ use case ก่อน'; }
-      return;
-    }
-    if(btn) btn.disabled = true;
-    if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'กำลังประเมินคะแนนด้วย AI Claude...'; }
-    await claudeSampleReady;
-    if(!claudeSample){
-      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ฟีเจอร์นี้ใช้ได้เมื่อเปิดหน้านี้ผ่าน Claude เท่านั้น (ไม่พร้อมใช้งานในบราวเซอร์ปกติ)'; }
-      if(btn) btn.disabled = false;
-      return;
-    }
-    var context = [
-      'ชื่อ use case: ' + name,
-      'วิธีการเดิมที่ทำอยู่: ' + (document.getElementById('f-solution').value.trim() || '-'),
-      'ข้อมูลที่มีอยู่สำหรับใช้งาน: ' + (document.getElementById('f-dataavailable').value.trim() || '-'),
-      'แนวทางหลังนำ AI มาใช้: ' + (document.getElementById('f-redesign').value.trim() || '-')
-    ].join('\n');
-    var prompt = 'คุณเป็นที่ปรึกษาประเมิน use case AI ในโรงงานผลิต ให้คะแนน 4 มิติของ use case นี้ตามเกณฑ์ที่กำหนดเป๊ะๆ (เลือกเลข 1-5 ที่ตรงกับคำอธิบายมากที่สุดเท่านั้น):\n\n'
-      + context + '\n\n'
-      + 'เกณฑ์การให้คะแนน:\n' + sliderRubricText() + '\n\n'
-      + 'ตอบกลับเป็น JSON เท่านั้น (ไม่ต้องมีข้อความอื่นนอก JSON): {"impact":1-5,"feasibility":1-5,"data":1-5,"risk":1-5,"reason":"เหตุผลสั้นๆ รวมไม่เกิน 2-3 ประโยค อธิบายว่าทำไมถึงให้คะแนนแต่ละมิติแบบนั้น"}';
-    try {
-      var parsed = await sampleJsonWithTimeout(prompt, { modelTier: 'quick', cache: false }, 45000);
-      var clamp = function(v){ v = Math.round(Number(v)); if(isNaN(v)) return 3; return Math.max(1, Math.min(5, v)); };
-      // แสดงเป็นคำแนะนำเท่านั้น — ไม่แตะ slider / ไม่เปลี่ยนคะแนนที่ตั้งไว้
-      var sug = 'AI แนะนำ: ผลกระทบ ' + clamp(parsed.impact) + ' · เทคนิค ' + clamp(parsed.feasibility)
-        + ' · ข้อมูล ' + clamp(parsed.data) + ' · เสี่ยง ' + clamp(parsed.risk)
-        + (parsed.reason ? ' — ' + parsed.reason : '')
-        + '  (คะแนนเดิมไม่ถูกเปลี่ยน ถ้าเห็นด้วยให้ปรับ slider เอง)';
-      if(statusEl){ statusEl.style.color = 'var(--teal)'; statusEl.textContent = sug; }
-    } catch(e){
-      if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'ประเมินไม่สำเร็จ: ' + sampleErrorMessage(e); }
-    } finally {
-      if(btn) btn.disabled = false;
-    }
   }
 
   function closeForm(){
@@ -4162,55 +4496,22 @@
     }
     document.getElementById('f-error').style.display='none';
 
-    var deptVal = document.getElementById('f-dept').value.trim();
-    var ownerVal = document.getElementById('f-owner').value.trim();
-
-    var qwpVal = document.getElementById('f-qwp').value.trim();
-    var refStepVal = document.getElementById('f-refstep').value.trim();
-    var kqiVal = document.getElementById('f-kqi2').value.trim();
-
     var data = {
       id: editingId || genId(),
       name: name,
-      dept: deptVal,
-      owner: ownerVal,
-      solution: document.getElementById('f-solution').value.trim(),
       attachment: currentAttachment,
-      attachRef: document.getElementById('f-attach-ref').value.trim(),
-      aiType: document.getElementById('f-aitype').value,
-      impact: Number(document.getElementById('f-impact').value),
-      feasibility: Number(document.getElementById('f-feasibility').value),
-      data: Number(document.getElementById('f-data').value),
-      risk: Number(document.getElementById('f-risk').value),
-      dataAvailable: document.getElementById('f-dataavailable').value.trim(),
-      redesignDesc: document.getElementById('f-redesign').value.trim(),
-      qwp: qwpVal,
-      refStep: refStepVal,
-      kqi: kqiVal
+      attachRef: document.getElementById('f-attach-ref').value.trim()
     };
+    FORM_TEXT_FIELDS.forEach(function(p){ data[p[1]] = document.getElementById(p[0]).value.trim(); });
+    FORM_SELECT_FIELDS.forEach(function(p){ data[p[1]] = document.getElementById(p[0]).value; });
+    // ประเภทงาน AI (key เดิม 16 หมวด) คำนวณอัตโนมัติจากประเภทข้อมูลนำเข้า + การปรับโมเดล
+    // — ตรงตามหลักการเดียวกับ template: ไม่ให้ผู้ใช้เดา ระบบอนุมานให้จากข้อมูลที่กรอกจริง
+    data.aiType = deriveLegacyAiType(data);
     if(editingId){
       var existing = useCases.find(function(u){ return u.id===editingId; });
       if(existing){
         if(existing.aiFlow) data.aiFlow = existing.aiFlow;
         if(existing.aiPlan) data.aiPlan = existing.aiPlan;
-        // users/language/dataSensitivity/latency/availability: ไม่มีช่องกรอกในฟอร์มแล้ว
-        // (Excel ต้นทางไม่มีข้อมูลนี้ กรอกได้แต่เดา) — คงค่าเดิมไว้เฉยๆ ไม่ทับด้วยค่าว่าง
-        data.users = existing.users;
-        data.language = existing.language;
-        data.dataSensitivity = existing.dataSensitivity;
-        data.latency = existing.latency;
-        data.availability = existing.availability;
-        // hardware/risks/resources/kpi/roi/recommendation/preparedBy/approver:
-        // เอาหัวข้อ "Spec, ความเสี่ยง, ทรัพยากร และ kQI" ออกจากฟอร์มแล้วเช่นกัน
-        // (จะกลับมาทบทวนทีหลัง) — คงค่าเดิมไว้ ไม่ทับด้วยค่าว่าง
-        data.hardware = existing.hardware;
-        data.risks = existing.risks;
-        data.resources = existing.resources;
-        data.kpi = existing.kpi;
-        data.roi = existing.roi;
-        data.recommendation = existing.recommendation;
-        data.preparedBy = existing.preparedBy;
-        data.approver = existing.approver;
       }
       useCases = useCases.map(function(u){ return u.id===editingId ? data : u; });
     } else {
@@ -4243,13 +4544,22 @@
 
   function exportCsv(){
     if(useCases.length===0) return;
-    var headers = ['ชื่อ use case','แผนก','ผู้รับผิดชอบ','QWP อ้างอิง','kQI/QI ที่เกี่ยวข้อง','ขั้นตอนที่เกี่ยวข้อง','วิธีการเดิมที่ทำอยู่','ข้อมูลที่มีอยู่สำหรับใช้งาน','แนวทางหลังนำ AI มาใช้','เอกสารแนบ','จำนวน Users/วัน','ภาษา','ระดับความสำคัญข้อมูล','Latency','Availability','ลักษณะงาน/ข้อมูล','AI ที่แนะนำ','Spec Hardware','ผลกระทบทางธุรกิจ','ความเป็นไปได้ทางเทคนิค','ความพร้อมของข้อมูล','ความเสี่ยง','คะแนนรวม','ระดับความสำคัญ','ความเสี่ยงและการลดความเสี่ยง','ทรัพยากรและประมาณการ','KQI (ตัวชี้วัด)','ROI','ข้อเสนอแนะ','ผู้จัดทำ','ผู้อนุมัติ'];
+    var headers = ['ชื่อ use case','บริษัท','หน่วยงาน','ผู้รับผิดชอบ','QWP อ้างอิง','kQI/QI ที่เกี่ยวข้อง','ขั้นตอนใน SQP','ปัญหา/ข้อจำกัด','วิธีการปฏิบัติงานปัจจุบัน','ข้อมูลที่มีอยู่','แนวทางหลังนำ AI มาใช้','เอกสารแนบ',
+      'เวลาที่ใช้ในปัจจุบัน','มูลค่าความสูญเสียต่อปี','รูปแบบการจัดเก็บข้อมูล','ระยะเวลาข้อมูลย้อนหลัง','ปริมาณข้อมูล','สิทธิ์การใช้ข้อมูล','การเชื่อมต่อระบบเดิม','ผู้ดูแลระบบ','ผลกระทบเมื่อ AI ผิดพลาด','การตรวจสอบโดยบุคลากร','ระดับความลับ',
+      'ความสำคัญตามความเห็นหน่วยงาน','กำหนดเวลาที่ต้องการใช้งาน','หมายเหตุ',
+      'ลักษณะการเริ่มทำงาน','ประเภทข้อมูลนำเข้า','ประเภทงาน AI','ผู้ใช้งานต่อวัน','ผู้ใช้พร้อมกันสูงสุด','รายการที่ประมวลผลต่อวัน','จุดตรวจพร้อมกัน','ภาษา','เวลาตอบสนอง','ช่วงเวลาให้บริการ','ผลกระทบเมื่อช้าลง','ระยะเวลาจัดเก็บข้อมูล','งบประมาณ','ข้อจำกัดอื่นๆ','ผู้ให้ข้อมูล',
+      'ปริมาณข้อมูลนำเข้าต่อวัน','ขนาดคลังเอกสาร','ความละเอียดภาพ','รูปแบบการติดตั้ง','การปรับโมเดล','ความถี่ฝึกโมเดลใหม่',
+      'Impact','Data','Feasibility','Risk','คะแนนรวม','ระดับความสำคัญ'];
     var rows = useCases.map(function(u){
-      var score = computeScore(u);
-      var p = priorityInfo(score);
-      var cat = getCategory(u.aiType);
+      var d = computeScoreDetail(u);
+      var p = d.total==null ? {label:'ข้อมูลไม่ครบ'} : priorityInfo(d.total);
       var attachText = (u.attachment ? u.attachment.name : '') + (u.attachment && u.attachRef ? ' / ' : '') + (u.attachRef || '');
-      return [u.name,u.dept,u.owner,u.qwp,u.kqi,u.refStep,u.solution,u.dataAvailable,u.redesignDesc,attachText,u.users,u.language,u.dataSensitivity,u.latency,u.availability,(cat?cat.label:''),(cat?cat.aiType:''),u.hardware,u.impact,u.feasibility,u.data,u.risk,score,p.label,u.risks,u.resources,u.kpi,u.roi,u.recommendation,u.preparedBy,u.approver]
+      return [u.name,u.company,u.dept,u.owner,u.qwp,u.kqi,u.refStep,u.problem,u.solution,u.dataAvailable,u.redesignDesc,attachText,
+        u.timeSpent,u.lossValue,u.dataFormat,u.dataHistory,u.dataVolume,u.dataRights,u.needConnect,u.adminOwner,u.aiErrorImpact,u.reviewNeed,u.confidentiality,
+        u.deptPriority,u.targetTimeline,u.remark,
+        u.triggerType,u.inputType,aiKindLabel(u.inputType),u.usersPerDay,u.peakConcurrent,u.itemsPerDay,u.pointsCount,u.language,u.responseTime,u.serviceHours,u.slowdownImpact,u.retentionPeriod,u.budget,u.constraints,u.providedBy,
+        u.dailyInputSize,u.corpusSize,u.imageResolution,u.installLocation,u.modelAdaptation,u.retrainFrequency,
+        d.impact,d.data,d.feasibility,d.risk,(d.total==null?'':d.total),p.label]
         .map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
     });
     var csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
@@ -4292,12 +4602,12 @@
     return t.content.firstChild;
   }
 
-  ['impact','feasibility','data','risk'].forEach(function(id){
-    document.getElementById('f-'+id).addEventListener('input', function(e){
-      document.getElementById('f-'+id+'-out').textContent = e.target.value;
-      updateSliderDesc(id, e.target.value);
-    });
+  populateAllSelects();
+  ['f-timespent','f-lossvalue','f-dataformat','f-datahistory','f-datarights','f-needconnect','f-adminowner','f-aierror','f-reviewneed','f-confidentiality','f-usersperday','f-peakconcurrent'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('change', onScoreFieldsChanged);
   });
+  document.getElementById('f-inputtype').addEventListener('change', updateAiKindPreview);
 
   document.getElementById('open-add-btn').onclick = openAdd;
   document.getElementById('open-import-btn').onclick = function(){
@@ -4341,25 +4651,6 @@
   };
   document.getElementById('flow-close-btn').onclick = closeFlow;
   document.getElementById('flow-modal').onclick = function(e){ if(e.target.id==='flow-modal') closeFlow(); };
-  document.getElementById('analyze-btn').onclick = function(){
-    var combined = [
-      document.getElementById('f-name').value,
-      document.getElementById('f-solution').value,
-      document.getElementById('f-dataavailable').value,
-      document.getElementById('f-redesign').value
-    ].join(' ');
-    var result = detectAiType(combined);
-    var statusEl = document.getElementById('analyze-status');
-    if(result){
-      document.getElementById('f-aitype').value = result.key;
-      statusEl.textContent = 'ตรวจพบจากคำว่า: ' + result.matched.slice(0,4).join(', ');
-    } else {
-      statusEl.textContent = 'ไม่พบคำที่บ่งชี้ชัดเจน กรุณาเลือกเองจากรายการด้านบน';
-    }
-  };
-
-  document.getElementById('score-ai-btn').onclick = function(){ analyzeScoresAI(); };
-
   document.getElementById('f-attach-file').addEventListener('change', function(e){
     var statusEl = document.getElementById('f-attach-status');
     var file = e.target.files && e.target.files[0];
