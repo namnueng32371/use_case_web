@@ -6,14 +6,14 @@
 <title>AI Use Case Prioritization Tool</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy:#13294B;
     --navy-light:#1E3A66;
     --teal:#0F6E56;
     --teal-light:#E1F5EE;
-    --bg:#F6F5F1;
+    --bg:#F3F3F3;
     --card:#FFFFFF;
     --border:#E3E1DA;
     --text:#1F2430;
@@ -41,11 +41,11 @@
   html{scrollbar-color:var(--border) var(--bg);}
   body{
     margin:0;
-    font-family:'Inter', -apple-system, sans-serif;
+    font-family:'IBM Plex Sans Thai', -apple-system, sans-serif;
     background:var(--bg);
     color:var(--text);
   }
-  .app{max-width:920px; margin:0 auto; padding:32px 20px 32px;}
+  .app{max-width:clamp(920px, 72vw, 1400px); margin:0 auto; padding:32px 20px 32px;}
   #app-footer{margin-top:28px; width:100%; box-sizing:border-box;}
   .footer-bar{background:linear-gradient(90deg, #E65A15 0%, #EA6619 50%, #EF6C00 100%); color:#fff; padding:14px 28px; border-radius:0; display:flex; justify-content:space-between; align-items:center; box-shadow:0 3px 12px rgba(230,90,21,0.22);}
   .footer-tagline{font-size:15px; font-weight:400; letter-spacing:0.5px; opacity:0.95; font-style:italic;}
@@ -61,15 +61,30 @@
   .doc-footer-bar{margin-top:24px; background:#E3631C; color:#fff; padding:10px 16px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:13px;}
   .doc-footer-bar .brand{font-weight:700;}
   .doc-footer-bar .brand small{font-weight:400; font-size:9px; opacity:.9;}
-  .header{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:28px;}
-  .header .header-text{text-align:left;}
   .logo{
     width:42px; height:42px; border-radius:10px; background:var(--navy);
     display:flex; align-items:center; justify-content:center;
     color:#fff; font-weight:700; font-size:15px; flex-shrink:0;
   }
-  .header h1{font-size:21px; font-weight:700; margin:0; color:var(--navy);}
-  .header p{font-size:13px; color:var(--text-muted); margin:2px 0 0;}
+  .app-header{
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:26px 28px 20px; margin-bottom:28px;
+    box-shadow:0 1px 2px rgba(19,41,75,.05);
+  }
+  .app-header-top{
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding-bottom:18px; margin-bottom:16px; border-bottom:1px solid var(--border);
+  }
+  .app-header-text{text-align:left;}
+  .app-header-text h1{font-size:25px; font-weight:600; letter-spacing:-0.015em; margin:0; color:var(--navy); line-height:1.25;}
+  .app-header-text p{font-size:13.5px; color:#5C6B84; margin:6px 0 0; max-width:60ch; line-height:1.55;}
+  .app-header-logo{height:40px; width:auto; flex-shrink:0;}
+  @media (max-width:640px){
+    .app-header{padding:20px 18px 16px; border-radius:16px;}
+    .app-header-top{flex-wrap:wrap; padding-bottom:14px; margin-bottom:12px;}
+    .app-header-text h1{font-size:20px;}
+    .app-header-logo{height:32px;}
+  }
 
   .summary{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;}
   .stat{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 16px;}
@@ -242,10 +257,18 @@
   }
 
   /* --- Nav tabs --- */
-  .nav-tabs{display:flex; flex-wrap:wrap; gap:14px 26px; border-bottom:1px solid var(--border); margin-bottom:24px;}
-  .nav-tab{background:transparent; border:none; padding:0 0 10px; font-size:13px; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; border-radius:0; margin-bottom:-1px; display:inline-flex; align-items:center; gap:6px; text-align:left;}
-  .nav-tab:hover{color:var(--text);}
-  .nav-tab.active{color:var(--navy); border-bottom-color:var(--teal);}
+  .nav-tabs{display:flex; flex-wrap:wrap; gap:4px; background:var(--bg); border-radius:14px; padding:5px;}
+  .nav-tab{
+    background:transparent; border:none; padding:9px 16px; font-size:13px; font-weight:600;
+    color:#5C6B84; border-radius:10px; display:inline-flex; align-items:center; gap:7px; text-align:left;
+    transition:background .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  .nav-tab:hover{color:var(--navy); background:rgba(19,41,75,.05);}
+  .nav-tab.active{color:var(--navy); background:#fff; box-shadow:0 1px 2px rgba(19,41,75,.08), 0 1px 1px rgba(19,41,75,.04);}
+  .nav-tab.active:hover{background:#fff;}
+  @media (max-width:640px){
+    .nav-tab{padding:8px 12px; font-size:12.5px;}
+  }
 
   /* --- Org structure page --- */
   .org-intro{font-size:13px; color:var(--text-muted); line-height:1.7; margin:0 0 20px;}
@@ -656,7 +679,7 @@
   .dg-btn:active{transform:scale(0.96);}
   .dg-zoom-val{font-size:12px; font-weight:600; color:var(--text-muted); min-width:45px; text-align:center;}
   .dg-fig .dg-scroll{overflow-x:auto; overflow-y:hidden; padding:10px 0; border-radius:8px; background:var(--bg); border:1px dashed var(--border);}
-  .dg-fig .dg-scroll svg{display:block; min-width:1380px; width:100%; height:auto; font-family:'Inter', sans-serif; transition:transform .2s ease, min-width .2s ease; transform-origin:top left;}
+  .dg-fig .dg-scroll svg{display:block; min-width:1380px; width:100%; height:auto; font-family:'IBM Plex Sans Thai', sans-serif; transition:transform .2s ease, min-width .2s ease; transform-origin:top left;}
   .dg-btn svg, .dg-header-title svg{min-width:unset; width:14px; height:14px; display:inline-block; vertical-align:middle;}
   .dg-fig figcaption{font-size:12.5px; color:var(--text-muted); margin:12px 4px 2px; line-height:1.6;}
   .dg-node rect, .dg-node polygon{fill:var(--card); stroke:var(--border); stroke-width:1.6;}
@@ -897,21 +920,23 @@
 
 <div class="app">
 
-  <div class="header">
-    <div class="header-text">
-      <h1>AI use case prioritization tool</h1>
-      <p>บันทึก ให้คะแนน จัดลำดับความสำคัญ และออกเอกสารสรุปของ use case AI ในองค์กร — ในโปรแกรมเดียว</p>
+  <header class="app-header">
+    <div class="app-header-top">
+      <div class="app-header-text">
+        <h1>AI use case prioritization tool</h1>
+        <p>บันทึก ให้คะแนน จัดลำดับความสำคัญ และออกเอกสารสรุปของ use case AI ในองค์กร — ในโปรแกรมเดียว</p>
+      </div>
+      <img id="brand-logo" alt="Polymate" class="app-header-logo">
     </div>
-    <img id="brand-logo" alt="Polymate" style="height:46px; width:auto; flex-shrink:0;">
-  </div>
 
-  <div class="nav-tabs" role="tablist">
-    <button class="nav-tab active" id="tab-usecases" type="button" role="tab" aria-selected="true"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg>จัดลำดับ Use Case</button>
-    <button class="nav-tab" id="tab-org" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>โครงสร้างทีม AI Star</button>
-    <button class="nav-tab" id="tab-flow" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>Flow การทำงาน AI Start</button>
-    <button class="nav-tab" id="tab-spec" type="button" role="tab" aria-selected="false">ประเมิน Spec/ราคา Server</button>
-    <button class="nav-tab" id="tab-plan" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>แผนโครงการ AI Local GSK</button>
-  </div>
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" id="tab-usecases" type="button" role="tab" aria-selected="true"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg>จัดลำดับ Use Case</button>
+      <button class="nav-tab" id="tab-org" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>โครงสร้างทีม AI Star</button>
+      <button class="nav-tab" id="tab-flow" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>Flow การทำงาน AI Start</button>
+      <button class="nav-tab" id="tab-spec" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>ประเมิน Spec/ราคา Server</button>
+      <button class="nav-tab" id="tab-plan" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>แผนโครงการ AI Local GSK</button>
+    </nav>
+  </header>
 
   <div id="view-usecases">
 
