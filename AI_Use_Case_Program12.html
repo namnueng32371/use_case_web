@@ -242,8 +242,8 @@
   }
 
   /* --- Nav tabs --- */
-  .nav-tabs{display:flex; gap:26px; border-bottom:1px solid var(--border); margin-bottom:24px;}
-  .nav-tab{background:transparent; border:none; padding:0 0 10px; font-size:13px; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; border-radius:0; margin-bottom:-1px; display:inline-flex; align-items:center; gap:6px;}
+  .nav-tabs{display:flex; flex-wrap:wrap; gap:14px 26px; border-bottom:1px solid var(--border); margin-bottom:24px;}
+  .nav-tab{background:transparent; border:none; padding:0 0 10px; font-size:13px; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; border-radius:0; margin-bottom:-1px; display:inline-flex; align-items:center; gap:6px; text-align:left;}
   .nav-tab:hover{color:var(--text);}
   .nav-tab.active{color:var(--navy); border-bottom-color:var(--teal);}
 
@@ -805,6 +805,92 @@
   @media (max-width:600px){
     .flow-side-box{max-width:130px;}
   }
+
+  /* ===== แท็บ แผนโครงการ AI Local GSK ===== */
+  .pt-intro{font-size:13px; color:var(--text-muted); line-height:1.7; margin:0 0 26px;}
+  .pt-eyebrow{font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-muted); margin:34px 0 14px;}
+  .pt-eyebrow:first-of-type{margin-top:6px;}
+  .pt-lede{font-size:13px; color:var(--text); line-height:1.7; margin:0 0 16px; max-width:62ch;}
+
+  .pt-road{position:relative; margin:0 0 8px; padding-left:30px;}
+  .pt-road::before{content:""; position:absolute; left:9px; top:6px; bottom:10px; width:2px; background:var(--border);}
+  .pt-step{position:relative; padding:0 0 20px;}
+  .pt-step:last-child{padding-bottom:0;}
+  .pt-step-dot{position:absolute; left:-30px; top:1px; width:20px; height:20px; border-radius:50%; background:var(--card); border:2px solid var(--border); color:var(--text-muted); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+  .pt-step--now .pt-step-dot{border-color:var(--teal); background:var(--teal); color:#fff;}
+  .pt-step--done .pt-step-dot{border-color:var(--teal); color:var(--teal);}
+  .pt-step-head{display:flex; align-items:center; flex-wrap:wrap; gap:10px;}
+  .pt-step-title{font-size:14px; font-weight:700; color:var(--navy);}
+  .pt-step--now .pt-step-title{color:var(--teal);}
+  .pt-step-when{font-size:12px; color:var(--text-muted); font-weight:500;}
+  .pt-now-pill{font-size:11px; font-weight:700; letter-spacing:.4px; color:#fff; background:var(--teal); padding:2px 9px; border-radius:999px;}
+  .pt-step-body{font-size:12.5px; color:var(--text-muted); line-height:1.65; margin:5px 0 0;}
+  .pt-step-body b{color:var(--text); font-weight:600;}
+
+  .pt-wave{border:1px solid var(--border); border-left:4px solid var(--border); border-radius:12px; background:var(--card); padding:16px 18px; margin-bottom:14px;}
+  .pt-wave-head{display:flex; align-items:baseline; flex-wrap:wrap; gap:10px 14px; margin-bottom:8px;}
+  .pt-wave-title{font-size:14px; font-weight:700;}
+  .pt-wave-when{font-size:12px; color:var(--text-muted);}
+  .pt-wave-count{margin-left:auto; font-size:12px; font-weight:700; color:var(--text-muted); font-variant-numeric:tabular-nums;}
+  .pt-wave-rec{font-size:12.5px; color:var(--text-muted); line-height:1.65; margin:0 0 12px; max-width:64ch;}
+  .pt-wave-rec b{color:var(--text); font-weight:600;}
+  .pt-uc-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden;}
+  .pt-uc{display:flex; align-items:center; gap:12px; padding:9px 12px; background:var(--card);}
+  .pt-uc-name{font-size:12.5px; color:var(--text); font-weight:500; flex:1; min-width:0;}
+  .pt-uc-dept{font-size:11.5px; color:var(--text-muted); flex-shrink:0; max-width:38%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pt-uc-score{font-size:12px; font-weight:700; padding:2px 9px; border-radius:7px; font-variant-numeric:tabular-nums; flex-shrink:0;}
+  .pt-uc--empty{font-size:12px; color:var(--text-muted); font-style:italic;}
+
+  .pt-grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .pt-grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .pt-col{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px;}
+  .pt-col-tag{font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--indigo); margin:0 0 4px;}
+  .pt-col-title{font-size:14px; font-weight:700; color:var(--navy); margin:0 0 12px;}
+  .pt-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;}
+  .pt-col li{font-size:12.5px; color:var(--text-muted); line-height:1.55; padding-left:15px; position:relative;}
+  .pt-col li::before{content:""; position:absolute; left:0; top:7px; width:6px; height:6px; border-radius:50%; background:var(--indigo); opacity:.55;}
+  .pt-col li b{color:var(--text); font-weight:600;}
+
+  .pt-tier{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; display:flex; flex-direction:column;}
+  .pt-tier-name{font-size:13px; font-weight:700; color:var(--peach); margin:0 0 2px;}
+  .pt-tier-scope{font-size:11.5px; color:var(--text-muted); margin:0 0 10px; line-height:1.5;}
+  .pt-tier-price{font-size:19px; font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; margin:0 0 2px;}
+  .pt-tier-price small{font-size:12px; font-weight:500; color:var(--text-muted);}
+  .pt-tier-spec{font-size:11.5px; color:var(--text-muted); line-height:1.6; margin:10px 0 0; padding-top:10px; border-top:1px solid var(--border);}
+  .pt-tier-phase{font-size:11px; font-weight:600; color:var(--teal); margin:8px 0 0;}
+
+  /* แผนงานรวมทั้งพอร์ต — สไตล์เดียวกับ modal แผนงาน */
+  .pt-wavestrip{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:8px 0 18px;}
+  .pt-ws{border:1px solid var(--border); border-top:3px solid var(--border); border-radius:8px; padding:11px 13px; background:var(--card);}
+  .pt-ws-name{font-size:12.5px; font-weight:700; margin:0 0 2px;}
+  .pt-ws-meta{font-size:11px; color:var(--text-muted); margin:0 0 6px; font-variant-numeric:tabular-nums;}
+  .pt-ws-rec{font-size:11.5px; color:var(--text-muted); line-height:1.55; margin:0;}
+
+  .pt-gantt{margin-top:8px; border:1px solid var(--border); border-radius:8px; padding:14px 16px 8px; background:var(--card); overflow-x:auto;}
+  .pt-gantt-inner{min-width:520px;}
+  .pt-g-wavehead{display:flex; align-items:center; gap:8px; margin:14px 0 8px; padding-bottom:4px; border-bottom:1px dashed var(--border);}
+  .pt-g-wavehead:first-child{margin-top:0;}
+  .pt-g-wavehead .dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .pt-g-wavehead .txt{font-size:12px; font-weight:700;}
+  .pt-g-wavehead .sub{font-size:11px; color:var(--text-muted); font-weight:500; font-variant-numeric:tabular-nums;}
+  .pt-g-row{display:flex; align-items:center; gap:10px; margin-bottom:5px; font-size:12px;}
+  .pt-g-label{width:230px; flex-shrink:0; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:flex; align-items:center; gap:6px;}
+  .pt-g-sc{font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:5px; flex-shrink:0; font-variant-numeric:tabular-nums;}
+  .pt-g-track{flex:1; background:var(--bg); border-radius:4px; height:18px; position:relative; min-width:180px;}
+  .pt-g-bar{position:absolute; top:0; height:18px; border-radius:4px; opacity:.9;}
+  .pt-g-bar--lead{background:repeating-linear-gradient(45deg,var(--border),var(--border) 4px,transparent 4px,transparent 8px); opacity:1; border:1px solid var(--border);}
+  .pt-g-bar{cursor:default; transition:filter .12s;}
+  .pt-g-bar:hover{opacity:1; filter:brightness(1.12) saturate(1.1);}
+  .pt-g-axis{display:flex; margin:6px 0 0 240px; font-size:10.5px; color:var(--text-muted);}
+  .pt-g-axis span{flex:1; text-align:center; border-left:1px solid var(--border);}
+  .pt-g-axis span:first-child{border-left:none;}
+
+  @media (max-width:720px){
+    .pt-grid2, .pt-grid3, .pt-wavestrip{grid-template-columns:1fr;}
+    .pt-uc-dept{display:none;}
+    .pt-g-label{width:150px;}
+    .pt-g-axis{margin-left:160px;}
+  }
 </style>
 </head>
 <body>
@@ -824,6 +910,7 @@
     <button class="nav-tab" id="tab-org" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>โครงสร้างทีม AI Star</button>
     <button class="nav-tab" id="tab-flow" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>Flow การทำงาน AI Start</button>
     <button class="nav-tab" id="tab-spec" type="button" role="tab" aria-selected="false">ประเมิน Spec/ราคา Server</button>
+    <button class="nav-tab" id="tab-plan" type="button" role="tab" aria-selected="false"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>แผนโครงการ AI Local GSK</button>
   </div>
 
   <div id="view-usecases">
@@ -863,30 +950,6 @@
     <div class="import-status" id="import-status"></div>
     <div class="import-results" id="import-results"></div>
   </div>
-
-  <details style="margin-bottom:18px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 14px;">
-    <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">ดูเกณฑ์การแนะนำประเภท AI ทั้งหมด</summary>
-    <div style="margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.9;">
-      <b style="color:var(--navy);">ตามชนิดข้อมูล/งาน</b><br>
-      ข้อความ / ภาษา &rarr; NLP และ LLM (แชทบอท, สรุปเอกสาร)<br>
-      รูปภาพ / วิดีโอ &rarr; Computer vision (ตรวจคุณภาพสินค้า, OCR)<br>
-      เสียง &rarr; Speech AI (แปลงเสียงเป็นข้อความ)<br>
-      ตัวเลข / time series &rarr; Predictive ML (พยากรณ์ยอดขาย)<br>
-      งานทำซ้ำ มีกฎตายตัว &rarr; RPA ผสาน AI (คีย์ข้อมูลอัตโนมัติ)<br>
-      ต้องการเนื้อหาใหม่ &rarr; Generative AI (สร้าง draft เนื้อหา/ภาพ)<br>
-      ต้องการแนะนำ/จับคู่ &rarr; Recommendation AI (แนะนำสินค้า, จับคู่งาน)<br>
-      <b style="color:var(--navy); display:inline-block; margin-top:8px;">งานเฉพาะทาง</b><br>
-      สร้างภาพจากคำสั่ง &rarr; Image generation (ภาพโฆษณา, ภาพสินค้า)<br>
-      ค้นหา/ถามตอบจากเอกสาร &rarr; Embedding / RAG (ถามตอบจากคลังเอกสารองค์กร)<br>
-      ผู้ช่วยความรู้ภายในองค์กร &rarr; Knowledge assistant (ช่วยพนักงานค้นข้อมูล)<br>
-      ปรับโมเดลเฉพาะองค์กร &rarr; Fine-tuning (ปรับโมเดลให้เข้าใจศัพท์เฉพาะ)<br>
-      ประมวลผลข้อมูลจำนวนมาก &rarr; Batch inference (จัดหมวด/วิเคราะห์ข้อมูลก้อนใหญ่)<br>
-      พยากรณ์ความต้องการสินค้า &rarr; Demand forecasting (วางแผนสต็อก/จัดซื้อ)<br>
-      คาดการณ์การซ่อมบำรุง &rarr; Predictive maintenance (เครื่องจักร, IoT)<br>
-      ตรวจจับความผิดปกติ/ทุจริต &rarr; Anomaly detection (fraud, ความปลอดภัย)<br>
-      งานอัตโนมัติหลายขั้นตอน &rarr; AI agent / automation (เชื่อมหลายระบบ)
-    </div>
-  </details>
 
   <div class="panel" id="form-panel">
     <h2 id="form-title">เพิ่ม use case ใหม่</h2>
@@ -1788,6 +1851,139 @@
 
     <p class="note">
       Claude จะพิจารณาจากประเภทงาน AI (aiType), วิธีการเดิม, ข้อมูลที่มีอยู่, แนวทางหลังนำ AI มาใช้, จำนวนผู้ใช้, ความไวของข้อมูล, Latency/Availability ที่ต้องการของแต่ละ use case ในกลุ่มนั้นๆ แล้วเสนอสเปกฮาร์ดแวร์/สถาปัตยกรรมที่เหมาะสมและงบประมาณโดยประมาณ (ไม่ได้ยึดตาม Tier ที่ตายตัว) — ใช้เป็นข้อมูลประกอบการตัดสินใจของผู้บริหาร ไม่ใช่ใบเสนอราคาสุดท้าย
+    </p>
+  </div>
+
+  <div id="view-plan" hidden>
+    <p class="pt-intro">
+      ภาพรวมทิศทางของ <b>โครงการ AI Local GSK</b> — สรุปจากไฟล์ &ldquo;โครงการ AI Local GSK.xlsx&rdquo; (ชีท โครงสร้างทีม, Flow การทำงาน, Design Server Local, Template User Case)
+      รวมกับ use case จริงที่เก็บอยู่ในโปรแกรมนี้ หน้านี้ตอบคำถามเดียว: <b>เก็บ use case เสร็จแล้วไปต่อทางไหน และอะไรต้องทำก่อน</b>
+      ตอนนี้เราอยู่ที่ <b>เฟส 1 — เก็บ use case</b> ซึ่งก็คือโปรแกรมนี้เอง
+    </p>
+
+    <p class="pt-eyebrow">เส้นทางโครงการ 6 เฟส</p>
+    <div class="pt-road">
+      <div class="pt-step pt-step--now">
+        <div class="pt-step-dot">1</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">เก็บ Use Case</span>
+          <span class="pt-now-pill">อยู่ที่นี่</span>
+          <span class="pt-step-when">กำลังทำ</span>
+        </div>
+        <p class="pt-step-body">Business Unit Champion ของแต่ละฝ่าย (AMD / GM / ผจก.ฝ่าย) ส่ง pain point เข้ามาผ่านโปรแกรมนี้ · แต่ละ use case ต้องกรอก ปัญหา / วิธีเดิม / ข้อมูลที่มี / ผลที่คาดหวัง แล้วให้คะแนน <b>Impact · Feasibility · Data · Risk</b> · เป้าหมายเฟสนี้คือได้รายการที่ประเมินความเป็นไปได้เบื้องต้นแล้ว ครบทุกบริษัทในเครือ</p>
+      </div>
+      <div class="pt-step">
+        <div class="pt-step-dot">2</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">จัดลำดับ &amp; อนุมัติ</span>
+          <span class="pt-step-when">ถัดไปทันที</span>
+        </div>
+        <p class="pt-step-body">เรียงตามคะแนนในแท็บ &ldquo;จัดลำดับ Use Case&rdquo; · <b>AI Lead</b> ตั้งงบ คำนวณ ROI และเลือกว่าทำอะไรก่อน · ผ่าน <b>Gate ธรรมาภิบาล</b> ก่อนอนุมัติ — เช็ก PDPA (มีข้อมูลส่วนบุคคลไหม), Bias, ลิขสิทธิ์ข้อมูล · ปิดท้ายด้วยรายการ use case คลื่นแรกที่อนุมัติงบแล้ว</p>
+      </div>
+      <div class="pt-step">
+        <div class="pt-step-dot">3</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">วางโครงสร้างพื้นฐาน &amp; ตั้งทีม</span>
+          <span class="pt-step-when">คู่ขนานกับเฟส 2</span>
+        </div>
+        <p class="pt-step-body">ซื้อ/ติดตั้ง <b>Server Tier 1</b> (RTX 5090 32GB + vLLM) · ตั้งทีม AI Start ชุดเล็ก: AI Lead 1, AI Engineer/Builder 2, AI Ops/Trainer 1 · ดึงบทบาทเสริม (Product Owner, Research Analyst, Solution Designer, Governance) จาก Digital Development / QMR / HR แทนการจ้างใหม่</p>
+      </div>
+      <div class="pt-step">
+        <div class="pt-step-dot">4</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">Build &amp; Proof of Concept</span>
+          <span class="pt-step-when">ต่อ use case</span>
+        </div>
+        <p class="pt-step-body">Research Analyst เช็กก่อนว่าข้อมูลพอไหม และควรใช้ <b>RAG / Fine-tune / Prompt Engineering</b> · ทำต้นแบบด้วยข้อมูลตัวอย่าง 10–20 รายการ · เอาผลไปคุยกับ AI Lead เพื่อตัดสิน <b>GO / NO-GO</b> ก่อนลงแรง build เต็มระบบ</p>
+      </div>
+      <div class="pt-step">
+        <div class="pt-step-dot">5</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">Deploy &amp; Adoption</span>
+          <span class="pt-step-when">หลังผ่าน PoC</span>
+        </div>
+        <p class="pt-step-body">ปล่อยใช้งานจริง + เขียนคู่มือ + จัด workshop สั้น ๆ ให้แต่ละฝ่าย · AI Ops เฝ้า <b>Model drift</b> และ log รายวัน · Champion network เก็บ feedback ส่งกลับให้ AI Engineer ปรับ · ทำ post-launch review ที่ 30 / 60 / 90 วัน</p>
+      </div>
+      <div class="pt-step">
+        <div class="pt-step-dot">6</div>
+        <div class="pt-step-head">
+          <span class="pt-step-title">ขยายผลระดับองค์กร</span>
+          <span class="pt-step-when">ปีที่ 2–3 เป็นต้นไป</span>
+        </div>
+        <p class="pt-step-body">ขยับเป็น <b>Server Tier 2 → Tier 3</b> เมื่อผู้ใช้พร้อมกันเกิน ~30 คน หรือต้องการ RAG ทั้งเครือ · ตั้งทีมเต็มรูปแบบ: Head of AI Unit, AI Strategy &amp; Research, AI Engineering, MLOps Pipeline, AI Governance Committee, Data Governance · ทำ AI adoption ให้เป็นส่วนหนึ่งของ performance review</p>
+      </div>
+    </div>
+
+    <p class="pt-eyebrow">แผนงานรวมทั้งพอร์ต — จัดคลื่นตามคะแนน use case</p>
+    <p class="pt-lede">แบ่ง use case ทั้งหมดเป็น 3 คลื่นตามคะแนนรวม (Impact 35% · Feasibility 25% · Data 25% · Risk 15%) แล้ววางเป็นไทม์ไลน์เดียว — คลื่นทำต่อกันตามลำดับ แต่ละคลื่นมีช่วงเตรียมการก่อน และทีมทำได้ทีละ 2 use case พร้อมกัน (งานถัดไปเข้าเมื่อมีเลนว่าง) ความยาวแท่ง = ระยะเวลาของแผนงาน use case นั้น (จากช่อง "ทรัพยากรและประมาณการ" ถ้าไม่ระบุ = 24 สัปดาห์) อัปเดตอัตโนมัติเมื่อแก้คะแนนหรือทรัพยากร</p>
+    <div id="pt-waves"></div>
+    <div class="pt-wave" style="border-left-color:var(--blue); background:var(--blue-light);">
+      <div class="pt-wave-head">
+        <span class="pt-wave-title" style="color:var(--blue);">ชั้นแพลตฟอร์ม — ทำคู่ขนานทุกคลื่น</span>
+      </div>
+      <p class="pt-wave-rec" style="color:var(--text);">
+        จากชีท Template User Case: บริการพื้นฐาน <b>LLM API + AI Chatbot</b> และ <b>Embedding / RAG</b> สำหรับ S.K.Polymer, Thairubbtech, Polymate (ฝ่ายขาย/ผลิต/ADMIN)
+        เป็น &ldquo;ชั้นแพลตฟอร์ม&rdquo; ที่ทุก use case ด้านบนพึ่งพา — ต้องเริ่มตั้งแต่เฟส 3 · รายการที่ทำเครื่องหมาย
+        <b>&ldquo;สูง — ต้องการด่วน&rdquo;</b> ในไฟล์คือ LLM API + Chatbot ของ S.K.Polymer ฝ่ายขาย (ภาษาไทย, ตอบเรียลไทม์ 0–2 วินาที) ให้จัดเป็นงานแรกของชั้นนี้ · เป้าหมายเปิดใช้ Q2–Q3 ปี 2570
+      </p>
+    </div>
+
+    <p class="pt-eyebrow">ทีมที่ต้องตั้ง</p>
+    <div class="pt-grid2">
+      <div class="pt-col">
+        <p class="pt-col-tag">AI Start — เริ่มปีแรก</p>
+        <p class="pt-col-title">ทีมแกน 4 คน + บทบาทยืมตัว</p>
+        <ul>
+          <li><b>AI Lead / Owner</b> (1) — ทิศทาง, งบ, ROI, เจรจา vendor, ทำ Governance เอง</li>
+          <li><b>AI Engineer / Builder</b> (2) — สวม ML + Backend + Infra: เลือกโมเดล, เขียน API, ตั้ง GPU · เป็นคอขวดถ้ามีเกิน 2 use case พร้อมกัน</li>
+          <li><b>AI Ops / Trainer</b> (1) — QA/monitoring + สอนผู้ใช้ + รับ feedback</li>
+          <li>ยืมตัว: <b>Product Owner, Research Analyst, Solution Designer / Prompt Engineer, UX</b> จาก Digital Development</li>
+          <li>ยืมตัว: <b>Governance &amp; Ethics</b> (โดย QMR), <b>Change Mgmt</b> (AMD/GM/ผจก.ฝ่าย)</li>
+        </ul>
+      </div>
+      <div class="pt-col">
+        <p class="pt-col-tag">3 ปีขึ้นไป — โตเต็มรูปแบบ</p>
+        <p class="pt-col-title">แยกเป็น AI Unit จริง</p>
+        <ul>
+          <li><b>Head of AI Unit</b> — วัดผลด้วย KQI 4 ตัว (คนไม่ใช้ AI, ส่งงานไม่ทัน, ไม่คืนทุน, ละเมิด policy)</li>
+          <li><b>AI Strategy &amp; Research</b> + <b>AI Engineering</b> (3) แยกจาก Ops</li>
+          <li><b>MLOps Pipeline</b> — training pipeline, model registry, CI/CD, feature store</li>
+          <li><b>Infrastructure</b> — Cloud &amp; GPU, Observability &amp; Monitoring (โดย PLM)</li>
+          <li><b>AI Governance / Risk / Data Governance</b> — Committee เต็มรูปแบบ, AI Risk Register, PDPA</li>
+          <li><b>Business Unit Champion</b> ทุกฝ่าย — role เสริม ~20–30% ของเวลางาน</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px;">โครงสร้างและ Job Description ฉบับเต็ม (พร้อมแผนภาพสายบังคับบัญชา) อยู่ในแท็บ &ldquo;โครงสร้างทีม AI Star&rdquo;</p>
+
+    <p class="pt-eyebrow">โครงสร้าง Server ตามเฟส</p>
+    <p class="pt-lede">จากชีท Design Server Local — งบเริ่มต้นที่ AI แนะนำ อัตราแลกเปลี่ยนอ้างอิง 32.82 บาท/USD หลักการ sizing: VRAM ที่ใช้จริง = น้ำหนักโมเดล + KV cache ต่อผู้ใช้ × จำนวนคนพร้อมกัน × ความยาว context — ต้องเผื่อ headroom เสมอ</p>
+    <div class="pt-grid3">
+      <div class="pt-tier">
+        <p class="pt-tier-name">Tier 1 — ทีมเล็ก / POC</p>
+        <p class="pt-tier-scope">~10–30 คนพร้อมกัน · โมเดล 8B–32B</p>
+        <p class="pt-tier-price">฿205,125 <small>เริ่มต้น</small></p>
+        <p class="pt-tier-spec">เซิร์ฟเวอร์เดียว การ์ดเดียว RTX 5090 32GB + vLLM · 32B ใส่ได้สบายและเหลือที่ให้ KV cache · เริ่มได้เร็วและถูกที่สุด</p>
+        <p class="pt-tier-phase">ใช้ในเฟส 3–5</p>
+      </div>
+      <div class="pt-tier">
+        <p class="pt-tier-name">Tier 2 — ระดับแผนก / SME</p>
+        <p class="pt-tier-scope">~50–150 คน · โมเดลถึง 70B + RAG</p>
+        <p class="pt-tier-price">฿393,840 <small>เริ่มต้น</small></p>
+        <p class="pt-tier-spec">Node เดียวหลาย GPU (2× RTX 5090 หรือ RTX PRO 6000 96GB) + load balancer + Vector DB สำหรับ RAG · ก้าวแรกเข้าสู่แนวคิด HCI</p>
+        <p class="pt-tier-phase">ขยับมาเมื่อผู้ใช้พร้อมกัน &gt; ~30 คน</p>
+      </div>
+      <div class="pt-tier">
+        <p class="pt-tier-name">Tier 3 — ระดับองค์กร / HCI</p>
+        <p class="pt-tier-scope">หลายร้อยคนขึ้นไป · โมเดล 70B–400B+</p>
+        <p class="pt-tier-price">฿648,195 <small>– ฿10.4M (scale ×2)</small></p>
+        <p class="pt-tier-spec">หลาย GPU node (H200 / B300) เป็นคลัสเตอร์ + Kubernetes บน HCI (Nutanix / vSphere) · orchestration กระจายโหลด + autoscale + HA · มีทีมสนับสนุนแยก</p>
+        <p class="pt-tier-phase">เฟส 6 — ขยายทั้งเครือ</p>
+      </div>
+    </div>
+
+    <p class="note">
+      หน้านี้เป็นบทสรุปเชิงกลยุทธ์เพื่อประกอบการตัดสินใจ ไม่ใช่แผนงบประมาณหรือ timeline ที่ผูกมัด — ตัวเลขงบและปี (2570 = 2027) อ้างตามไฟล์ &ldquo;โครงการ AI Local GSK.xlsx&rdquo; ให้ AI Lead ปรับตามสถานการณ์จริงก่อนเสนอผู้บริหาร
     </p>
   </div>
 
@@ -2904,6 +3100,162 @@
     return list;
   }
 
+  function renderPlanTab(){
+    var host = document.getElementById('pt-waves');
+    if(!host) return;
+
+    var waves = [
+      { label:'คลื่นที่ 1 — เร่งด่วน', when:'เริ่มทันที', hex:'#188562', bg:'#E1F5EE',
+        test:function(s){ return s >= 75; },
+        rec:'คะแนน ≥75 — Impact สูงและทำได้จริง อนุมัติงบและเข้า Build/PoC ทันทีบน Server Tier 1' },
+      { label:'คลื่นที่ 2 — ระยะกลาง', when:'ต่อจากคลื่นที่ 1', hex:'#A46714', bg:'#FAEEDA',
+        test:function(s){ return s >= 50 && s < 75; },
+        rec:'คะแนน 50–74 — คุ้มค่าแต่รอจังหวะ เตรียม/ทำความสะอาดข้อมูลระหว่างรอคลื่นที่ 1 ผ่าน PoC' },
+      { label:'คลื่นที่ 3 — ระยะถัดไป', when:'ต่อจากคลื่นที่ 2', hex:'#6B6A63', bg:'#EDECE6',
+        test:function(s){ return s < 50; },
+        rec:'คะแนน <50 — ยังไม่พร้อม (ข้อมูล/feasibility/risk) ทบทวนโจทย์หรือรอเฟส 6' }
+    ];
+
+    if(!useCases.length){
+      host.innerHTML = '<p class="pt-uc pt-uc--empty">ยังไม่มี use case ในระบบ — เพิ่ม use case ในแท็บ &ldquo;จัดลำดับ Use Case&rdquo; แล้วแผนงานรวมจะปรากฏที่นี่</p>';
+      return;
+    }
+
+    // ---- สมมติฐานการวางแผน ----
+    var CONCURRENCY = 2;   // จำนวน use case ที่ทีมทำพร้อมกันได้จริง (ทีมแกน 4 คน)
+    var LEAD_WEEKS  = 6;   // เตรียมการก่อนเริ่มงานในแต่ละคลื่น (อนุมัติงบ · จัดซื้อ GPU/เครื่อง · ตั้ง/เสริมทีม)
+
+    // จัดกลุ่มตามคะแนน + คำนวณแผนงานของแต่ละ use case
+    var groups = waves.map(function(w){
+      var items = useCases
+        .map(function(uc){ return { uc:uc, score:computeScore(uc), plan:buildPlan(uc) }; })
+        .filter(function(x){ return w.test(x.score); })
+        .sort(function(a,b){ return b.score - a.score; });
+      return { w:w, items:items };
+    });
+
+    // ตารางเวลา: คลื่นต่อกัน · แต่ละคลื่นมีช่วงเตรียมการ · งานในคลื่นวิ่งได้ทีละ CONCURRENCY งาน
+    // (จัดงานเข้า "เลน" ว่างที่เร็วที่สุดก่อน ตามลำดับคะแนน)
+    var cursor = 0;
+    groups.forEach(function(g){
+      g.start = cursor;
+      if(!g.items.length){ g.leadEnd = cursor; g.end = cursor; g.weeks = 0; return; }
+      g.leadEnd = cursor + LEAD_WEEKS;
+      var lanes = [];
+      for(var i=0;i<CONCURRENCY;i++){ lanes.push(g.leadEnd); }
+      g.items.forEach(function(x){
+        var li = 0;
+        for(var k=1;k<lanes.length;k++){ if(lanes[k] < lanes[li]){ li = k; } }
+        x.start = lanes[li];
+        x.dur = x.plan.totalWeeks;
+        x.end = x.start + x.dur;
+        lanes[li] = x.end;
+      });
+      g.end = lanes.reduce(function(m,v){ return Math.max(m, v); }, g.leadEnd);
+      g.weeks = g.end - g.start;
+      cursor = g.end;
+    });
+    var totalWeeks = Math.max(1, cursor);
+    var months = Math.max(1, Math.ceil(totalWeeks / 4.33));
+
+    var totalUC = useCases.length;
+    var totalManDays = 0, totalBudget = 0, budgetCount = 0;
+    groups.forEach(function(g){ g.items.forEach(function(x){
+      totalManDays += x.plan.totalManDays;
+      if(x.plan.budget){ totalBudget += x.plan.budget; budgetCount++; }
+    }); });
+
+    // ---- แถบสรุปคลื่น ----
+    var strip = '<div class="pt-wavestrip">' + groups.map(function(g){
+      return '<div class="pt-ws" style="border-top-color:' + g.w.hex + ';">'
+        + '<p class="pt-ws-name" style="color:' + g.w.hex + ';">' + g.w.label + '</p>'
+        + '<p class="pt-ws-meta">' + g.items.length + ' use case · ~' + g.weeks + ' สัปดาห์ · ' + g.w.when + '</p>'
+        + '<p class="pt-ws-rec">' + g.w.rec + '</p>'
+        + '</div>';
+    }).join('') + '</div>';
+
+    // ---- การ์ดสถิติรวม (สไตล์เดียวกับ modal แผนงาน) ----
+    var doneWaves = groups.filter(function(g){ return g.items.length; }).length;
+    var stats = '<div class="plan-stats">'
+      + '<div class="plan-stat"><p class="lbl">Use case</p><p class="val">' + totalUC + '</p><p class="sub">' + doneWaves + ' คลื่น</p></div>'
+      + '<div class="plan-stat"><p class="lbl">ไทม์ไลน์รวม</p><p class="val">' + totalWeeks + ' สัปดาห์</p><p class="sub">~' + months + ' เดือน · ทำพร้อมกัน ' + CONCURRENCY + ' งาน</p></div>'
+      + '<div class="plan-stat"><p class="lbl">แรงงานรวม</p><p class="val">' + totalManDays.toLocaleString('en-US') + '</p><p class="sub">man-days</p></div>'
+      + '<div class="plan-stat"><p class="lbl">งบรวม (เท่าที่ระบุ)</p><p class="val">' + (totalBudget ? Math.round(totalBudget/1000).toLocaleString('en-US') + 'K' : '-') + '</p><p class="sub">' + budgetCount + '/' + totalUC + ' รายการระบุงบ</p></div>'
+      + '</div>';
+
+    // ---- Gantt รวม (ภาพเดียว จัดกลุ่มตามคลื่น) ----
+    var axis = '';
+    var axisStep = months <= 12 ? 1 : (months <= 36 ? 3 : 6);   // เดือน / ไตรมาส / ครึ่งปี
+    for(var mo = axisStep; mo <= months; mo += axisStep){ axis += '<span>' + (mo >= 12 && mo % 12 === 0 ? ('ปี ' + (mo/12)) : (mo + ' ด.')) + '</span>'; }
+    var gbody = groups.map(function(g){
+      var range = g.items.length ? ('เตรียม ' + LEAD_WEEKS + ' สัปดาห์ · งานสัปดาห์ ' + (g.leadEnd + 1) + '–' + g.end) : '—';
+      var head = '<div class="pt-g-wavehead"><span class="dot" style="background:' + g.w.hex + ';"></span>'
+        + '<span class="txt" style="color:' + g.w.hex + ';">' + g.w.label + '</span>'
+        + '<span class="sub">' + g.items.length + ' รายการ · ' + range + '</span></div>';
+      if(!g.items.length){
+        return head + '<div class="pt-g-row"><div class="pt-g-label" style="color:var(--text-muted);">— ไม่มี use case —</div><div class="pt-g-track"></div></div>';
+      }
+      var leadPct = (g.start / totalWeeks * 100).toFixed(2);
+      var leadW = (LEAD_WEEKS / totalWeeks * 100).toFixed(2);
+      var lead = '<div class="pt-g-row"><div class="pt-g-label" style="color:var(--text-muted); font-size:11px;">เตรียมการ / จัดซื้อ</div>'
+        + '<div class="pt-g-track"><div class="pt-g-bar pt-g-bar--lead" style="left:' + leadPct + '%; width:' + leadW + '%;" title="เตรียมการ / จัดซื้อ — ' + LEAD_WEEKS + ' สัปดาห์ (สัปดาห์ ' + (g.start + 1) + '–' + g.leadEnd + ')"></div></div></div>';
+      var rows = g.items.map(function(x){
+        var left = (x.start / totalWeeks * 100).toFixed(2);
+        var width = Math.max(1.2, x.dur / totalWeeks * 100).toFixed(2);
+        return '<div class="pt-g-row">'
+          + '<div class="pt-g-label"><span class="pt-g-sc" style="background:' + g.w.bg + '; color:' + g.w.hex + ';">' + x.score + '</span>'
+          + escapeHtml(x.uc.name || 'ไม่ระบุชื่อ') + '</div>'
+          + '<div class="pt-g-track"><div class="pt-g-bar" style="left:' + left + '%; width:' + width + '%; background:' + g.w.hex + ';" title="' + escapeHtml(x.uc.name || 'ไม่ระบุชื่อ') + ' — ' + x.dur + ' สัปดาห์ (สัปดาห์ ' + (x.start + 1) + '–' + x.end + ')"></div></div>'
+          + '</div>';
+      }).join('');
+      return head + lead + rows;
+    }).join('');
+    var gantt = '<div class="pt-gantt"><div class="pt-gantt-inner">' + gbody
+      + '<div class="pt-g-axis">' + axis + '</div></div></div>';
+
+    // ---- ตารางรายละเอียด จัดกลุ่มตามคลื่น ----
+    var detailRows = groups.map(function(g){
+      var sub = '<tr><td colspan="7" style="background:' + g.w.bg + '; color:' + g.w.hex + '; font-weight:700;">' + g.w.label + ' — ' + g.items.length + ' use case (เตรียม ' + LEAD_WEEKS + ' สัปดาห์ · เริ่มงานสัปดาห์ ' + (g.leadEnd + 1) + ')</td></tr>';
+      var rs = g.items.map(function(x){
+        return '<tr>'
+          + '<td>' + escapeHtml(x.uc.name || 'ไม่ระบุชื่อ') + '</td>'
+          + '<td style="text-align:center;">' + escapeHtml(x.uc.dept || '-') + '</td>'
+          + '<td style="text-align:center; font-weight:700; color:' + g.w.hex + ';">' + x.score + '</td>'
+          + '<td style="text-align:center;">' + x.dur + ' สัปดาห์<div style="font-size:11px; color:var(--text-muted);">เริ่ม สัปดาห์ ' + (x.start + 1) + '</div></td>'
+          + '<td style="text-align:center;">' + x.plan.teamSize + ' คน</td>'
+          + '<td style="text-align:center;">' + x.plan.totalManDays.toLocaleString('en-US') + '</td>'
+          + '<td style="text-align:right;">' + (x.plan.budget ? x.plan.budget.toLocaleString('en-US') : '-') + '</td>'
+          + '</tr>';
+      }).join('') || '<tr><td colspan="7" style="color:var(--text-muted);">— ไม่มี use case —</td></tr>';
+      return sub + rs;
+    }).join('');
+    var detail = '<div class="doc-section"><h3>ตารางแผนงานรวม</h3>'
+      + '<div style="overflow-x:auto;"><table class="doc-table" style="min-width:560px;"><tr><th>Use case</th><th style="width:14%">ฝ่าย</th><th style="width:8%">คะแนน</th><th style="width:12%">ระยะเวลา</th><th style="width:9%">ทีม</th><th style="width:11%">man-days</th><th style="width:13%">งบ (บาท)</th></tr>'
+      + detailRows + '</table></div></div>';
+
+    // ---- Milestones: สิ้นสุดแต่ละคลื่น ----
+    var msRows = groups.filter(function(g){ return g.items.length; }).map(function(g){
+      var names = g.items.slice(0, 3).map(function(x){ return x.uc.name; }).join(', ');
+      if(g.items.length > 3){ names += ' …'; }
+      return '<tr><td style="text-align:center;">สิ้นสัปดาห์ ' + g.end + '</td>'
+        + '<td>' + escapeHtml(g.w.label) + ' เข้าใช้งานจริง (' + g.items.length + ' use case)</td>'
+        + '<td>' + escapeHtml(names) + '</td></tr>';
+    }).join('');
+    var milestones = '<div class="doc-section"><h3>จุดส่งมอบสำคัญ (Milestones)</h3>'
+      + '<div style="overflow-x:auto;"><table class="doc-table" style="min-width:520px;"><tr><th style="width:18%">กำหนด</th><th style="width:34%">Milestone</th><th>use case ในคลื่น</th></tr>'
+      + (msRows || '<tr><td colspan="3" style="color:var(--text-muted);">— ยังไม่มี use case —</td></tr>') + '</table></div></div>';
+
+    var note = '<div class="doc-section"><h3>หมายเหตุ · สมมติฐาน</h3><p class="doc-text">'
+      + 'คลื่นแบ่งตามคะแนนรวมที่คำนวณสด และทำต่อกันตามลำดับ · '
+      + 'แต่ละคลื่นมีช่วง <b>เตรียมการ ' + LEAD_WEEKS + ' สัปดาห์</b> (อนุมัติงบ · จัดซื้อ GPU/เครื่อง · ตั้งทีม) ก่อนเริ่มงานจริง · '
+      + 'ทีมทำได้ <b>ทีละ ' + CONCURRENCY + ' use case พร้อมกัน</b> (ทีมแกน 4 คน) งานถัดไปเข้าเมื่อมีเลนว่าง เรียงตามคะแนน · '
+      + 'ระยะเวลา/ทีม/งบของแต่ละ use case มาจากช่อง "ทรัพยากรและประมาณการ" — <b>ถ้าไม่ได้ระบุ ใช้ค่าเริ่มต้น 24 สัปดาห์</b> (เก็บ/ทำความสะอาดข้อมูล → เทรน → ทดสอบ → นำร่อง → ทำให้เสถียร) · 3 คน · '
+      + 'man-days = วันทำงาน (5 วัน/สัปดาห์) × คนที่เกี่ยวข้องในแต่ละเฟส · '
+      + 'ปรับ CONCURRENCY / LEAD_WEEKS ได้ในโค้ด renderPlanTab()</p></div>';
+
+    host.innerHTML = strip + stats + gantt + detail + milestones + note;
+  }
+
   function renderList(){
     var container = document.getElementById('list-container');
     var list = getFilteredSorted();
@@ -2912,6 +3264,7 @@
       document.getElementById('chart-section').style.display = 'none';
       renderSummary();
       renderSpecTab();
+      renderPlanTab();
       return;
     }
     if(list.length===0){
@@ -2958,6 +3311,7 @@
     renderChart(list);
     bindCardEvents();
     renderSpecTab();
+    renderPlanTab();
   }
 
   function renderChart(list){
@@ -3034,35 +3388,41 @@
       + '<div style="border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:16px;"><img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:40px; width:auto;"></div>'
       + '<h2>'+escapeHtml(uc.name)+'</h2>'
       + '<p class="doc-sub">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
-      + '<div class="doc-section"><h3>1. ข้อมูลทั่วไป</h3>'
-      + '<table class="doc-table"><tr><th style="width:34%">แผนก / หน่วยงาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
-      + '<tr><th>ผู้รับผิดชอบ</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
-      + '<div class="doc-section"><h3>2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + '<div class="doc-section"><h3>1. ข้อมูลพื้นฐาน</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">บริษัท</th><td>'+fillOrDash(uc.company)+'</td></tr>'
+      + '<tr><th>หน่วยงานที่ใช้งาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
+      + '<tr><th>ผู้รับผิดชอบ (Owner)</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + '<table class="doc-table">'
-      + '<tr><th style="width:34%">QWP อ้างอิง (รหัส/ชื่อเอกสาร)</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
-      + '<tr><th>kQI / QI ที่เกี่ยวข้อง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
-      + '<tr><th>ขั้นตอนที่เกี่ยวข้อง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
+      + '<tr><th style="width:34%">เอกสาร QWP ที่อ้างอิง</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
+      + '<tr><th>ตัวชี้วัด kQI / QI ที่เกี่ยวข้อง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
+      + '<tr><th>ขั้นตอนใน SQP ที่เกี่ยวข้อง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
       + '</table></div>'
-      + '<div class="doc-section"><h3>3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3><p class="doc-text">'+fillOrDash(uc.solution)+'</p>'
+      + '<div class="doc-section"><h3>3. ผลกระทบ (Impact) &mdash; น้ำหนัก 35%</h3>'
+      + '<p class="doc-text"><b>ปัญหาหรือข้อจำกัดของงานในปัจจุบัน:</b> '+fillOrDash(uc.problem)+'</p>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>วิธีการปฏิบัติงานในปัจจุบัน (Existing Work):</b> '+fillOrDash(uc.solution)+'</p>'
       + ((uc.attachment || uc.attachRef) ? '<p class="doc-text" style="margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? '<a href="'+uc.attachment.data+'" download="'+escapeHtml(uc.attachment.name)+'">'+escapeHtml(uc.attachment.name)+'</a>' : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + '</div>'
-      + '<div class="doc-section"><h3>4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3><p class="doc-text">'+fillOrDash(uc.dataAvailable)+'</p></div>'
-      + '<div class="doc-section"><h3>5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3><p class="doc-text">'+fillOrDash(uc.redesignDesc)+'</p>'
-      + (cat ? '<p class="doc-text" style="margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '</div>'
-      + '<div class="doc-section"><h3>6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
-      + '<table class="doc-table">'
-      + '<tr><th style="width:34%">จำนวน Users / วัน</th><td>'+fillOrDash(uc.users)+'</td></tr>'
-      + '<tr><th>ภาษาที่ต้องการ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
-      + '<tr><th>ระดับความสำคัญของข้อมูล</th><td>'+fillOrDash(uc.dataSensitivity)+'</td></tr>'
-      + '<tr><th>Latency ที่รับได้</th><td>'+fillOrDash(uc.latency)+'</td></tr>'
-      + '<tr><th>Availability ที่ต้องการ</th><td>'+fillOrDash(uc.availability)+'</td></tr>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>แนวทางการทำงานหลังนำ AI มาใช้ (Redesign):</b> '+fillOrDash(uc.redesignDesc)+'</p>'
+      + '<table class="doc-table" style="margin-top:10px;">'
+      + '<tr><th style="width:34%">เวลาที่ใช้กับงานนี้ในปัจจุบัน</th><td>'+fillOrDash(uc.timeSpent)+'</td></tr>'
+      + '<tr><th>มูลค่าความสูญเสียต่อปี</th><td>'+fillOrDash(uc.lossValue)+'</td></tr>'
       + '</table></div>'
-      + '<div class="doc-section"><h3>7. Spec Hardware ที่ใช้ทำ AI</h3><p class="doc-text">'+nl2br(uc.hardware)+'</p></div>'
-      + '<div class="doc-section"><h3>8. Flow ขั้นตอนการทำ AI</h3>'
-      + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
-      + '<div class="doc-section"><h3>9. การประเมินและให้คะแนน</h3>'
+      + '<div class="doc-section"><h3>4. ความพร้อมของข้อมูล (Data) &mdash; น้ำหนัก 25%</h3>'
+      + '<p class="doc-text"><b>ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available):</b> '+fillOrDash(uc.dataAvailable)+'</p>'
+      + '<table class="doc-table" style="margin-top:10px;">'
+      + '<tr><th style="width:34%">รูปแบบการจัดเก็บข้อมูลในปัจจุบัน</th><td>'+fillOrDash(uc.dataFormat)+'</td></tr>'
+      + '<tr><th>ระยะเวลาข้อมูลย้อนหลังที่มี</th><td>'+fillOrDash(uc.dataHistory)+'</td></tr>'
+      + '<tr><th>ปริมาณข้อมูลโดยประมาณ</th><td>'+fillOrDash(uc.dataVolume)+'</td></tr>'
+      + '<tr><th>สิทธิ์ในการนำข้อมูลมาใช้พัฒนา AI</th><td>'+fillOrDash(uc.dataRights)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>5. ความเป็นไปได้ (Feasibility) &mdash; น้ำหนัก 25%</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ความจำเป็นในการเชื่อมต่อกับระบบเดิม</th><td>'+fillOrDash(uc.needConnect)+'</td></tr>'
+      + '<tr><th>ผู้ดูแลระบบหลังส่งมอบ</th><td>'+fillOrDash(uc.adminOwner)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>6. ความเสี่ยง (Risk) &mdash; น้ำหนัก 15% (กลับด้าน)</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ผลกระทบเมื่อ AI ให้ผลลัพธ์ผิดพลาด</th><td>'+fillOrDash(uc.aiErrorImpact)+'</td></tr>'
+      + '<tr><th>การตรวจสอบผลลัพธ์โดยบุคลากร</th><td>'+fillOrDash(uc.reviewNeed)+'</td></tr>'
+      + '<tr><th>ระดับชั้นความลับของข้อมูล</th><td>'+fillOrDash(uc.confidentiality)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>7. การประเมินและให้คะแนน</h3>'
       + '<table class="doc-table"><tr><th>เกณฑ์</th><th>น้ำหนัก</th><th>คะแนน (1-5)</th></tr>'
       + '<tr><td>ผลกระทบทางธุรกิจ (Impact)</td><td>35%</td><td>'+fillOrDash(scoreDetail.impact)+'</td></tr>'
       + '<tr><td>ความเป็นไปได้ (Feasibility)</td><td>25%</td><td>'+fillOrDash(scoreDetail.feasibility)+'</td></tr>'
@@ -3071,15 +3431,39 @@
       + '</table>'
       + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
       + '</div>'
-      + '<div class="doc-section"><h3>10. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
-      + '<div class="doc-section"><h3>11. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
-      + '<div class="doc-section"><h3>12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p class="doc-text">'+nl2br(uc.kpi)+'</p></div>'
-      + '<div class="doc-section"><h3>13. ผลตอบแทนการลงทุน (ROI)</h3><p class="doc-text">'+nl2br(uc.roi)+'</p></div>'
-      + '<div class="doc-section"><h3>14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p class="doc-text">'+nl2br(uc.recommendation)+'</p></div>'
-      + '<div class="doc-section"><h3>15. การอนุมัติ</h3><div class="doc-grid2">'
-      + '<div class="box"><p class="lbl">ผู้จัดทำ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</div><div class="ln">วันที่: '+today+'</div><div class="ln">ลงชื่อ:</div></div>'
-      + '<div class="box"><p class="lbl">ผู้พิจารณา / อนุมัติ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</div><div class="ln">วันที่:</div><div class="ln">ลงชื่อ:</div></div>'
-      + '</div></div>'
+      + '<div class="doc-section"><h3>8. แผน</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ระดับความสำคัญตามความเห็นหน่วยงาน</th><td>'+fillOrDash(uc.deptPriority)+'</td></tr>'
+      + '<tr><th>กำหนดเวลาที่ต้องการใช้งาน</th><td>'+fillOrDash(uc.targetTimeline)+'</td></tr>'
+      + '<tr><th>หมายเหตุ</th><td>'+nl2br(uc.remark)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>9. รายละเอียดเทคนิค &mdash; โซน A (หน่วยงานผู้ใช้กรอก)</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">ลักษณะการเริ่มทำงานของระบบ</th><td>'+fillOrDash(uc.triggerType)+'</td></tr>'
+      + '<tr><th>ประเภทข้อมูลนำเข้า</th><td>'+fillOrDash(uc.inputType)+(uc.inputType?' &rarr; <b>ประเภทงาน AI:</b> '+escapeHtml(aiKindLabel(uc.inputType)):'')+'</td></tr>'
+      + '<tr><th>จำนวนผู้ใช้งานต่อวัน</th><td>'+fillOrDash(uc.usersPerDay)+'</td></tr>'
+      + '<tr><th>ผู้ใช้งานพร้อมกันสูงสุด</th><td>'+fillOrDash(uc.peakConcurrent)+'</td></tr>'
+      + '<tr><th>ปริมาณรายการที่ประมวลผลต่อวัน</th><td>'+fillOrDash(uc.itemsPerDay)+'</td></tr>'
+      + '<tr><th>จุดตรวจหรือกล้องที่ทำงานพร้อมกัน</th><td>'+fillOrDash(uc.pointsCount)+'</td></tr>'
+      + '<tr><th>ภาษาที่ต้องรองรับ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
+      + '<tr><th>เวลาตอบสนองที่ยอมรับได้</th><td>'+fillOrDash(uc.responseTime)+'</td></tr>'
+      + '<tr><th>ช่วงเวลาที่ต้องให้บริการ</th><td>'+fillOrDash(uc.serviceHours)+'</td></tr>'
+      + '<tr><th>ผลกระทบเมื่อระบบตอบสนองช้าลง</th><td>'+fillOrDash(uc.slowdownImpact)+'</td></tr>'
+      + '<tr><th>ระยะเวลาการจัดเก็บข้อมูล</th><td>'+fillOrDash(uc.retentionPeriod)+'</td></tr>'
+      + '<tr><th>งบประมาณที่ตั้งไว้ (บาท)</th><td>'+fillOrDash(uc.budget)+'</td></tr>'
+      + '<tr><th>ข้อจำกัดอื่นๆ และหมายเหตุ</th><td>'+nl2br(uc.constraints)+'</td></tr>'
+      + '<tr><th>ผู้ให้ข้อมูล (หน่วยงาน)</th><td>'+fillOrDash(uc.providedBy)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>10. รายละเอียดเทคนิค &mdash; โซน B (ทีม AI / IT ดำเนินการภายหลัง)</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">ปริมาณข้อมูลนำเข้าต่อวัน</th><td>'+fillOrDash(uc.dailyInputSize)+'</td></tr>'
+      + '<tr><th>ขนาดคลังเอกสารทั้งหมด</th><td>'+fillOrDash(uc.corpusSize)+'</td></tr>'
+      + '<tr><th>ความละเอียดของภาพ</th><td>'+fillOrDash(uc.imageResolution)+'</td></tr>'
+      + '<tr><th>รูปแบบการติดตั้ง</th><td>'+fillOrDash(uc.installLocation)+'</td></tr>'
+      + '<tr><th>การปรับโมเดลด้วยข้อมูลขององค์กร</th><td>'+fillOrDash(uc.modelAdaptation)+'</td></tr>'
+      + '<tr><th>ความถี่ในการฝึกโมเดลใหม่</th><td>'+fillOrDash(uc.retrainFrequency)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>11. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
       + '<div class="doc-footer-bar"><span>&ldquo; Designed for your identity. &rdquo;</span><span class="brand">Polymate <small>IT Solutions</small></span></div>';
   }
 
@@ -3911,35 +4295,37 @@
     return ''
       + '<h2 style="'+H2+'">'+escapeHtml(uc.name)+'</h2>'
       + '<p style="'+SUB+'">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
-      + '<h3 style="'+H3+'">1. ข้อมูลทั่วไป</h3>'
-      + tbl(row2('แผนก / หน่วยงาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ', fillOrDash(uc.owner), true))
-      + '<h3 style="'+H3+'">2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + '<h3 style="'+H3+'">1. ข้อมูลพื้นฐาน</h3>'
+      + tbl(row2('บริษัท', fillOrDash(uc.company), true) + row2('หน่วยงานที่ใช้งาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ (Owner)', fillOrDash(uc.owner), true))
+      + '<h3 style="'+H3+'">2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + tbl(
-          row2('QWP อ้างอิง (รหัส/ชื่อเอกสาร)', fillOrDash(uc.qwp), true)
-          + row2('kQI / QI ที่เกี่ยวข้อง', nl2br(uc.kqi,'color:#6B7280;'), true)
-          + row2('ขั้นตอนที่เกี่ยวข้อง', nl2br(uc.refStep,'color:#6B7280;'), true)
+          row2('เอกสาร QWP ที่อ้างอิง', fillOrDash(uc.qwp), true)
+          + row2('ตัวชี้วัด kQI / QI ที่เกี่ยวข้อง', nl2br(uc.kqi,'color:#6B7280;'), true)
+          + row2('ขั้นตอนใน SQP ที่เกี่ยวข้อง', nl2br(uc.refStep,'color:#6B7280;'), true)
         )
-      + '<h3 style="'+H3+'">3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.solution)+'</p>'
+      + '<h3 style="'+H3+'">3. ผลกระทบ (Impact) &mdash; น้ำหนัก 35%</h3>'
+      + '<p style="'+TXT+'"><b>ปัญหาหรือข้อจำกัดของงานในปัจจุบัน:</b> '+fillOrDash(uc.problem)+'</p>'
+      + '<p style="'+TXT+' margin-top:8px;"><b>วิธีการปฏิบัติงานในปัจจุบัน (Existing Work):</b> '+fillOrDash(uc.solution)+'</p>'
       + ((uc.attachment || uc.attachRef) ? '<p style="'+TXT+' margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? escapeHtml(uc.attachment.name) : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + '<h3 style="'+H3+'">4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.dataAvailable)+'</p>'
-      + '<h3 style="'+H3+'">5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.redesignDesc)+'</p>'
-      + (cat ? '<p style="'+TXT+' margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '<h3 style="'+H3+'">6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<p style="'+TXT+' margin-top:8px;"><b>แนวทางการทำงานหลังนำ AI มาใช้ (Redesign):</b> '+fillOrDash(uc.redesignDesc)+'</p>'
+      + tbl(row2('เวลาที่ใช้กับงานนี้ในปัจจุบัน', fillOrDash(uc.timeSpent), true) + row2('มูลค่าความสูญเสียต่อปี', fillOrDash(uc.lossValue), true))
+      + '<h3 style="'+H3+'">4. ความพร้อมของข้อมูล (Data) &mdash; น้ำหนัก 25%</h3>'
+      + '<p style="'+TXT+'"><b>ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available):</b> '+fillOrDash(uc.dataAvailable)+'</p>'
       + tbl(
-          row2('จำนวน Users / วัน', fillOrDash(uc.users), true)
-          + row2('ภาษาที่ต้องการ', fillOrDash(uc.language), true)
-          + row2('ระดับความสำคัญของข้อมูล', fillOrDash(uc.dataSensitivity), true)
-          + row2('Latency ที่รับได้', fillOrDash(uc.latency), true)
-          + row2('Availability ที่ต้องการ', fillOrDash(uc.availability), true)
+          row2('รูปแบบการจัดเก็บข้อมูลในปัจจุบัน', fillOrDash(uc.dataFormat), true)
+          + row2('ระยะเวลาข้อมูลย้อนหลังที่มี', fillOrDash(uc.dataHistory), true)
+          + row2('ปริมาณข้อมูลโดยประมาณ', fillOrDash(uc.dataVolume), true)
+          + row2('สิทธิ์ในการนำข้อมูลมาใช้พัฒนา AI', fillOrDash(uc.dataRights), true)
         )
-      + '<h3 style="'+H3+'">7. Spec Hardware ที่ใช้ทำ AI</h3><p style="'+TXT+'">'+nl2br(uc.hardware,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">8. Flow ขั้นตอนการทำ AI</h3>'
-      + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
-      + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''))
-      + '<h3 style="'+H3+'">9. การประเมินและให้คะแนน</h3>'
+      + '<h3 style="'+H3+'">5. ความเป็นไปได้ (Feasibility) &mdash; น้ำหนัก 25%</h3>'
+      + tbl(row2('ความจำเป็นในการเชื่อมต่อกับระบบเดิม', fillOrDash(uc.needConnect), true) + row2('ผู้ดูแลระบบหลังส่งมอบ', fillOrDash(uc.adminOwner), true))
+      + '<h3 style="'+H3+'">6. ความเสี่ยง (Risk) &mdash; น้ำหนัก 15% (กลับด้าน)</h3>'
+      + tbl(
+          row2('ผลกระทบเมื่อ AI ให้ผลลัพธ์ผิดพลาด', fillOrDash(uc.aiErrorImpact), true)
+          + row2('การตรวจสอบผลลัพธ์โดยบุคลากร', fillOrDash(uc.reviewNeed), true)
+          + row2('ระดับชั้นความลับของข้อมูล', fillOrDash(uc.confidentiality), true)
+        )
+      + '<h3 style="'+H3+'">7. การประเมินและให้คะแนน</h3>'
       + tbl(
           '<tr><td style="'+TH+'">เกณฑ์</td><td style="'+TH+'">น้ำหนัก</td><td style="'+TH+'">คะแนน (1-5)</td></tr>'
           + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ (Impact)</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.impact)+'</td></tr>'
@@ -3948,18 +4334,41 @@
           + '<tr><td style="'+TD+'">ความเสี่ยง (Risk)</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.risk)+'</td></tr>'
         )
       + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
-      + '<h3 style="'+H3+'">10. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">11. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">13. ผลตอบแทนการลงทุน (ROI)</h3><p style="'+TXT+'">'+nl2br(uc.roi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p style="'+TXT+'">'+nl2br(uc.recommendation,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">15. การอนุมัติ</h3>'
+      + '<h3 style="'+H3+'">8. แผน</h3>'
       + tbl(
-          '<tr><td style="'+TH+' width:50%;">ผู้จัดทำ</td><td style="'+TH+' width:50%;">ผู้พิจารณา / อนุมัติ</td></tr>'
-          + '<tr><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</td><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</td></tr>'
-          + '<tr><td style="'+TD+'">วันที่: '+today+'</td><td style="'+TD+'">วันที่:</td></tr>'
-          + '<tr><td style="'+TD+'">ลงชื่อ:</td><td style="'+TD+'">ลงชื่อ:</td></tr>'
-        );
+          row2('ระดับความสำคัญตามความเห็นหน่วยงาน', fillOrDash(uc.deptPriority), true)
+          + row2('กำหนดเวลาที่ต้องการใช้งาน', fillOrDash(uc.targetTimeline), true)
+          + row2('หมายเหตุ', nl2br(uc.remark,'color:#6B7280;'), true)
+        )
+      + '<h3 style="'+H3+'">9. รายละเอียดเทคนิค &mdash; โซน A (หน่วยงานผู้ใช้กรอก)</h3>'
+      + tbl(
+          row2('ลักษณะการเริ่มทำงานของระบบ', fillOrDash(uc.triggerType), true)
+          + row2('ประเภทข้อมูลนำเข้า', fillOrDash(uc.inputType)+(uc.inputType?' &rarr; <b>ประเภทงาน AI:</b> '+escapeHtml(aiKindLabel(uc.inputType)):''), true)
+          + row2('จำนวนผู้ใช้งานต่อวัน', fillOrDash(uc.usersPerDay), true)
+          + row2('ผู้ใช้งานพร้อมกันสูงสุด', fillOrDash(uc.peakConcurrent), true)
+          + row2('ปริมาณรายการที่ประมวลผลต่อวัน', fillOrDash(uc.itemsPerDay), true)
+          + row2('จุดตรวจหรือกล้องที่ทำงานพร้อมกัน', fillOrDash(uc.pointsCount), true)
+          + row2('ภาษาที่ต้องรองรับ', fillOrDash(uc.language), true)
+          + row2('เวลาตอบสนองที่ยอมรับได้', fillOrDash(uc.responseTime), true)
+          + row2('ช่วงเวลาที่ต้องให้บริการ', fillOrDash(uc.serviceHours), true)
+          + row2('ผลกระทบเมื่อระบบตอบสนองช้าลง', fillOrDash(uc.slowdownImpact), true)
+          + row2('ระยะเวลาการจัดเก็บข้อมูล', fillOrDash(uc.retentionPeriod), true)
+          + row2('งบประมาณที่ตั้งไว้ (บาท)', fillOrDash(uc.budget), true)
+          + row2('ข้อจำกัดอื่นๆ และหมายเหตุ', nl2br(uc.constraints,'color:#6B7280;'), true)
+          + row2('ผู้ให้ข้อมูล (หน่วยงาน)', fillOrDash(uc.providedBy), true)
+        )
+      + '<h3 style="'+H3+'">10. รายละเอียดเทคนิค &mdash; โซน B (ทีม AI / IT ดำเนินการภายหลัง)</h3>'
+      + tbl(
+          row2('ปริมาณข้อมูลนำเข้าต่อวัน', fillOrDash(uc.dailyInputSize), true)
+          + row2('ขนาดคลังเอกสารทั้งหมด', fillOrDash(uc.corpusSize), true)
+          + row2('ความละเอียดของภาพ', fillOrDash(uc.imageResolution), true)
+          + row2('รูปแบบการติดตั้ง', fillOrDash(uc.installLocation), true)
+          + row2('การปรับโมเดลด้วยข้อมูลขององค์กร', fillOrDash(uc.modelAdaptation), true)
+          + row2('ความถี่ในการฝึกโมเดลใหม่', fillOrDash(uc.retrainFrequency), true)
+        )
+      + '<h3 style="'+H3+'">11. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''));
   }
 
   function exportDocWord(uc){
@@ -4569,17 +4978,19 @@
   }
 
   function switchTab(tab){
-    ['usecases','org','flow','spec'].forEach(function(t){
+    ['usecases','org','flow','spec','plan'].forEach(function(t){
       document.getElementById('view-' + t).hidden = (t !== tab);
       document.getElementById('tab-' + t).classList.toggle('active', t === tab);
       document.getElementById('tab-' + t).setAttribute('aria-selected', String(t === tab));
     });
     if(tab === 'spec') initSpecTab();
+    if(tab === 'plan') renderPlanTab();
   }
   document.getElementById('tab-usecases').addEventListener('click', function(){ switchTab('usecases'); });
   document.getElementById('tab-org').addEventListener('click', function(){ switchTab('org'); });
   document.getElementById('tab-flow').addEventListener('click', function(){ switchTab('flow'); });
   document.getElementById('tab-spec').addEventListener('click', function(){ switchTab('spec'); });
+  document.getElementById('tab-plan').addEventListener('click', function(){ switchTab('plan'); });
   document.getElementById('org-role-close-btn').addEventListener('click', function(){
     document.getElementById('org-role-modal').classList.remove('open');
   });

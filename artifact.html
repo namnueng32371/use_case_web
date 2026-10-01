@@ -945,30 +945,6 @@
     <div class="import-results" id="import-results"></div>
   </div>
 
-  <details style="margin-bottom:18px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 14px;">
-    <summary style="cursor:pointer; font-size:13px; font-weight:500; color:var(--navy);">ดูเกณฑ์การแนะนำประเภท AI ทั้งหมด</summary>
-    <div style="margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.9;">
-      <b style="color:var(--navy);">ตามชนิดข้อมูล/งาน</b><br>
-      ข้อความ / ภาษา &rarr; NLP และ LLM (แชทบอท, สรุปเอกสาร)<br>
-      รูปภาพ / วิดีโอ &rarr; Computer vision (ตรวจคุณภาพสินค้า, OCR)<br>
-      เสียง &rarr; Speech AI (แปลงเสียงเป็นข้อความ)<br>
-      ตัวเลข / time series &rarr; Predictive ML (พยากรณ์ยอดขาย)<br>
-      งานทำซ้ำ มีกฎตายตัว &rarr; RPA ผสาน AI (คีย์ข้อมูลอัตโนมัติ)<br>
-      ต้องการเนื้อหาใหม่ &rarr; Generative AI (สร้าง draft เนื้อหา/ภาพ)<br>
-      ต้องการแนะนำ/จับคู่ &rarr; Recommendation AI (แนะนำสินค้า, จับคู่งาน)<br>
-      <b style="color:var(--navy); display:inline-block; margin-top:8px;">งานเฉพาะทาง</b><br>
-      สร้างภาพจากคำสั่ง &rarr; Image generation (ภาพโฆษณา, ภาพสินค้า)<br>
-      ค้นหา/ถามตอบจากเอกสาร &rarr; Embedding / RAG (ถามตอบจากคลังเอกสารองค์กร)<br>
-      ผู้ช่วยความรู้ภายในองค์กร &rarr; Knowledge assistant (ช่วยพนักงานค้นข้อมูล)<br>
-      ปรับโมเดลเฉพาะองค์กร &rarr; Fine-tuning (ปรับโมเดลให้เข้าใจศัพท์เฉพาะ)<br>
-      ประมวลผลข้อมูลจำนวนมาก &rarr; Batch inference (จัดหมวด/วิเคราะห์ข้อมูลก้อนใหญ่)<br>
-      พยากรณ์ความต้องการสินค้า &rarr; Demand forecasting (วางแผนสต็อก/จัดซื้อ)<br>
-      คาดการณ์การซ่อมบำรุง &rarr; Predictive maintenance (เครื่องจักร, IoT)<br>
-      ตรวจจับความผิดปกติ/ทุจริต &rarr; Anomaly detection (fraud, ความปลอดภัย)<br>
-      งานอัตโนมัติหลายขั้นตอน &rarr; AI agent / automation (เชื่อมหลายระบบ)
-    </div>
-  </details>
-
   <div class="panel" id="form-panel">
     <h2 id="form-title">เพิ่ม use case ใหม่</h2>
     <div class="row2">
@@ -3408,35 +3384,41 @@
       + '<div style="border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:16px;"><img src="'+LOGO_MAIN_DATAURI+'" alt="Polymate" style="height:40px; width:auto;"></div>'
       + '<h2>'+escapeHtml(uc.name)+'</h2>'
       + '<p class="doc-sub">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
-      + '<div class="doc-section"><h3>1. ข้อมูลทั่วไป</h3>'
-      + '<table class="doc-table"><tr><th style="width:34%">แผนก / หน่วยงาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
-      + '<tr><th>ผู้รับผิดชอบ</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
-      + '<div class="doc-section"><h3>2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + '<div class="doc-section"><h3>1. ข้อมูลพื้นฐาน</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">บริษัท</th><td>'+fillOrDash(uc.company)+'</td></tr>'
+      + '<tr><th>หน่วยงานที่ใช้งาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
+      + '<tr><th>ผู้รับผิดชอบ (Owner)</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + '<table class="doc-table">'
-      + '<tr><th style="width:34%">QWP อ้างอิง (รหัส/ชื่อเอกสาร)</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
-      + '<tr><th>kQI / QI ที่เกี่ยวข้อง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
-      + '<tr><th>ขั้นตอนที่เกี่ยวข้อง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
+      + '<tr><th style="width:34%">เอกสาร QWP ที่อ้างอิง</th><td>'+fillOrDash(uc.qwp)+'</td></tr>'
+      + '<tr><th>ตัวชี้วัด kQI / QI ที่เกี่ยวข้อง</th><td>'+nl2br(uc.kqi)+'</td></tr>'
+      + '<tr><th>ขั้นตอนใน SQP ที่เกี่ยวข้อง</th><td>'+nl2br(uc.refStep)+'</td></tr>'
       + '</table></div>'
-      + '<div class="doc-section"><h3>3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3><p class="doc-text">'+fillOrDash(uc.solution)+'</p>'
+      + '<div class="doc-section"><h3>3. ผลกระทบ (Impact) &mdash; น้ำหนัก 35%</h3>'
+      + '<p class="doc-text"><b>ปัญหาหรือข้อจำกัดของงานในปัจจุบัน:</b> '+fillOrDash(uc.problem)+'</p>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>วิธีการปฏิบัติงานในปัจจุบัน (Existing Work):</b> '+fillOrDash(uc.solution)+'</p>'
       + ((uc.attachment || uc.attachRef) ? '<p class="doc-text" style="margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? '<a href="'+uc.attachment.data+'" download="'+escapeHtml(uc.attachment.name)+'">'+escapeHtml(uc.attachment.name)+'</a>' : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + '</div>'
-      + '<div class="doc-section"><h3>4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3><p class="doc-text">'+fillOrDash(uc.dataAvailable)+'</p></div>'
-      + '<div class="doc-section"><h3>5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3><p class="doc-text">'+fillOrDash(uc.redesignDesc)+'</p>'
-      + (cat ? '<p class="doc-text" style="margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '</div>'
-      + '<div class="doc-section"><h3>6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
-      + '<table class="doc-table">'
-      + '<tr><th style="width:34%">จำนวน Users / วัน</th><td>'+fillOrDash(uc.users)+'</td></tr>'
-      + '<tr><th>ภาษาที่ต้องการ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
-      + '<tr><th>ระดับความสำคัญของข้อมูล</th><td>'+fillOrDash(uc.dataSensitivity)+'</td></tr>'
-      + '<tr><th>Latency ที่รับได้</th><td>'+fillOrDash(uc.latency)+'</td></tr>'
-      + '<tr><th>Availability ที่ต้องการ</th><td>'+fillOrDash(uc.availability)+'</td></tr>'
+      + '<p class="doc-text" style="margin-top:8px;"><b>แนวทางการทำงานหลังนำ AI มาใช้ (Redesign):</b> '+fillOrDash(uc.redesignDesc)+'</p>'
+      + '<table class="doc-table" style="margin-top:10px;">'
+      + '<tr><th style="width:34%">เวลาที่ใช้กับงานนี้ในปัจจุบัน</th><td>'+fillOrDash(uc.timeSpent)+'</td></tr>'
+      + '<tr><th>มูลค่าความสูญเสียต่อปี</th><td>'+fillOrDash(uc.lossValue)+'</td></tr>'
       + '</table></div>'
-      + '<div class="doc-section"><h3>7. Spec Hardware ที่ใช้ทำ AI</h3><p class="doc-text">'+nl2br(uc.hardware)+'</p></div>'
-      + '<div class="doc-section"><h3>8. Flow ขั้นตอนการทำ AI</h3>'
-      + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
-      + '<div class="doc-section"><h3>9. การประเมินและให้คะแนน</h3>'
+      + '<div class="doc-section"><h3>4. ความพร้อมของข้อมูล (Data) &mdash; น้ำหนัก 25%</h3>'
+      + '<p class="doc-text"><b>ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available):</b> '+fillOrDash(uc.dataAvailable)+'</p>'
+      + '<table class="doc-table" style="margin-top:10px;">'
+      + '<tr><th style="width:34%">รูปแบบการจัดเก็บข้อมูลในปัจจุบัน</th><td>'+fillOrDash(uc.dataFormat)+'</td></tr>'
+      + '<tr><th>ระยะเวลาข้อมูลย้อนหลังที่มี</th><td>'+fillOrDash(uc.dataHistory)+'</td></tr>'
+      + '<tr><th>ปริมาณข้อมูลโดยประมาณ</th><td>'+fillOrDash(uc.dataVolume)+'</td></tr>'
+      + '<tr><th>สิทธิ์ในการนำข้อมูลมาใช้พัฒนา AI</th><td>'+fillOrDash(uc.dataRights)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>5. ความเป็นไปได้ (Feasibility) &mdash; น้ำหนัก 25%</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ความจำเป็นในการเชื่อมต่อกับระบบเดิม</th><td>'+fillOrDash(uc.needConnect)+'</td></tr>'
+      + '<tr><th>ผู้ดูแลระบบหลังส่งมอบ</th><td>'+fillOrDash(uc.adminOwner)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>6. ความเสี่ยง (Risk) &mdash; น้ำหนัก 15% (กลับด้าน)</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ผลกระทบเมื่อ AI ให้ผลลัพธ์ผิดพลาด</th><td>'+fillOrDash(uc.aiErrorImpact)+'</td></tr>'
+      + '<tr><th>การตรวจสอบผลลัพธ์โดยบุคลากร</th><td>'+fillOrDash(uc.reviewNeed)+'</td></tr>'
+      + '<tr><th>ระดับชั้นความลับของข้อมูล</th><td>'+fillOrDash(uc.confidentiality)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>7. การประเมินและให้คะแนน</h3>'
       + '<table class="doc-table"><tr><th>เกณฑ์</th><th>น้ำหนัก</th><th>คะแนน (1-5)</th></tr>'
       + '<tr><td>ผลกระทบทางธุรกิจ (Impact)</td><td>35%</td><td>'+fillOrDash(scoreDetail.impact)+'</td></tr>'
       + '<tr><td>ความเป็นไปได้ (Feasibility)</td><td>25%</td><td>'+fillOrDash(scoreDetail.feasibility)+'</td></tr>'
@@ -3445,15 +3427,39 @@
       + '</table>'
       + '<p class="doc-text" style="margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
       + '</div>'
-      + '<div class="doc-section"><h3>10. ความเสี่ยงและการลดความเสี่ยง</h3><p class="doc-text">'+nl2br(uc.risks)+'</p></div>'
-      + '<div class="doc-section"><h3>11. ทรัพยากรและประมาณการ</h3><p class="doc-text">'+nl2br(uc.resources)+'</p></div>'
-      + '<div class="doc-section"><h3>12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p class="doc-text">'+nl2br(uc.kpi)+'</p></div>'
-      + '<div class="doc-section"><h3>13. ผลตอบแทนการลงทุน (ROI)</h3><p class="doc-text">'+nl2br(uc.roi)+'</p></div>'
-      + '<div class="doc-section"><h3>14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p class="doc-text">'+nl2br(uc.recommendation)+'</p></div>'
-      + '<div class="doc-section"><h3>15. การอนุมัติ</h3><div class="doc-grid2">'
-      + '<div class="box"><p class="lbl">ผู้จัดทำ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</div><div class="ln">วันที่: '+today+'</div><div class="ln">ลงชื่อ:</div></div>'
-      + '<div class="box"><p class="lbl">ผู้พิจารณา / อนุมัติ</p><div class="ln">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</div><div class="ln">วันที่:</div><div class="ln">ลงชื่อ:</div></div>'
-      + '</div></div>'
+      + '<div class="doc-section"><h3>8. แผน</h3>'
+      + '<table class="doc-table"><tr><th style="width:34%">ระดับความสำคัญตามความเห็นหน่วยงาน</th><td>'+fillOrDash(uc.deptPriority)+'</td></tr>'
+      + '<tr><th>กำหนดเวลาที่ต้องการใช้งาน</th><td>'+fillOrDash(uc.targetTimeline)+'</td></tr>'
+      + '<tr><th>หมายเหตุ</th><td>'+nl2br(uc.remark)+'</td></tr></table></div>'
+      + '<div class="doc-section"><h3>9. รายละเอียดเทคนิค &mdash; โซน A (หน่วยงานผู้ใช้กรอก)</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">ลักษณะการเริ่มทำงานของระบบ</th><td>'+fillOrDash(uc.triggerType)+'</td></tr>'
+      + '<tr><th>ประเภทข้อมูลนำเข้า</th><td>'+fillOrDash(uc.inputType)+(uc.inputType?' &rarr; <b>ประเภทงาน AI:</b> '+escapeHtml(aiKindLabel(uc.inputType)):'')+'</td></tr>'
+      + '<tr><th>จำนวนผู้ใช้งานต่อวัน</th><td>'+fillOrDash(uc.usersPerDay)+'</td></tr>'
+      + '<tr><th>ผู้ใช้งานพร้อมกันสูงสุด</th><td>'+fillOrDash(uc.peakConcurrent)+'</td></tr>'
+      + '<tr><th>ปริมาณรายการที่ประมวลผลต่อวัน</th><td>'+fillOrDash(uc.itemsPerDay)+'</td></tr>'
+      + '<tr><th>จุดตรวจหรือกล้องที่ทำงานพร้อมกัน</th><td>'+fillOrDash(uc.pointsCount)+'</td></tr>'
+      + '<tr><th>ภาษาที่ต้องรองรับ</th><td>'+fillOrDash(uc.language)+'</td></tr>'
+      + '<tr><th>เวลาตอบสนองที่ยอมรับได้</th><td>'+fillOrDash(uc.responseTime)+'</td></tr>'
+      + '<tr><th>ช่วงเวลาที่ต้องให้บริการ</th><td>'+fillOrDash(uc.serviceHours)+'</td></tr>'
+      + '<tr><th>ผลกระทบเมื่อระบบตอบสนองช้าลง</th><td>'+fillOrDash(uc.slowdownImpact)+'</td></tr>'
+      + '<tr><th>ระยะเวลาการจัดเก็บข้อมูล</th><td>'+fillOrDash(uc.retentionPeriod)+'</td></tr>'
+      + '<tr><th>งบประมาณที่ตั้งไว้ (บาท)</th><td>'+fillOrDash(uc.budget)+'</td></tr>'
+      + '<tr><th>ข้อจำกัดอื่นๆ และหมายเหตุ</th><td>'+nl2br(uc.constraints)+'</td></tr>'
+      + '<tr><th>ผู้ให้ข้อมูล (หน่วยงาน)</th><td>'+fillOrDash(uc.providedBy)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>10. รายละเอียดเทคนิค &mdash; โซน B (ทีม AI / IT ดำเนินการภายหลัง)</h3>'
+      + '<table class="doc-table">'
+      + '<tr><th style="width:34%">ปริมาณข้อมูลนำเข้าต่อวัน</th><td>'+fillOrDash(uc.dailyInputSize)+'</td></tr>'
+      + '<tr><th>ขนาดคลังเอกสารทั้งหมด</th><td>'+fillOrDash(uc.corpusSize)+'</td></tr>'
+      + '<tr><th>ความละเอียดของภาพ</th><td>'+fillOrDash(uc.imageResolution)+'</td></tr>'
+      + '<tr><th>รูปแบบการติดตั้ง</th><td>'+fillOrDash(uc.installLocation)+'</td></tr>'
+      + '<tr><th>การปรับโมเดลด้วยข้อมูลขององค์กร</th><td>'+fillOrDash(uc.modelAdaptation)+'</td></tr>'
+      + '<tr><th>ความถี่ในการฝึกโมเดลใหม่</th><td>'+fillOrDash(uc.retrainFrequency)+'</td></tr>'
+      + '</table></div>'
+      + '<div class="doc-section"><h3>11. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p class="doc-text" style="margin-bottom:12px; color:var(--text-secondary);">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + '<ol class="flow-list">' + getFlow(uc.aiType).map(function(s){ return '<li>'+escapeHtml(s)+'</li>'; }).join('') + '</ol></div>'
       + '<div class="doc-footer-bar"><span>&ldquo; Designed for your identity. &rdquo;</span><span class="brand">Polymate <small>IT Solutions</small></span></div>';
   }
 
@@ -4285,35 +4291,37 @@
     return ''
       + '<h2 style="'+H2+'">'+escapeHtml(uc.name)+'</h2>'
       + '<p style="'+SUB+'">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
-      + '<h3 style="'+H3+'">1. ข้อมูลทั่วไป</h3>'
-      + tbl(row2('แผนก / หน่วยงาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ', fillOrDash(uc.owner), true))
-      + '<h3 style="'+H3+'">2. การอ้างอิงกระบวนการคุณภาพ (QWP)</h3>'
+      + '<h3 style="'+H3+'">1. ข้อมูลพื้นฐาน</h3>'
+      + tbl(row2('บริษัท', fillOrDash(uc.company), true) + row2('หน่วยงานที่ใช้งาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ (Owner)', fillOrDash(uc.owner), true))
+      + '<h3 style="'+H3+'">2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + tbl(
-          row2('QWP อ้างอิง (รหัส/ชื่อเอกสาร)', fillOrDash(uc.qwp), true)
-          + row2('kQI / QI ที่เกี่ยวข้อง', nl2br(uc.kqi,'color:#6B7280;'), true)
-          + row2('ขั้นตอนที่เกี่ยวข้อง', nl2br(uc.refStep,'color:#6B7280;'), true)
+          row2('เอกสาร QWP ที่อ้างอิง', fillOrDash(uc.qwp), true)
+          + row2('ตัวชี้วัด kQI / QI ที่เกี่ยวข้อง', nl2br(uc.kqi,'color:#6B7280;'), true)
+          + row2('ขั้นตอนใน SQP ที่เกี่ยวข้อง', nl2br(uc.refStep,'color:#6B7280;'), true)
         )
-      + '<h3 style="'+H3+'">3. วิธีการเดิมที่ทำอยู่ (Existing Work)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.solution)+'</p>'
+      + '<h3 style="'+H3+'">3. ผลกระทบ (Impact) &mdash; น้ำหนัก 35%</h3>'
+      + '<p style="'+TXT+'"><b>ปัญหาหรือข้อจำกัดของงานในปัจจุบัน:</b> '+fillOrDash(uc.problem)+'</p>'
+      + '<p style="'+TXT+' margin-top:8px;"><b>วิธีการปฏิบัติงานในปัจจุบัน (Existing Work):</b> '+fillOrDash(uc.solution)+'</p>'
       + ((uc.attachment || uc.attachRef) ? '<p style="'+TXT+' margin-top:8px;"><b>เอกสารแนบ:</b> '+(uc.attachment ? escapeHtml(uc.attachment.name) : '')+(uc.attachment && uc.attachRef ? ' / ' : '')+(uc.attachRef ? escapeHtml(uc.attachRef) : '')+'</p>' : '')
-      + '<h3 style="'+H3+'">4. ข้อมูลที่มีอยู่สำหรับใช้งาน (Data Available)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.dataAvailable)+'</p>'
-      + '<h3 style="'+H3+'">5. แนวทางหลังนำ AI มาใช้ (Redesign)</h3>'
-      + '<p style="'+TXT+'">'+fillOrDash(uc.redesignDesc)+'</p>'
-      + (cat ? '<p style="'+TXT+' margin-top:8px;"><b>ลักษณะงาน:</b> '+escapeHtml(cat.label)+' &rarr; <b>AI ที่แนะนำ:</b> '+escapeHtml(cat.aiType)+'</p>' : '')
-      + '<h3 style="'+H3+'">6. ข้อกำหนดทางเทคนิคและความคาดหวัง</h3>'
+      + '<p style="'+TXT+' margin-top:8px;"><b>แนวทางการทำงานหลังนำ AI มาใช้ (Redesign):</b> '+fillOrDash(uc.redesignDesc)+'</p>'
+      + tbl(row2('เวลาที่ใช้กับงานนี้ในปัจจุบัน', fillOrDash(uc.timeSpent), true) + row2('มูลค่าความสูญเสียต่อปี', fillOrDash(uc.lossValue), true))
+      + '<h3 style="'+H3+'">4. ความพร้อมของข้อมูล (Data) &mdash; น้ำหนัก 25%</h3>'
+      + '<p style="'+TXT+'"><b>ข้อมูลที่มีอยู่ในปัจจุบัน (Data Available):</b> '+fillOrDash(uc.dataAvailable)+'</p>'
       + tbl(
-          row2('จำนวน Users / วัน', fillOrDash(uc.users), true)
-          + row2('ภาษาที่ต้องการ', fillOrDash(uc.language), true)
-          + row2('ระดับความสำคัญของข้อมูล', fillOrDash(uc.dataSensitivity), true)
-          + row2('Latency ที่รับได้', fillOrDash(uc.latency), true)
-          + row2('Availability ที่ต้องการ', fillOrDash(uc.availability), true)
+          row2('รูปแบบการจัดเก็บข้อมูลในปัจจุบัน', fillOrDash(uc.dataFormat), true)
+          + row2('ระยะเวลาข้อมูลย้อนหลังที่มี', fillOrDash(uc.dataHistory), true)
+          + row2('ปริมาณข้อมูลโดยประมาณ', fillOrDash(uc.dataVolume), true)
+          + row2('สิทธิ์ในการนำข้อมูลมาใช้พัฒนา AI', fillOrDash(uc.dataRights), true)
         )
-      + '<h3 style="'+H3+'">7. Spec Hardware ที่ใช้ทำ AI</h3><p style="'+TXT+'">'+nl2br(uc.hardware,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">8. Flow ขั้นตอนการทำ AI</h3>'
-      + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
-      + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''))
-      + '<h3 style="'+H3+'">9. การประเมินและให้คะแนน</h3>'
+      + '<h3 style="'+H3+'">5. ความเป็นไปได้ (Feasibility) &mdash; น้ำหนัก 25%</h3>'
+      + tbl(row2('ความจำเป็นในการเชื่อมต่อกับระบบเดิม', fillOrDash(uc.needConnect), true) + row2('ผู้ดูแลระบบหลังส่งมอบ', fillOrDash(uc.adminOwner), true))
+      + '<h3 style="'+H3+'">6. ความเสี่ยง (Risk) &mdash; น้ำหนัก 15% (กลับด้าน)</h3>'
+      + tbl(
+          row2('ผลกระทบเมื่อ AI ให้ผลลัพธ์ผิดพลาด', fillOrDash(uc.aiErrorImpact), true)
+          + row2('การตรวจสอบผลลัพธ์โดยบุคลากร', fillOrDash(uc.reviewNeed), true)
+          + row2('ระดับชั้นความลับของข้อมูล', fillOrDash(uc.confidentiality), true)
+        )
+      + '<h3 style="'+H3+'">7. การประเมินและให้คะแนน</h3>'
       + tbl(
           '<tr><td style="'+TH+'">เกณฑ์</td><td style="'+TH+'">น้ำหนัก</td><td style="'+TH+'">คะแนน (1-5)</td></tr>'
           + '<tr><td style="'+TD+'">ผลกระทบทางธุรกิจ (Impact)</td><td style="'+TD+'">35%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.impact)+'</td></tr>'
@@ -4322,18 +4330,41 @@
           + '<tr><td style="'+TD+'">ความเสี่ยง (Risk)</td><td style="'+TD+'">15%</td><td style="'+TD+'">'+fillOrDash(scoreDetail.risk)+'</td></tr>'
         )
       + '<p style="'+TXT+' margin-top:8px;"><b>คะแนนรวม:</b> '+(scoreDetail.total==null?'ข้อมูลไม่ครบ':(score+' / 100'))+' &nbsp;&nbsp; <b>ระดับความสำคัญ:</b> '+p.label+'</p>'
-      + '<h3 style="'+H3+'">10. ความเสี่ยงและการลดความเสี่ยง</h3><p style="'+TXT+'">'+nl2br(uc.risks,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">11. ทรัพยากรและประมาณการ</h3><p style="'+TXT+'">'+nl2br(uc.resources,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">12. ตัวชี้วัดความสำเร็จ (KQI)</h3><p style="'+TXT+'">'+nl2br(uc.kpi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">13. ผลตอบแทนการลงทุน (ROI)</h3><p style="'+TXT+'">'+nl2br(uc.roi,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">14. ข้อเสนอแนะและขั้นตอนต่อไป</h3><p style="'+TXT+'">'+nl2br(uc.recommendation,'color:#6B7280;')+'</p>'
-      + '<h3 style="'+H3+'">15. การอนุมัติ</h3>'
+      + '<h3 style="'+H3+'">8. แผน</h3>'
       + tbl(
-          '<tr><td style="'+TH+' width:50%;">ผู้จัดทำ</td><td style="'+TH+' width:50%;">ผู้พิจารณา / อนุมัติ</td></tr>'
-          + '<tr><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.preparedBy)+'</td><td style="'+TD+'">ชื่อ-นามสกุล: '+fillOrDash(uc.approver)+'</td></tr>'
-          + '<tr><td style="'+TD+'">วันที่: '+today+'</td><td style="'+TD+'">วันที่:</td></tr>'
-          + '<tr><td style="'+TD+'">ลงชื่อ:</td><td style="'+TD+'">ลงชื่อ:</td></tr>'
-        );
+          row2('ระดับความสำคัญตามความเห็นหน่วยงาน', fillOrDash(uc.deptPriority), true)
+          + row2('กำหนดเวลาที่ต้องการใช้งาน', fillOrDash(uc.targetTimeline), true)
+          + row2('หมายเหตุ', nl2br(uc.remark,'color:#6B7280;'), true)
+        )
+      + '<h3 style="'+H3+'">9. รายละเอียดเทคนิค &mdash; โซน A (หน่วยงานผู้ใช้กรอก)</h3>'
+      + tbl(
+          row2('ลักษณะการเริ่มทำงานของระบบ', fillOrDash(uc.triggerType), true)
+          + row2('ประเภทข้อมูลนำเข้า', fillOrDash(uc.inputType)+(uc.inputType?' &rarr; <b>ประเภทงาน AI:</b> '+escapeHtml(aiKindLabel(uc.inputType)):''), true)
+          + row2('จำนวนผู้ใช้งานต่อวัน', fillOrDash(uc.usersPerDay), true)
+          + row2('ผู้ใช้งานพร้อมกันสูงสุด', fillOrDash(uc.peakConcurrent), true)
+          + row2('ปริมาณรายการที่ประมวลผลต่อวัน', fillOrDash(uc.itemsPerDay), true)
+          + row2('จุดตรวจหรือกล้องที่ทำงานพร้อมกัน', fillOrDash(uc.pointsCount), true)
+          + row2('ภาษาที่ต้องรองรับ', fillOrDash(uc.language), true)
+          + row2('เวลาตอบสนองที่ยอมรับได้', fillOrDash(uc.responseTime), true)
+          + row2('ช่วงเวลาที่ต้องให้บริการ', fillOrDash(uc.serviceHours), true)
+          + row2('ผลกระทบเมื่อระบบตอบสนองช้าลง', fillOrDash(uc.slowdownImpact), true)
+          + row2('ระยะเวลาการจัดเก็บข้อมูล', fillOrDash(uc.retentionPeriod), true)
+          + row2('งบประมาณที่ตั้งไว้ (บาท)', fillOrDash(uc.budget), true)
+          + row2('ข้อจำกัดอื่นๆ และหมายเหตุ', nl2br(uc.constraints,'color:#6B7280;'), true)
+          + row2('ผู้ให้ข้อมูล (หน่วยงาน)', fillOrDash(uc.providedBy), true)
+        )
+      + '<h3 style="'+H3+'">10. รายละเอียดเทคนิค &mdash; โซน B (ทีม AI / IT ดำเนินการภายหลัง)</h3>'
+      + tbl(
+          row2('ปริมาณข้อมูลนำเข้าต่อวัน', fillOrDash(uc.dailyInputSize), true)
+          + row2('ขนาดคลังเอกสารทั้งหมด', fillOrDash(uc.corpusSize), true)
+          + row2('ความละเอียดของภาพ', fillOrDash(uc.imageResolution), true)
+          + row2('รูปแบบการติดตั้ง', fillOrDash(uc.installLocation), true)
+          + row2('การปรับโมเดลด้วยข้อมูลขององค์กร', fillOrDash(uc.modelAdaptation), true)
+          + row2('ความถี่ในการฝึกโมเดลใหม่', fillOrDash(uc.retrainFrequency), true)
+        )
+      + '<h3 style="'+H3+'">11. Flow ขั้นตอนการทำ AI</h3>'
+      + (cat ? '<p style="'+TXT+' margin-bottom:6px; color:#6B7280;">ขั้นตอนสำหรับ '+escapeHtml(cat.aiType)+'</p>' : '')
+      + tbl(getFlow(uc.aiType).map(function(s,i){ return '<tr><td style="'+TH+' width:8%; text-align:center;">'+(i+1)+'</td><td style="'+TD+'">'+escapeHtml(s)+'</td></tr>'; }).join(''));
   }
 
   function exportDocWord(uc){
