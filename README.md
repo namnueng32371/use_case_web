@@ -1,205 +1,127 @@
-# AI Use Case Prioritization Tool — คู่มือการติดตั้งและใช้งาน
+# AI Use Case Prioritization Tool — คู่มือใช้งาน
 
-เครื่องมือบันทึกและจัดลำดับความสำคัญ use case AI ขององค์กร ข้อมูลเก็บอยู่ใน **MySQL database** (`ai_usecase_db`) ผ่าน backend **Flask** ([server.py](server.py)) เพื่อให้หลายคนเข้าใช้งานแล้วเห็นข้อมูลชุดเดียวกัน
+เครื่องมือรวบรวม ให้คะแนน และจัดลำดับความสำคัญ use case AI ของกลุ่มบริษัท (โรงงานผลิตยาง/พลาสติก) ทำงานเป็น **Claude Artifact ไฟล์เดียว** — ไม่มี server, ไม่มี MySQL, ไม่ต้องติดตั้งอะไรบนเครื่อง
 
-คู่มือนี้เป็นไฟล์เดียวครบทุกเรื่อง ไม่ต้องเปิดไฟล์อื่นประกอบ — ใครที่คุ้นเคยกับ Python/MySQL อยู่แล้วข้ามไปหัวข้อ "วิธีรันประจำวัน" ได้เลย ส่วนใครที่เครื่องยังไม่มีอะไรเลยให้เริ่มที่หัวข้อ "ติดตั้งบนเครื่องใหม่ทั้งหมด"
+> เอกสารนี้สำหรับ "คนใช้งาน" ถ้าจะแก้โค้ดหรือให้ AI Agent ทำงานกับโปรเจกต์ ให้อ่าน [AGENTS.md](AGENTS.md) และ [CONTEXT.md](CONTEXT.md) ก่อน
+> ยุคเก่า (Flask + MySQL, `start_all.bat`, `server.py`) **เลิกใช้แล้ว** — ถ้าเจอเอกสารหรือคำแนะนำที่อ้างถึงสิ่งเหล่านี้ ให้ถือว่าล้าสมัย
 
 ---
 
-## องค์ประกอบของระบบ
+## เปิดใช้งาน
 
-| ส่วน | รายละเอียด |
+เปิดลิงก์ Artifact ตัวหลัก **"AI Use Case Prioritization Tool"** บน claude.ai (ต้องล็อกอินบัญชีที่มีสิทธิ์เปิด Artifact นี้) — ตอนนี้ผู้ใช้งานมีเฉพาะทีม AI เท่านั้น
+
+ข้อมูลทั้งหมดเก็บอยู่ใน **ฐานข้อมูลของ Artifact เอง** (`window.claude.use('db')`) ทุกคนที่เปิด Artifact ตัวเดียวกันจะเห็นข้อมูลชุดเดียวกัน
+
+| ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| Database | MySQL Server, database `ai_usecase_db`, ตาราง `use_cases` |
-| Backend | Flask ([server.py](server.py)) รันที่ port `8765` |
-| Frontend | [AI_Use_Case_Program12.html](AI_Use_Case_Program12.html) เสิร์ฟผ่าน Flask ตัวเดียวกัน |
-
-**หลักการสำคัญ: ทุกเครื่องตั้ง MySQL root แบบไม่มีรหัสผ่านเหมือนกันหมด** (เหมาะกับใช้งานในวง LAN ภายในที่ไว้ใจกันเท่านั้น — **ห้ามเปิด port 3306/8765 ออกอินเทอร์เน็ตเด็ดขาด** เพราะไม่มีรหัสผ่านป้องกัน) `server.py` ใช้ค่านี้เป็น default อยู่แล้ว ไม่ต้องตั้งค่าอะไรเพิ่ม
+| [artifact.html](artifact.html) | โค้ดตัวจริงที่ publish ขึ้น Artifact (ตัวที่ใช้งาน) |
+| [AI_Use_Case_Program12.html](AI_Use_Case_Program12.html) | สำเนาโค้ดแบบไฟล์เต็มหน้า เก็บเป็นไฟล์สำรองบนเครื่อง (เปิดในเบราว์เซอร์ได้ แต่จะเก็บข้อมูลใน `localStorage` ของเครื่องนั้นแทน ไม่ได้แชร์กับ Artifact) |
 
 ---
 
-## วิธีรันประจำวัน (เครื่องที่ setup ไว้แล้ว)
+## หน้าจอหลัก (5 แท็บ)
 
-ดับเบิลคลิกไฟล์ **[start_all.bat](start_all.bat)** — จะ start MySQL และแอปให้อัตโนมัติ แล้วเปิดเบราว์เซอร์ไปที่:
+| แท็บ | ทำอะไรได้ |
+|---|---|
+| **จัดลำดับ Use Case** | เพิ่ม/แก้/ลบ use case, คะแนนความสำคัญคำนวณอัตโนมัติ, กรองตามระดับ, เรียงลำดับ, ส่งออก CSV, ส่งออกเอกสาร Word รายเคส, นำเข้า use case จากไฟล์ PDF/Word/PowerPoint ให้ Claude ช่วยอ่าน |
+| **โครงสร้างทีม AI Star** | แผนผังโครงสร้างทีม |
+| **Flow การทำงาน AI Start** | ให้ AI ร่าง flow การทำงานของเคส และส่งออกเป็น JSON สำหรับ n8n |
+| **ประเมิน Spec/ราคา Server** | ให้ AI ประเมิน spec และงบ server ตามกลุ่ม use case (**กำลังจะออกแบบใหม่** — ดูหัวข้อ "สถานะงาน") |
+| **แผนโครงการ AI Local GSK** | Roadmap / Gantt ของเคส (**กำลังจะออกแบบใหม่**) |
+
+### สูตรคะแนนความสำคัญ
 
 ```
-http://localhost:8765
+คะแนน = (Impact×0.35 + Feasibility×0.25 + Data×0.25 + (6−Risk)×0.15) × 20
 ```
 
-**ห้ามปิดหน้าต่าง command ที่เปิดขึ้นมา** ระหว่างใช้งาน — ถ้าปิด แอปและการเชื่อมต่อฐานข้อมูลจะหยุดทำงาน
+ช่วงคะแนน 20–100 · **สูง ≥ 75** · **กลาง 50–74** · **ต่ำ < 50** — ที่มาและเหตุผลดูที่ [docs/SCORING.md](docs/SCORING.md)
 
-ให้คนอื่นในวง LAN เดียวกันเข้าใช้งานได้ผ่าน `http://<IP เครื่องนี้>:8765` (ดู IP ด้วยคำสั่ง `ipconfig`; อาจต้องเปิด Windows Firewall ให้ port 8765 ด้วย)
+> หมายเหตุ: คะแนนใช้คัดกรองเบื้องต้นเท่านั้น การเลือกเคสที่จะทำจริงในแต่ละปี **ผู้บริหารเป็นผู้ตัดสิน**
 
-### วิธี manual ทีละขั้น (ถ้าไม่อยากใช้ start_all.bat)
+### ปุ่มที่ตั้งใจปิดไว้
 
-```powershell
-Start-Process "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqld.exe" -ArgumentList '--defaults-file="C:\ProgramData\MySQL\MySQL Server 8.4\my.ini"'
-```
-รอ 3-4 วินาทีให้ MySQL พร้อม แล้ว (ในโฟลเดอร์โปรเจกต์):
-```bash
-python server.py
-```
-
-> 🔶 เลข `8.4` ในคำสั่งข้างบนคือเวอร์ชัน MySQL — ถ้าเครื่องนั้นลงเวอร์ชันอื่น ให้เปิดดูโฟลเดอร์ `C:\Program Files\MySQL\` จริงก่อน แล้วแก้เลขให้ตรง
-
-### เช็คว่า MySQL รันอยู่ไหม
-
-```bash
-"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqladmin.exe" -u root ping
-```
-ขึ้น `mysqld is alive` = ใช้งานได้ปกติ, error `Can't connect... (10061)` = MySQL ยังไม่ได้ start
-
-### วิธีหยุดการทำงาน
-
-- ปิดหน้าต่าง command ของ `start_all.bat` (หรือกด `Ctrl+C` ใน terminal ที่รัน `server.py`)
-- หยุด MySQL: `"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqladmin.exe" -u root shutdown`
+ปุ่ม **"ล้างทั้งหมด"** ถูกปิดไว้โดยตั้งใจ เพราะข้อมูลใช้ร่วมกัน กดครั้งเดียวจะลบของทุกคน
 
 ---
 
-## ติดตั้งบนเครื่องใหม่ทั้งหมด
+## เก็บ use case จากแผนกแบบออฟไลน์ (Excel Template)
 
-ทำตามลำดับ 1 → 6 ได้แม้ไม่มีพื้นฐานเทคนิคมาก่อน ใช้เวลาประมาณ 15-20 นาที
+แจกไฟล์ [docs/AI_UseCase_Template_v2.xlsx](docs/AI_UseCase_Template_v2.xlsx) ให้แผนกกรอก แล้วทีม AI นำมาลงในเว็บ — คู่มืออธิบายทุกคอลัมน์อยู่ที่ [docs/TEMPLATE_GUIDE.md](docs/TEMPLATE_GUIDE.md)
 
-> 🔶 **จุดที่ต้องระวัง — แต่ละคอมไม่เหมือนกัน:** จะมีกล่องแบบนี้คั่นไว้ทุกจุดที่ค่าอาจไม่เหมือนกันในแต่ละเครื่อง อ่านให้ดีตรงจุดนั้นเป็นพิเศษ ส่วนที่เหลือทำตามได้เหมือนกันทุกเครื่อง
+- **ห้ามแก้ไฟล์ .xlsx ด้วยมือ** — แก้ที่ [docs/build_template.py](docs/build_template.py) แล้วสร้างใหม่:
+  ```bash
+  python docs/build_template.py
+  ```
+  (ต้องปิดไฟล์ .xlsx ใน Excel ก่อนรัน ไม่งั้นจะขึ้น PermissionError)
+- ช่องในฟอร์มเว็บกับคอลัมน์ใน template ต้องตรงกันเสมอ
 
-### ขั้นที่ 1 — ติดตั้ง Python
+> ⚠️ ตอนนี้ `build_template.py` เพิ่มคอลัมน์ **AA "สถานที่ตั้งที่ใช้งาน"** แล้ว แต่ไฟล์ .xlsx ยังไม่ได้สร้างใหม่ (ยังเป็น 26 คอลัมน์) — ต้องปิด Excel แล้วรันสคริปต์อีกครั้ง
 
-1. ไปที่ https://www.python.org/downloads/ กดดาวน์โหลดเวอร์ชันล่าสุด (3.10 ขึ้นไป)
-2. รันตัวติดตั้ง **สำคัญ: ต้องติ๊กช่อง "Add python.exe to PATH"** ที่หน้าแรกก่อนกด Install
-3. เช็คว่าใช้ได้แล้วโดยเปิด Command Prompt/PowerShell ใหม่ พิมพ์:
-   ```bash
-   python --version
-   ```
+---
 
-### ขั้นที่ 2 — ติดตั้ง MySQL Server
+## สถานะงาน
 
-1. ไปที่ https://dev.mysql.com/downloads/installer/ ดาวน์โหลด **MySQL Installer for Windows**
-2. รันตัวติดตั้ง เลือก Setup Type เป็น **"Server only"**
-3. ถ้ามีหน้าต่างถามให้ตั้งรหัสผ่าน/ตั้งค่าเชื่อมต่อ **ปิดทิ้งได้เลย ไม่ต้องกรอกอะไร** — ขั้นตอนถัดไปจะช่วยตั้งให้อัตโนมัติแทน เพื่อให้ได้ root ไม่มีรหัสผ่านตรงกับเครื่องอื่นๆ ในระบบนี้
+| เรื่อง | สถานะ |
+|---|---|
+| ฟอร์ม + คะแนน + เอกสาร Word + CSV + นำเข้าเอกสาร | ใช้งานได้ |
+| ช่อง "สถานที่ตั้ง" ในฟอร์มเว็บ | เพิ่มแล้ว (ยังเป็นช่องพิมพ์อิสระ — จะเปลี่ยนเป็น dropdown เมื่อได้รายชื่อสถานที่ของแต่ละบริษัท) |
+| หน้าประเมิน Spec + หน้าแผนโครงการ | **วางแผนเสร็จแล้ว ยังไม่ได้แก้โค้ด** — เปลี่ยนเป็นเครื่องคำนวณ spec แบบกำหนดสูตรตายตัว (ไม่ให้ AI เดาราคา), แยก server ตามสถานที่ตั้ง, เทียบ scenario ให้ผู้บริหารเลือก — รายละเอียดใน [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) เฟส 3 |
 
-### ขั้นที่ 3 — เอาโค้ดโปรเจกต์มาไว้ที่เครื่อง
+เอกสารอื่นที่เกี่ยวข้อง: [PRD.md](PRD.md) (ความต้องการ), [ARCHITECTURE.md](ARCHITECTURE.md) (สถาปัตยกรรม), [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) (ดีไซน์), [PRODUCT.md](PRODUCT.md) (บริบทผลิตภัณฑ์สำหรับ impeccable)
 
-ดูวิธีละเอียดในหัวข้อ [วิธีใช้ git กับโปรเจกต์นี้](#วิธีใช้-git-กับโปรเจกต์นี้) ด้านล่าง (`git clone` แล้ว `git checkout jeng_branch`) หรือถ้าไม่สะดวกใช้ git ให้ขอคนอื่น copy ทั้งโฟลเดอร์มาให้ตรงๆ — ต้องมีไฟล์เหล่านี้ครบ: `AI_Use_Case_Program12.html`, `server.py`, `schema.sql`, `requirements.txt`, `setup_mysql.ps1`
+---
 
-### ขั้นที่ 4 — ให้คอมตั้งค่า MySQL ให้อัตโนมัติ (คลิกเดียว)
+## ข้อมูลสำรอง (Backup)
 
-1. กด Start พิมพ์ **PowerShell** เห็นโปรแกรมขึ้นมา **คลิกขวา → "Run as administrator"** (มีถามยืนยันให้กด Yes)
-2. พิมพ์คำสั่งนี้ (แก้ path ให้ตรงกับที่วางโฟลเดอร์โปรเจกต์ไว้จริง):
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File "C:\path\to\use_case_web\setup_mysql.ps1"
-   ```
-3. รอจนขึ้นข้อความสีเขียวว่า "Done! MySQL is ready..."
+| ไฟล์ | คืออะไร |
+|---|---|
+| `backup_ai_usecase_db_*.sql` | dump ฐานข้อมูล MySQL ก่อนย้ายมาเป็น Artifact |
+| `data/use_cases_export.json` | ข้อมูล use case ที่ export ออกมาตอนย้ายระบบ |
 
-สคริปต์ [setup_mysql.ps1](setup_mysql.ps1) จะหาเวอร์ชัน MySQL ที่ติดตั้งจริงในเครื่องนั้นเองอัตโนมัติ สร้างที่เก็บข้อมูล ตั้งค่า root ไม่มีรหัสผ่าน และติดตั้งเป็น Windows Service ให้รันอัตโนมัติทุกครั้งที่เปิดเครื่อง — ไม่ต้องรู้เรื่องเวอร์ชันหรือแก้ค่าเอง
-
-### ขั้นที่ 5 — สร้างฐานข้อมูล
-
-เปิด PowerShell ธรรมดา (ไม่ต้อง admin) ไปที่โฟลเดอร์โปรเจกต์แล้วรัน [schema.sql](schema.sql) เพื่อสร้าง database และตาราง (เริ่มต้นว่างเปล่า พร้อมกรอกข้อมูลจริง):
-
-```powershell
-cd "C:\path\to\use_case_web"
-& "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" -u root < schema.sql
-```
-
-> 🔶 เลข `8.4` ต้องตรงกับที่เห็นจริงในโฟลเดอร์ `C:\Program Files\MySQL\` ของเครื่องนั้น (เช่นอาจเป็น `MySQL Server 8.0`)
-
-**ถ้ามีไฟล์ backup ข้อมูล (`.sql`) ที่คนอื่นส่งมาให้แทน** ใช้คำสั่งนี้แทนขั้นตอนข้างบน (ไฟล์ backup จะสร้าง database พร้อมข้อมูลให้ในตัวอยู่แล้ว ไม่ต้องรัน `schema.sql` ซ้ำ):
-```powershell
-& "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" -u root < ชื่อไฟล์ที่ได้รับมา.sql
-```
-
-### ขั้นที่ 6 — ติดตั้ง Python package แล้วรันแอป
-
-```powershell
-pip install -r requirements.txt
-python server.py
-```
-
-เปิดเบราว์เซอร์ไปที่ `http://localhost:8765` — ควรเห็นหน้าแอป พร้อมรายการ use case ว่างเปล่า (หรือมีข้อมูลถ้า import backup ไว้ในขั้นที่ 5) เพิ่มรายการแรกผ่านปุ่ม "+ เพิ่ม use case ใหม่" ได้เลย
-
-### สรุปจุดที่ต่างกันในแต่ละเครื่อง (เช็คลิสต์)
-
-| จุดที่ต้องดู | ทำไมถึงต่างกัน | ต้องทำอะไร |
-|---|---|---|
-| เลขเวอร์ชัน MySQL (เช่น 8.4, 8.0, 9.x) ในชื่อโฟลเดอร์ | แล้วแต่ว่าดาวน์โหลดเวอร์ชันไหนตอนติดตั้ง | เปิดดูโฟลเดอร์ `C:\Program Files\MySQL\` จริงก่อนพิมพ์คำสั่งที่มีเลขเวอร์ชัน |
-| path ที่วางโฟลเดอร์โปรเจกต์ไว้ | แต่ละคนวางไว้คนละที่ (Desktop, D:\, ฯลฯ) | แก้ path ในคำสั่งให้ตรงกับที่ตัวเองวางไว้จริง |
-| ชื่อไฟล์ backup ข้อมูล (.sql) ถ้ามี | วันที่ export ต่างกันแต่ละครั้ง | ใช้ชื่อไฟล์ที่ได้รับมาจริง |
-| IP เครื่อง ถ้าจะให้คนอื่นเข้าผ่านเครือข่ายในออฟฟิศ | แต่ละเครื่องมี IP ไม่เหมือนกัน | เช็คด้วยคำสั่ง `ipconfig` ดูเลขที่ขึ้นตรง "IPv4 Address" |
+**ห้ามลบ** — เก็บไว้เผื่อต้องกู้คืน
 
 ---
 
 ## วิธีใช้ git กับโปรเจกต์นี้
 
-Repo อยู่ที่ https://github.com/namnueng32371/use_case_web.git
+Repo: https://github.com/namnueng32371/use_case_web.git
 
 ### Clone ครั้งแรก
 
 ```bash
 git clone https://github.com/namnueng32371/use_case_web.git
-cd use_case_web
-git checkout jeng_branch
 ```
 
-### Branch ที่มีอยู่
+### Branch
 
 | Branch | สถานะ |
 |---|---|
 | `main` | branch หลัก |
-| `jeng_branch` | branch ที่ใช้พัฒนาอยู่ตอนนี้ |
-| `non_branch` | มีอยู่ใน repo |
-
-ตอนนี้ทั้ง 3 branch ยังชี้ไปที่ commit เดียวกัน (ยังไม่มีการแยกงานที่ต่างกันชัดเจน) — ถ้าไม่แน่ใจว่าควรทำงานบน branch ไหน ให้ใช้ `jeng_branch` เป็นค่าเริ่มต้น
+| `trim-form-fields` | branch ที่ใช้พัฒนาอยู่ตอนนี้ |
+| อื่นๆ (`non_branch`, `sandbox_renew`, `backup_sandbox_NEW`) | มีอยู่ใน repo — ยังไม่ทราบว่าใช้ต่อหรือไม่ ต้องยืนยันกับเจ้าของ repo |
 
 ### คำสั่งที่ใช้บ่อย
 
-**ดูว่าอยู่ branch ไหน / มีอะไรเปลี่ยนแปลงบ้าง:**
 ```bash
 git status
-git branch
 ```
 
-**สลับไป branch อื่น:**
 ```bash
-git checkout main
-git checkout jeng_branch
+git pull origin trim-form-fields
 ```
 
-**ดึงของล่าสุดจาก remote มาก่อนเริ่มทำงาน:**
 ```bash
-git pull origin jeng_branch
-```
-
-**บันทึกการเปลี่ยนแปลงที่ทำไว้ (commit):**
-```bash
-git add <ไฟล์ที่แก้ หรือ .>
-git commit -m "อธิบายสั้นๆ ว่าแก้อะไร"
-```
-
-**ส่งขึ้น remote (push):**
-```bash
-git push origin jeng_branch
+git push origin trim-form-fields
 ```
 
 ### ข้อควรระวัง
 
-- **อย่า push ไฟล์ backup ข้อมูล (`.sql` ที่มีคำว่า backup) หรือไฟล์ชั่วคราว** — มี [.gitignore](.gitignore) กันไว้ให้ส่วนหนึ่งแล้ว แต่เช็ค `git status` ก่อน commit ทุกครั้งว่าไม่มีไฟล์แปลกๆ หลุดเข้าไป
-- ก่อน push ควร `git pull` ก่อนเสมอ เผื่อมีคนอื่น push ไปก่อนแล้ว จะได้ไม่ชนกัน (conflict)
-- ถ้าเจอ conflict ตอน pull/merge และไม่แน่ใจว่าจะแก้ยังไง ให้หยุดถามก่อน อย่าเดาแก้เอง เพราะอาจทำให้ของคนอื่นหายได้
-
----
-
-## ข้อมูลการเชื่อมต่อฐานข้อมูล
-
-| รายการ | ค่า |
-|---|---|
-| Host | `127.0.0.1` |
-| Port | `3306` |
-| User | `root` |
-| Password | *(ไม่มี — ตั้งค่าแบบ local dev ทุกเครื่องเหมือนกัน)* |
-| Database | `ai_usecase_db` |
-| ตาราง | `use_cases` (คอลัมน์ `id`, `name`, `dept`, `payload` เป็น JSON เก็บข้อมูล use case ทั้งหมด) |
-
-ปรับค่าเชื่อมต่อได้ผ่าน environment variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` ถ้าจำเป็น (ดูใน [server.py](server.py)) — ปกติไม่ต้องแตะเพราะทุกเครื่องตั้งเหมือนกันหมด
+- เช็ค `git status` ก่อน commit ทุกครั้งว่าไม่มีไฟล์แปลกๆ หรือไฟล์ชั่วคราวหลุดเข้าไป
+- ก่อน push ควร `git pull` ก่อนเสมอ เผื่อมีคนอื่น push ไปก่อนแล้ว
+- ถ้าเจอ conflict และไม่แน่ใจว่าจะแก้ยังไง ให้หยุดถามก่อน อย่าเดาแก้เอง
+- หลัง commit ที่แก้ `artifact.html` ต้อง publish ขึ้น Artifact ตัวหลักด้วย (ดู [AGENTS.md](AGENTS.md))
 
 ---
 
@@ -207,13 +129,8 @@ git push origin jeng_branch
 
 | ปัญหา | สาเหตุที่เป็นไปได้ | วิธีแก้ |
 |---|---|---|
-| `'python' is not recognized` | ไม่ได้ติ๊ก Add to PATH ตอนลง Python | ลง Python ใหม่แล้วติ๊กช่องนั้น หรือเพิ่ม PATH เอง |
-| `'mysql' is not recognized` | MySQL bin ไม่ได้อยู่ใน PATH | ใช้ full path เช่น `"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe"` แทน |
-| สคริปต์ `setup_mysql.ps1` บอกว่าไม่พบ MySQL | ยังไม่ได้ติดตั้ง MySQL ตามขั้นที่ 2 | กลับไปทำขั้นที่ 2 ให้เสร็จก่อน |
-| `ERROR 1045 (28000): Access denied for user 'root'` | ตัวติดตั้ง MySQL ตั้งรหัสผ่าน root ไว้ก่อนรันสคริปต์ (ทับไม่สำเร็จ) | ลบโฟลเดอร์ data ของ MySQL เวอร์ชันนั้นใน `C:\ProgramData\MySQL\` ทิ้ง แล้วรัน `setup_mysql.ps1` ใหม่ |
-| เปิด `localhost:8765` ไม่ได้ | ยังไม่ได้รัน `server.py` | รัน `start_all.bat` หรือ `python server.py` |
-| หน้าเว็บเปิดได้แต่ข้อมูลไม่ขึ้น/บันทึกไม่ได้ | MySQL ยังไม่ได้ start | ตรวจด้วย `mysqladmin ping` ตามด้านบน แล้ว start MySQL |
-| `Can't connect to MySQL server on 'localhost:3306'` | MySQL ไม่ได้รันอยู่ | Start MySQL ตามขั้นตอนด้านบน หรือ `net start MySQL84` ถ้าติดตั้งเป็น service แล้ว |
-| ต้องการให้เพื่อนร่วมงานเข้าใช้งานจากเครื่องอื่นไม่ได้ | Windows Firewall block port 8765 | เปิด inbound rule สำหรับ port 8765 ใน Windows Firewall |
-
-หากยังแก้ไม่ได้ ส่งข้อความ error ที่ขึ้นมาให้ทีมช่วยดูได้เลย
+| เปิด Artifact แล้วไม่มีข้อมูล | ไม่ได้ล็อกอิน/ไม่มีสิทธิ์ใน Artifact ตัวหลัก หรือเปิด Artifact ผิดตัว | ตรวจว่าเปิดลิงก์ "AI Use Case Prioritization Tool" ตัวหลัก |
+| เปิด `AI_Use_Case_Program12.html` จากเครื่องแล้วข้อมูลไม่ตรงกับบน Artifact | ไฟล์ local เก็บข้อมูลใน `localStorage` ของเครื่อง ไม่ได้เชื่อมกับฐานข้อมูลของ Artifact | ใช้งานจริงผ่าน Artifact เท่านั้น |
+| ปุ่ม AI (วิเคราะห์ flow / spec / นำเข้าเอกสาร) ไม่ตอบ | ต้องเปิดผ่าน Artifact จึงเรียก Claude ได้ | เปิดผ่าน Artifact |
+| `python docs/build_template.py` ขึ้น PermissionError | ไฟล์ .xlsx เปิดค้างอยู่ใน Excel | ปิด Excel แล้วรันใหม่ |
+| ภาษาไทยในคอนโซลเพี้ยน | คอนโซล Windows ใช้ cp874 | ไฟล์จริงเป็น UTF-8 ปกติ ตรวจด้วยการเปิดไฟล์แทนการดูจากคอนโซล |
