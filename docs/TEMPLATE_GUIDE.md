@@ -4,8 +4,9 @@
 
 มี 5 sheet: `คู่มือการใช้งาน` · `1-UseCase ทั้งหมด` · `2-รายละเอียดเทคนิค` · `3-คะแนนและลำดับ` · `DATA`
 
-> ⚠️ **ค้าง rebuild:** `build_template.py` เพิ่มคอลัมน์ **AA (สถานที่ตั้งที่ใช้งาน)** ใน sheet 1 แล้ว
-> แต่ไฟล์ .xlsx ยังเป็นเวอร์ชันเก่า (26 คอลัมน์) — ต้องปิดไฟล์ใน Excel แล้วรัน `python docs/build_template.py`
+> ไฟล์ .xlsx สร้างใหม่แล้ว (2026-10-12) มีคอลัมน์ **AA (สถานที่ตั้งที่ใช้งาน)** ครบ 27 คอลัมน์ ยังไม่ได้เปิดตรวจด้วย Excel จริง
+>
+> ไฟล์ที่ commit ตอนนี้มี **use case จริง 3 รายการในแถว 7–9 ของ sheet 1** (จาก `AI Transformation Plan (Prod) E&E.xlsx` เฉพาะแถวที่มี Redesign) สร้างด้วยตัวเลือก `SEED_JSON=<ไฟล์ JSON> python docs/build_template.py` — ใส่เฉพาะช่องข้อความที่มีในต้นฉบับ (บริษัท หน่วยงาน QWP kQI ขั้นตอน ปัญหา Existing Work Redesign Data Available หมายเหตุ) ช่อง dropdown ทั้งหมดเว้นว่าง รันสคริปต์โดยไม่กำหนด `SEED_JSON` จะได้ template ว่าง
 
 ## ภาพรวม: ข้อมูลไหลยังไง
 
