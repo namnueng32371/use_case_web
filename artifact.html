@@ -993,6 +993,11 @@
         <input type="text" id="f-owner" placeholder="ชื่อผู้รับผิดชอบ">
       </div>
     </div>
+    <div class="field">
+      <label for="f-site">สถานที่ตั้งที่ใช้งาน (โรงงาน / สาขา)</label>
+      <input type="text" id="f-site" placeholder="เช่น โรงงานระยอง — ที่ตั้งเดียวเว้นว่างได้">
+      <div class="slider-hint">บริษัทเดียวมีหลายที่ตั้งได้ ที่ตั้งคนละที่ = ใช้ Server คนละเครื่อง (ไม่มี Server กลาง) พิมพ์ชื่อให้เหมือนกันทุกครั้งสำหรับที่ตั้งเดียวกัน ไม่นำไปคิดคะแนน</div>
+    </div>
     <div style="border:1px solid var(--border); border-radius:10px; padding:14px 16px 4px; margin:0 0 18px; background:#FAFAF8;">
       <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">อ้างอิงระบบคุณภาพ (QWP / SQP) <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่บังคับ ไม่นำไปคิดคะแนน</span></div>
       <div class="field">
@@ -3412,6 +3417,7 @@
       + '<div class="doc-section"><h3>1. ข้อมูลพื้นฐาน</h3>'
       + '<table class="doc-table"><tr><th style="width:34%">บริษัท</th><td>'+fillOrDash(uc.company)+'</td></tr>'
       + '<tr><th>หน่วยงานที่ใช้งาน</th><td>'+fillOrDash(uc.dept)+'</td></tr>'
+      + '<tr><th>สถานที่ตั้งที่ใช้งาน</th><td>'+fillOrDash(uc.site)+'</td></tr>'
       + '<tr><th>ผู้รับผิดชอบ (Owner)</th><td>'+fillOrDash(uc.owner)+'</td></tr></table></div>'
       + '<div class="doc-section"><h3>2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + '<table class="doc-table">'
@@ -4317,7 +4323,7 @@
       + '<h2 style="'+H2+'">'+escapeHtml(uc.name)+'</h2>'
       + '<p style="'+SUB+'">เอกสารวิเคราะห์ use case AI &middot; พิมพ์เมื่อ '+today+'</p>'
       + '<h3 style="'+H3+'">1. ข้อมูลพื้นฐาน</h3>'
-      + tbl(row2('บริษัท', fillOrDash(uc.company), true) + row2('หน่วยงานที่ใช้งาน', fillOrDash(uc.dept), true) + row2('ผู้รับผิดชอบ (Owner)', fillOrDash(uc.owner), true))
+      + tbl(row2('บริษัท', fillOrDash(uc.company), true) + row2('หน่วยงานที่ใช้งาน', fillOrDash(uc.dept), true) + row2('สถานที่ตั้งที่ใช้งาน', fillOrDash(uc.site), true) + row2('ผู้รับผิดชอบ (Owner)', fillOrDash(uc.owner), true))
       + '<h3 style="'+H3+'">2. อ้างอิงระบบคุณภาพ (QWP / SQP)</h3>'
       + tbl(
           row2('เอกสาร QWP ที่อ้างอิง', fillOrDash(uc.qwp), true)
@@ -4431,7 +4437,7 @@
 
   // ฟิลด์ข้อความ/ข้อความยาว: [id, ชื่อ property ใน use case]
   var FORM_TEXT_FIELDS = [
-    ['f-dept','dept'], ['f-owner','owner'], ['f-qwp','qwp'], ['f-kqi2','kqi'], ['f-refstep','refStep'],
+    ['f-dept','dept'], ['f-site','site'], ['f-owner','owner'], ['f-qwp','qwp'], ['f-kqi2','kqi'], ['f-refstep','refStep'],
     ['f-problem','problem'], ['f-solution','solution'], ['f-dataavailable','dataAvailable'], ['f-redesign','redesignDesc'],
     ['f-datavolume','dataVolume'], ['f-targettimeline','targetTimeline'], ['f-remark','remark'],
     ['f-budget','budget'], ['f-constraints','constraints'], ['f-providedby','providedBy']
@@ -4596,7 +4602,7 @@
 
   function exportCsv(){
     if(useCases.length===0) return;
-    var headers = ['ชื่อ use case','บริษัท','หน่วยงาน','ผู้รับผิดชอบ','QWP อ้างอิง','kQI/QI ที่เกี่ยวข้อง','ขั้นตอนใน SQP','ปัญหา/ข้อจำกัด','วิธีการปฏิบัติงานปัจจุบัน','ข้อมูลที่มีอยู่','แนวทางหลังนำ AI มาใช้','เอกสารแนบ',
+    var headers = ['ชื่อ use case','บริษัท','หน่วยงาน','สถานที่ตั้ง','ผู้รับผิดชอบ','QWP อ้างอิง','kQI/QI ที่เกี่ยวข้อง','ขั้นตอนใน SQP','ปัญหา/ข้อจำกัด','วิธีการปฏิบัติงานปัจจุบัน','ข้อมูลที่มีอยู่','แนวทางหลังนำ AI มาใช้','เอกสารแนบ',
       'เวลาที่ใช้ในปัจจุบัน','มูลค่าความสูญเสียต่อปี','รูปแบบการจัดเก็บข้อมูล','ระยะเวลาข้อมูลย้อนหลัง','ปริมาณข้อมูล','สิทธิ์การใช้ข้อมูล','การเชื่อมต่อระบบเดิม','ผู้ดูแลระบบ','ผลกระทบเมื่อ AI ผิดพลาด','การตรวจสอบโดยบุคลากร','ระดับความลับ',
       'ความสำคัญตามความเห็นหน่วยงาน','กำหนดเวลาที่ต้องการใช้งาน','หมายเหตุ',
       'ลักษณะการเริ่มทำงาน','ประเภทข้อมูลนำเข้า','ประเภทงาน AI','ผู้ใช้งานต่อวัน','ผู้ใช้พร้อมกันสูงสุด','รายการที่ประมวลผลต่อวัน','จุดตรวจพร้อมกัน','ภาษา','เวลาตอบสนอง','ช่วงเวลาให้บริการ','ผลกระทบเมื่อช้าลง','ระยะเวลาจัดเก็บข้อมูล','งบประมาณ','ข้อจำกัดอื่นๆ','ผู้ให้ข้อมูล',
@@ -4606,7 +4612,7 @@
       var d = computeScoreDetail(u);
       var p = d.total==null ? {label:'ข้อมูลไม่ครบ'} : priorityInfo(d.total);
       var attachText = (u.attachment ? u.attachment.name : '') + (u.attachment && u.attachRef ? ' / ' : '') + (u.attachRef || '');
-      return [u.name,u.company,u.dept,u.owner,u.qwp,u.kqi,u.refStep,u.problem,u.solution,u.dataAvailable,u.redesignDesc,attachText,
+      return [u.name,u.company,u.dept,u.site,u.owner,u.qwp,u.kqi,u.refStep,u.problem,u.solution,u.dataAvailable,u.redesignDesc,attachText,
         u.timeSpent,u.lossValue,u.dataFormat,u.dataHistory,u.dataVolume,u.dataRights,u.needConnect,u.adminOwner,u.aiErrorImpact,u.reviewNeed,u.confidentiality,
         u.deptPriority,u.targetTimeline,u.remark,
         u.triggerType,u.inputType,aiKindLabel(u.inputType),u.usersPerDay,u.peakConcurrent,u.itemsPerDay,u.pointsCount,u.language,u.responseTime,u.serviceHours,u.slowdownImpact,u.retentionPeriod,u.budget,u.constraints,u.providedBy,
