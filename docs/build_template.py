@@ -459,6 +459,29 @@ tip(ws1, "AA", "สถานที่ตั้งที่ใช้งาน",
     "พิมพ์ชื่อให้เหมือนกันทุกครั้งสำหรับที่ตั้งเดียวกัน\n"
     "ถ้ามีที่ตั้งเดียว เว้นว่างได้")
 
+# ใส่ use case จริงลงชีต 1 ตอน build — ทำเฉพาะเมื่อกำหนด SEED_JSON (ไฟล์ {"items":[...]} รูปแบบเดียวกับ Artifact db)
+# ใส่เฉพาะช่องข้อความที่มีค่าจริง ช่องอื่นเว้นว่าง (dropdown คะแนนต้องให้เจ้าของ case กรอกเอง)
+# ค่าเริ่มต้น (ไม่กำหนด SEED_JSON) ยังได้ template ว่างเหมือนเดิม
+_seed_path = os.environ.get("SEED_JSON")
+if _seed_path:
+    import json
+    with open(_seed_path, encoding="utf-8") as _f:
+        _items = json.load(_f)["items"]
+    assert len(_items) <= LAST - FIRST + 1, "use case เกินจำนวนแถวใน template"
+    _seed_cols = {"name": "B", "company": "C", "dept": "D", "owner": "E", "qwp": "F", "kqi": "G",
+                  "refStep": "H", "problem": "I", "solution": "J", "redesignDesc": "K",
+                  "dataAvailable": "N", "remark": "Z", "site": "AA"}
+    _companies = [o for o, _ in LISTS["A"][1]]
+    for _n, _u in enumerate(_items):
+        _r = FIRST + _n
+        ws1[f"A{_r}"] = _n + 1
+        for _k, _L in _seed_cols.items():
+            if _u.get(_k):
+                ws1[f"{_L}{_r}"] = _u[_k]
+        if _u.get("company"):
+            assert _u["company"] in _companies, "บริษัทต้องตรงกับรายการ dropdown: " + _u["company"]
+            ws1[f"C{_r}"] = _u["company"]
+
 # ======================== SHEET 2 : รายละเอียดเทคนิค (ทุก use case, ลิงก์ชื่อ)
 ws2 = wb.create_sheet("2-รายละเอียดเทคนิค")
 groups2 = [
