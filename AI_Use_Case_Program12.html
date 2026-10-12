@@ -958,7 +958,6 @@
       <option value="dept">แผนก</option>
     </select>
     <div class="spacer"></div>
-    <button class="btn-secondary" id="export-btn">ส่งออก CSV</button>
     <button class="btn-secondary btn-danger" id="clear-btn" disabled title="ปิดใช้งานไว้เพื่อความปลอดภัย เพราะข้อมูลนี้ใช้ร่วมกันหลายคนผ่านฐานข้อมูลกลาง กดครั้งเดียวจะลบของทุกคนทิ้งทั้งหมด" style="opacity:.5; cursor:not-allowed;">ล้างทั้งหมด</button>
   </div>
 
@@ -1268,7 +1267,7 @@
 
   <p class="note">
     สูตรคะแนน: (ผลกระทบทางธุรกิจ × 0.35) + (ความเป็นไปได้ทางเทคนิค × 0.25) + (ความพร้อมของข้อมูล × 0.25) + ((6 − ความเสี่ยง) × 0.15) แล้วคูณ 20 เพื่อแปลงเป็นคะแนนเต็ม 100 — คะแนน ≥75 = ระดับสูง, 50–74 = ระดับกลาง, ต่ำกว่า 50 = ระดับต่ำ<br>
-    กดปุ่ม "เอกสาร" บนการ์ดแต่ละ use case เพื่อดูเอกสารสรุปฉบับเต็ม (รวม Spec Hardware, ความเสี่ยง, ทรัพยากร, KQI และ ROI) แล้วเลือกดาวน์โหลดเป็นไฟล์ Word หรือพิมพ์/บันทึกเป็น PDF ได้ทันที<br>
+    กดปุ่ม "เอกสาร" บนการ์ดแต่ละ use case เพื่อดูเอกสารสรุปฉบับเต็ม (รวม Spec Hardware, ความเสี่ยง, ทรัพยากร, KQI และ ROI) แล้วพิมพ์/บันทึกเป็น PDF ได้ทันที<br>
     กดปุ่ม "แผนงาน" เพื่อแปลง Flow ขั้นตอนการทำ AI เป็นแผนงานละเอียด (กิจกรรม ช่วงเวลา ผู้รับผิดชอบ สิ่งส่งมอบ และไทม์ไลน์ Gantt) โดยระบบกระจายระยะเวลาตามที่ระบุในช่อง "ทรัพยากรและประมาณการ" ให้อัตโนมัติ<br>
     ในฟอร์ม กดปุ่ม "เติม Spec แนะนำตามประเภท AI อัตโนมัติ" เพื่อให้ระบบเติม Spec hardware ความเสี่ยง ทรัพยากร KQI และ ROI ที่เหมาะกับประเภท AI นั้นให้ แล้วปรับแก้ได้ตามจริง<br>
     ข้อมูลจะถูกบันทึกไว้ในฐานข้อมูลกลาง (MySQL) ผู้ใช้ทุกคนที่เข้าเครื่องมือนี้จะเห็นข้อมูลชุดเดียวกัน
@@ -2041,7 +2040,6 @@
 <div class="modal-overlay" id="doc-modal">
   <div class="doc-card">
     <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
-      <button class="btn-secondary" id="doc-word-btn">ดาวน์โหลด Word</button>
       <button class="btn-secondary" id="doc-print-btn">พิมพ์ / บันทึกเป็น PDF</button>
       <button class="btn-secondary" id="doc-close-btn">ปิด</button>
     </div>
@@ -2052,7 +2050,6 @@
 <div class="modal-overlay" id="plan-modal">
   <div class="doc-card">
     <div class="doc-actions no-print" style="justify-content:flex-end; margin-bottom:20px;">
-      <button class="btn-secondary" id="plan-word-btn">ดาวน์โหลด Word</button>
       <button class="btn-secondary" id="plan-print-btn">พิมพ์ / บันทึกเป็น PDF</button>
       <button class="btn-secondary" id="plan-close-btn">ปิด</button>
     </div>
@@ -4684,7 +4681,6 @@
   document.getElementById('save-btn').onclick = handleSave;
   document.getElementById('filter-priority').onchange = renderList;
   document.getElementById('sort-by').onchange = renderList;
-  document.getElementById('export-btn').onclick = exportCsv;
   document.getElementById('clear-btn').onclick = askClearAll;
   function printWithClass(cls){
     document.body.classList.add(cls);
@@ -4693,17 +4689,9 @@
     window.print();
   }
   document.getElementById('doc-print-btn').onclick = function(){ printWithClass('printing-doc'); };
-  document.getElementById('doc-word-btn').onclick = function(){
-    var uc = useCases.find(function(u){ return u.id===currentDocId; });
-    exportDocWord(uc);
-  };
   document.getElementById('doc-close-btn').onclick = closeDoc;
   document.getElementById('doc-modal').onclick = function(e){ if(e.target.id==='doc-modal') closeDoc(); };
   document.getElementById('plan-print-btn').onclick = function(){ printWithClass('printing-plan'); };
-  document.getElementById('plan-word-btn').onclick = function(){
-    var uc = useCases.find(function(u){ return u.id===currentDocId; });
-    exportPlanWord(uc);
-  };
   document.getElementById('plan-close-btn').onclick = closePlan;
   document.getElementById('plan-modal').onclick = function(e){ if(e.target.id==='plan-modal') closePlan(); };
   document.getElementById('flow-print-btn').onclick = function(){ printWithClass('printing-flow'); };
