@@ -114,7 +114,7 @@ use_case_web/
 | ประเมิน Flow/n8n | `analyzeFlowAI()` | `uc.aiFlow` |
 | นำเข้า use case จากเอกสาร | `runImportAnalysis()` | ผู้ใช้เลือกเพิ่มทีละรายการเข้า `useCases` |
 
-- **เอกสารที่ออกมา:** หน้าจอ/พิมพ์ (`buildDocBody`), Word `.doc` (`buildDocBodyInline` สร้าง HTML แล้วดาวน์โหลดเป็น Blob), CSV (`exportCsv`), n8n JSON (`exportN8nJson`)
+- **เอกสารที่ออกมา:** หน้าจอ/พิมพ์ (`buildDocBody`) และ n8n JSON (`exportN8nJson`, ปุ่มยังอยู่) — ปุ่มส่งออก CSV และดาวน์โหลด Word (เอกสาร/แผนงาน) **ถูกเอาออกจากหน้าเว็บแล้ว (2026-10-12)** เพราะ Artifact ไม่ให้สิทธิ์ดาวน์โหลดแก่ผู้ชม ปุ่มจึงไม่ทำงาน — ฟังก์ชัน `exportCsv` / `exportDocWord` / `exportPlanWord` ยังค้างอยู่ในโค้ดแต่ไม่มีปุ่มเรียก (ถ้าจะนำกลับต้องประกาศ capability `downloads` แล้วบันทึกผ่าน `window.claude.downloads.save`)
 
 **ข้อสังเกตที่ตรวจพบ (ยังไม่แก้ ดูเฟส 3–4 ใน `IMPLEMENTATION_PLAN.md`):** `ucSpecSummaryLine`/`ucSpecSummaryLineShort` ยังอ้างฟิลด์เก่า (`users`, `language`, `dataSensitivity`, `latency`, `availability`) และ `parseTotalWeeks/TeamSize/Budget` อ่านจาก `uc.resources` ซึ่งไม่มีช่องกรอกแล้ว ทำให้ข้อมูล Zone A/B และ `budget` ไม่ถูกส่งเข้า prompt สเปก/แผนงาน
 
