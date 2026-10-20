@@ -994,8 +994,8 @@
     </div>
     <div class="field">
       <label for="f-site">สถานที่ตั้งที่ใช้งาน (โรงงาน / สาขา)</label>
-      <input type="text" id="f-site" placeholder="เช่น โรงงานระยอง — ที่ตั้งเดียวเว้นว่างได้">
-      <div class="slider-hint">บริษัทเดียวมีหลายที่ตั้งได้ ที่ตั้งคนละที่ = ใช้ Server คนละเครื่อง (ไม่มี Server กลาง) พิมพ์ชื่อให้เหมือนกันทุกครั้งสำหรับที่ตั้งเดียวกัน ไม่นำไปคิดคะแนน</div>
+      <select id="f-site" data-list="site"></select>
+      <div class="slider-hint">ที่ตั้งคนละที่ = ใช้ Server คนละเครื่อง · นาดีของ Thairubbtech กับ SKPolymer คือที่เดียวกัน ใช้ Server ร่วมกัน · ไม่นำไปคิดคะแนน</div>
     </div>
     <div style="border:1px solid var(--border); border-radius:10px; padding:14px 16px 4px; margin:0 0 18px; background:#FAFAF8;">
       <div style="font-size:13px; font-weight:600; color:var(--navy); margin-bottom:12px;">อ้างอิงระบบคุณภาพ (QWP / SQP) <span style="font-weight:400; color:var(--text-muted); font-size:11.5px;">— ไม่บังคับ ไม่นำไปคิดคะแนน</span></div>
@@ -2862,6 +2862,7 @@
   // ===== รายการตัวเลือก (dropdown) — ตรงกับ docs/AI_UseCase_Template_v2.xlsx sheet DATA เป๊ะๆ =====
   // แต่ละ opts เป็น [label] หรือ [label, score(1-5)] — ไม่มี score = ไม่นำไปคิดคะแนน
   var DATA_LISTS = {
+    site: { title:'สถานที่ตั้ง', opts:[['Thairubbtech - ท่าทราย'],['Thairubbtech - นาดี'],['SKPolymer - บางขุนเทียน'],['SKPolymer - นาดี'],['SKPolymer - ลาดหลุมแก้ว']] },
     company: { title:'บริษัท', opts:[['บริษัท แกรนด์เอสเค คอร์ปอเรชั่น จำกัด'],['บริษัท เอส.เค.โพลีเมอร์ จำกัด'],['บริษัท ไทยรับเทค จำกัด'],['บริษัท โพลีเมท จำกัด'],['บริษัท จีทีเค สมาร์ท โซลูชั่น จำกัด'],['อื่นๆ']] },
     dataFormat: { title:'รูปแบบการจัดเก็บข้อมูลปัจจุบัน', opts:[
       ['เอกสารกระดาษ / บันทึกด้วยลายมือ - ต้องแปลงเป็นดิจิทัลก่อน',1],
@@ -4434,14 +4435,14 @@
 
   // ฟิลด์ข้อความ/ข้อความยาว: [id, ชื่อ property ใน use case]
   var FORM_TEXT_FIELDS = [
-    ['f-dept','dept'], ['f-site','site'], ['f-owner','owner'], ['f-qwp','qwp'], ['f-kqi2','kqi'], ['f-refstep','refStep'],
+    ['f-dept','dept'], ['f-owner','owner'], ['f-qwp','qwp'], ['f-kqi2','kqi'], ['f-refstep','refStep'],
     ['f-problem','problem'], ['f-solution','solution'], ['f-dataavailable','dataAvailable'], ['f-redesign','redesignDesc'],
     ['f-datavolume','dataVolume'], ['f-targettimeline','targetTimeline'], ['f-remark','remark'],
     ['f-budget','budget'], ['f-constraints','constraints'], ['f-providedby','providedBy']
   ];
   // ฟิลด์ dropdown: [id, ชื่อ property ใน use case] — ค่าเป็น label ตรงตัวจาก DATA_LISTS
   var FORM_SELECT_FIELDS = [
-    ['f-company','company'], ['f-timespent','timeSpent'], ['f-lossvalue','lossValue'],
+    ['f-company','company'], ['f-site','site'], ['f-timespent','timeSpent'], ['f-lossvalue','lossValue'],
     ['f-dataformat','dataFormat'], ['f-datahistory','dataHistory'], ['f-datarights','dataRights'],
     ['f-needconnect','needConnect'], ['f-adminowner','adminOwner'],
     ['f-aierror','aiErrorImpact'], ['f-reviewneed','reviewNeed'], ['f-confidentiality','confidentiality'],

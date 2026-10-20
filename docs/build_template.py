@@ -18,7 +18,7 @@ F_TITLE = Font(name=FONT, size=14, bold=True, color="FFFFFF")
 F_GROUP = Font(name=FONT, size=10, bold=True, color="FFFFFF")
 F_HEAD  = Font(name=FONT, size=9,  bold=True)
 F_BODY  = Font(name=FONT, size=9)
-F_LINK  = Font(name=FONT, size=9, color="008000")   # เขียว = ลิงก์มาจาก sheet อื่น
+F_LINK  = Font(name=FONT, size=9, color="595959")   # เทาเข้ม = ระบบเติมให้ ไม่ต้องกรอก
 F_CALC  = Font(name=FONT, size=9, bold=True)
 F_EX    = Font(name=FONT, size=9, italic=True, color="808080")
 F_NOTE  = Font(name=FONT, size=9, color="C00000", bold=True)
@@ -35,7 +35,7 @@ FILL_PLAN  = PatternFill("solid", fgColor="595959")
 FILL_TECH  = PatternFill("solid", fgColor="0F6E6E")
 FILL_TOTAL = PatternFill("solid", fgColor="1F3864")
 FILL_INPUT = PatternFill("solid", fgColor="FFF2CC")   # เหลือง = กรอกเอง
-FILL_AUTO  = PatternFill("solid", fgColor="E2EFDA")   # เขียวอ่อน = ระบบเติมให้
+FILL_AUTO  = PatternFill("solid", fgColor="D9D9D9")   # เทา = ระบบเติมให้ ไม่ต้องกด/ไม่ต้องกรอก
 FILL_EX    = PatternFill("solid", fgColor="F2F2F2")
 FILL_IT    = PatternFill("solid", fgColor="DEEBF7")   # ฟ้าอ่อน = ทีม AI/IT เติม
 
@@ -175,6 +175,7 @@ LISTS = {
         ("ทุกไตรมาส", None),
         ("ทุกเดือนหรือถี่กว่านั้น", None),
         ("ยังไม่สามารถระบุได้", None)]),
+    "AA": ("สถานที่ตั้ง", [("Thairubbtech - ท่าทราย", None), ("Thairubbtech - นาดี", None), ("SKPolymer - บางขุนเทียน", None), ("SKPolymer - นาดี", None), ("SKPolymer - ลาดหลุมแก้ว", None)]),
     "AE": ("ลักษณะการเริ่มทำงานของระบบ", [
         ("ผู้ใช้เรียกใช้งานเอง - เปิดใช้เป็นครั้งคราว", None),
         ("ทำงานอัตโนมัติต่อเนื่อง - ระบบทำงานเอง ไม่มีผู้เรียกใช้", None),
@@ -277,7 +278,7 @@ def dv(col, prompt=None):
     return v
 
 # ------------------------------------------------- helper สร้าง sheet ตาราง
-def build_sheet(ws, title, note, groups, cols, example, auto_cols=(), prompts=None):
+def build_sheet(ws, title, note, groups, cols, example, auto_cols=(), prompts=None, legend=None):
     ws.sheet_view.showGridLines = False
     ncol = len(cols)
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=ncol)
@@ -289,6 +290,19 @@ def build_sheet(ws, title, note, groups, cols, example, auto_cols=(), prompts=No
     n = ws.cell(row=2, column=1, value=note)
     n.font = F_NOTE; n.alignment = Alignment(vertical="center", wrap_text=True)
     ws.row_dimensions[2].height = 22
+
+    # แถว 3 = ป้ายสี (ข้อความ, สีพื้น, สีตัวอักษร, คอลัมน์เริ่ม, คอลัมน์จบ)
+    for text, fill, fcolor, c1, c2 in (legend or []):
+        if c2 > c1:
+            ws.merge_cells(start_row=3, start_column=c1, end_row=3, end_column=c2)
+        for k in range(c1, c2 + 1):
+            ws.cell(row=3, column=k).fill = fill
+            ws.cell(row=3, column=k).border = BORDER
+        lc = ws.cell(row=3, column=c1, value=text)
+        lc.font = Font(name=FONT, size=10, bold=True, color=fcolor)
+        lc.alignment = WRAP_C
+    if legend:
+        ws.row_dimensions[3].height = 22
 
     c0 = 1
     for gname, gspan, gfill in groups:
@@ -374,7 +388,7 @@ cols1 = [
     ("กำหนดเวลาที่ต้องการใช้งาน\n(ไตรมาส / ปี)", 20, None),
     ("หมายเหตุ", 26, None),
     # --- สถานที่ตั้ง (ต่อท้ายสุดเพื่อไม่ให้ตัวอักษรคอลัมน์ที่สูตรอ้างอิงเลื่อน) ---
-    ("สถานที่ตั้งที่ใช้งาน\n(โรงงาน / สาขา)", 30, None),
+    ("สถานที่ตั้งที่ใช้งาน\n(โรงงาน / สาขา)", 30, "AA"),
 ]
 assert sum(g[1] for g in groups1) == len(cols1), (sum(g[1] for g in groups1), len(cols1))
 ex1 = [1, "Auto Inspection ตรวจคุณภาพชิ้นงานด้วย Machine Learning",
@@ -400,14 +414,17 @@ ex1 = [1, "Auto Inspection ตรวจคุณภาพชิ้นงาน�
        "ภายในองค์กร - ห้ามเผยแพร่ออกนอกบริษัท",
        "สูง - ต้องการเร่งด่วน", "ไตรมาส 2 ปี 2570",
        "คุณสมชายผ่านการอบรม Python มาแล้ว",
-       "โรงงานระยอง"]
+       "SKPolymer - บางขุนเทียน"]
 build_sheet(
     ws1,
     "ชั้นที่ 1 : เก็บ Use Case ทั้งหมด   (ทุก Use Case ต้องกรอก — ระบบใช้ข้อมูลนี้คำนวณคะแนนใน sheet '3-คะแนนและลำดับ')",
-    "วิธีกรอก : กรอกเฉพาะช่องสีเหลืองตั้งแต่แถวที่ 7 ลงไป  |  แถวสีเทา (แถวที่ 6) คือตัวอย่าง อย่าลบ  |  "
+    "วิธีกรอก : กรอกเฉพาะช่องสีเหลืองตั้งแต่แถวที่ 7 ลงไป  |  แถวที่ 6 (เทาอ่อน ตัวเอียง) คือตัวอย่าง อย่าลบ  |  "
     "ช่องที่มีลูกศรต้องเลือกจากรายการเท่านั้น เพราะระบบอ่านค่าไปแปลงเป็นคะแนน",
     groups1, cols1, ex1,
     prompts={
+        "AA": "เลือกโรงงาน/สาขาที่ใช้งานนี้จริง\n\n"
+              "Thairubbtech นาดี กับ SKPolymer นาดี เป็นที่เดียวกัน ใช้ Server ร่วมกัน\n"
+              "ไม่นำไปคิดคะแนน",
         "L": "เวลาที่คนใช้ทำงานนี้ด้วยวิธีเดิม รวมทุกคนในหน่วยงาน\n\n"
              "เช่น 3 คน คนละ 6 ชั่วโมง/สัปดาห์ = 18 ชั่วโมง/สัปดาห์\n\n"
              "ยังไม่ได้ใช้ AI ช่วย",
@@ -452,12 +469,6 @@ tip(ws1, "N", "ข้อมูลที่มีอยู่ตอนนี้",
     "มีข้อมูลอะไรบ้าง เก็บไว้ที่ไหน ใครเป็นคนเก็บ\nถ้ามีสัดส่วนที่น่าสนใจให้เขียนด้วย เช่น รูปดี 3,000 / รูปเสีย 1,000")
 tip(ws1, "Q", "ปริมาณข้อมูลโดยประมาณ",
     "นับเป็น 'รายการ' หน่วยขึ้นกับงาน :\n  ตรวจภาพ = กี่รูป\n  หาสาเหตุ/NC = กี่เคส\n  ค้นหาเอกสาร = กี่ไฟล์\n  เครื่องเสีย = กี่ครั้ง\n  การผลิต = กี่ล็อต\n\nนับเฉพาะที่รู้คำตอบแล้ว เช่น รูปที่มาร์คว่าดี/เสีย\n(รายละเอียดเต็มอยู่ในคู่มือ)")
-tip(ws1, "AA", "สถานที่ตั้งที่ใช้งาน",
-    "โรงงาน/สาขาที่ใช้งานนี้จริง (บริษัทเดียวมีหลายที่ตั้งได้)\n\n"
-    "ที่ตั้งคนละที่ = ใช้ Server คนละเครื่อง ไม่มี Server กลางข้ามที่ตั้ง\n"
-    "พิมพ์ชื่อให้เหมือนกันทุกครั้งสำหรับที่ตั้งเดียวกัน\n"
-    "ถ้ามีที่ตั้งเดียว เว้นว่างได้")
-
 # ใส่ use case จริงลงชีต 1 ตอน build — ทำเฉพาะเมื่อกำหนด SEED_JSON (ไฟล์ {"items":[...]} รูปแบบเดียวกับ Artifact db)
 # ใส่เฉพาะช่องข้อความที่มีค่าจริง ช่องอื่นเว้นว่าง (dropdown คะแนนต้องให้เจ้าของ case กรอกเอง)
 # ค่าเริ่มต้น (ไม่กำหนด SEED_JSON) ยังได้ template ว่างเหมือนเดิม
@@ -537,9 +548,11 @@ ex2 = [1, "Auto Inspection ตรวจคุณภาพชิ้นงาน�
 build_sheet(
     ws2,
     "ชั้นที่ 2 : รายละเอียดเทคนิค   (กรอกทุก Use Case — ใช้กำหนด Spec Server ที่จะตั้งในบริษัท)",
-    "Server เป็นเครื่องซื้อใหม่ ตั้งในบริษัท ทุกที่ตั้ง (โรงงาน/สาขา) มีเครื่องของตัวเอง ไม่ใช้ Cloud  |  "
-    "เขียว = ระบบดึงมาให้  |  เหลือง = แผนกกรอก  |  ฟ้า = ทีม AI/IT เติมให้ทีหลัง แผนกข้ามไปได้เลย",
+    "Server เป็นเครื่องซื้อใหม่ ตั้งในบริษัท ทุกที่ตั้ง (โรงงาน/สาขา) มีเครื่องของตัวเอง ไม่ใช้ Cloud",
     groups2, cols2, ex2, auto_cols=(1, 2, 3, 6),
+    legend=[("เทา = ระบบเติมให้ ไม่ต้องกรอก", FILL_AUTO, "595959", 1, 2),
+            ("เหลือง = แผนกกรอก", FILL_INPUT, "000000", 3, 4),
+            ("ฟ้า = ทีม AI/IT เติมทีหลัง แผนกข้ามได้", FILL_IT, "000000", 5, 7)],
     prompts={
         "D": "ตอบก่อนช่องอื่น เพราะเป็นตัวบอกว่าช่องที่เหลือต้องกรอกยังไง\n\n"
              "งานที่ระบบสั่งเอง จะไม่มี 'ผู้ใช้งาน' — ให้กรอกคนที่เข้ามาดูผลแทน",
@@ -640,7 +653,7 @@ for _r in [6] + list(range(FIRST, LAST + 1)):
     _c.alignment = WRAP_T
     if _r == 6:
         _c.fill = FILL_AUTO
-        _c.font = Font(name=FONT, size=9, italic=True, color="008000")
+        _c.font = Font(name=FONT, size=9, italic=True, color="595959")
 
 # ทาสีโซน B ให้ต่างจากช่องที่แผนกต้องกรอก
 for _c in IT_ZONE:
@@ -653,11 +666,11 @@ for r in [6] + list(range(FIRST, LAST + 1)):
     ws2.cell(row=r, column=1).value = f'=IF({S1}!B{r}="","",{S1}!A{r})'
     ws2.cell(row=r, column=2).value = f'=IF({S1}!B{r}="","",{S1}!B{r})'
     ws2.cell(row=r, column=3).value = f'=IF({S1}!B{r}="","",{S1}!D{r})'
-    if r == 6:   # แถวตัวอย่าง: ให้ 3 ช่องแรกเป็นสีเขียว (ลิงก์) เหมือนแถวจริง
+    if r == 6:   # แถวตัวอย่าง: ให้ 3 ช่องแรกเป็นสีเทา (ลิงก์) เหมือนแถวจริง
         for col in (1, 2, 3):
             c = ws2.cell(row=6, column=col)
             c.fill = FILL_AUTO
-            c.font = Font(name=FONT, size=9, italic=True, color="008000")
+            c.font = Font(name=FONT, size=9, italic=True, color="595959")
 
 # ================================== SHEET 3 : คะแนนและลำดับ (คำนวณอัตโนมัติ)
 ws3 = wb.create_sheet("3-คะแนนและลำดับ")
@@ -680,9 +693,10 @@ build_sheet(
     ws3,
     "ชั้นที่ 3 : คะแนนและลำดับความสำคัญ   (ระบบคำนวณให้อัตโนมัติ — ห้ามพิมพ์ทับ)",
     "ทุกช่องในหน้านี้เป็นสูตร ดึงข้อมูลจาก sheet '1-UseCase ทั้งหมด' อัตโนมัติ  |  "
-    "แถวสีเทา (แถวที่ 6) คือคะแนนของ Use Case ตัวอย่าง ไม่นับเข้าการจัดอันดับ  |  "
+    "แถวที่ 6 (เทาอ่อน ตัวเอียง) คือคะแนนของ Use Case ตัวอย่าง ไม่นับเข้าการจัดอันดับ  |  "
     "ถ้าอยากปรับน้ำหนักคะแนนหรือเกณฑ์แบ่งระดับ ให้ไปแก้ที่ sheet 'DATA' คอลัมน์ AH-AI (ตัวเลขสีน้ำเงิน)",
-    groups3, cols3, example=None, auto_cols=tuple(range(1, len(cols3) + 1)))
+    groups3, cols3, example=None, auto_cols=tuple(range(1, len(cols3) + 1)),
+    legend=[("เทา = ระบบคำนวณให้ ห้ามพิมพ์ทับ", FILL_AUTO, "595959", 1, 3)])
 
 def lk(col, r):
     """INDEX/MATCH แปลงตัวเลือก dropdown -> คะแนน"""
@@ -799,48 +813,26 @@ c.font = F_TITLE; c.fill = FILL_TITLE; c.alignment = WRAP_C
 ws0.row_dimensions[2].height = 30
 
 rows = [
-    ("S", "โครงสร้างไฟล์", ""),
-    ("", "1-UseCase ทั้งหมด", "แผนกกรอกเอง — ข้อมูลพื้นฐานและข้อมูลที่ใช้คำนวณคะแนน (กรอกทุก Use Case)"),
-    ("", "2-รายละเอียดเทคนิค", "แผนกกรอกเอง — ข้อมูลเชิงเทคนิคสำหรับกำหนด Spec Hardware (กรอกทุก Use Case) "
-                               "ช่องชื่อ/แผนกระบบดึงมาจากชั้นที่ 1 ให้อัตโนมัติ"),
-    ("", "3-คะแนนและลำดับ", "ระบบคำนวณให้อัตโนมัติ — ไม่ต้องกรอกอะไรเลย ดูอย่างเดียว "
-                            "บอกว่าแต่ละ Use Case ได้กี่คะแนน อยู่ระดับไหน อันดับที่เท่าไหร่"),
-    ("", "DATA", "รายการตัวเลือก Dropdown + ตารางแปลงตัวเลือกเป็นคะแนน + น้ำหนักและเกณฑ์ (ปรับได้)"),
-    ("S", "ขั้นตอนการใช้งาน", ""),
-    ("", "ขั้นที่ 1", "แต่ละแผนกกรอก sheet '1-UseCase ทั้งหมด' ให้ครบทุก Use Case ที่อยากได้"),
-    ("", "ขั้นที่ 2", "กรอก sheet '2-รายละเอียดเทคนิค' ต่อ โดยดูชื่อ Use Case ที่ระบบดึงมาให้แล้ว"),
-    ("", "ขั้นที่ 3", "เปิด sheet '3-คะแนนและลำดับ' ดูผล — ระบบจัดอันดับให้ทันทีโดยไม่ต้องกด"),
-    ("", "ขั้นที่ 4", "นำไฟล์เข้าระบบ AI Use Case Tool เพื่อให้ AI ทบทวนคะแนนอีกชั้น "
-                      "และวิเคราะห์ Spec Hardware / ประมาณราคา Server ของ Use Case อันดับต้นๆ"),
-    ("S", "กติกาการกรอก", ""),
-    ("", "ช่องสีเหลือง", "ช่องที่ต้องกรอกเอง"),
-    ("", "ช่องสีเขียวอ่อน", "ระบบเติมให้อัตโนมัติ ห้ามพิมพ์ทับ (ถ้าพิมพ์ทับ สูตรจะหายและข้อมูลจะไม่ตรงกัน)"),
-    ("", "แถวสีเทา (แถวที่ 6)", "แถวตัวอย่าง อย่าลบทิ้ง ใช้ดูว่าควรกรอกละเอียดแค่ไหน (เป็นตัวเลขสมมติ)"),
-    ("", "ช่องที่มีลูกศร", "ต้องเลือกจากรายการเท่านั้น ห้ามพิมพ์เอง เพราะระบบอ่านค่าไปแปลงเป็นคะแนน"),
-    ("", "ไม่รู้คำตอบทำยังไง", "เลือก 'ยังไม่แน่ใจ' ดีกว่าเดาตัวเลขมั่ว เพราะตัวเลขที่เดาจะทำให้คะแนนผิดทั้งระบบ"),
-    ("", "กรอกได้กี่ Use Case", "แถวที่ 7 ถึง 36 (30 Use Case) ถ้าต้องการมากกว่านี้ให้แจ้งส่วนกลาง"),
-    ("", "สถานที่ตั้ง (คอลัมน์ AA)", "บริษัทเดียวมีหลายที่ตั้งได้ — ที่ตั้งคนละที่ถือว่าใช้ Server คนละเครื่อง ไม่มี Server กลางข้ามที่ตั้ง "
-                                   "จึงต้องพิมพ์ชื่อที่ตั้งให้เหมือนกันทุกครั้ง (ไม่ได้คิดคะแนน) ที่ตั้งเดียวเว้นว่างได้"),
-    ("S", "คอลัมน์ที่ตรงกับ Excel Template เดิม (ยกมาครบ ไม่ได้ตัดทิ้ง)", ""),
-    ("", "Existing Work", "-> คอลัมน์ G 'วิธีการทำงานปัจจุบัน' ในชั้นที่ 1"),
-    ("", "Description for Redesign", "-> คอลัมน์ H 'แนวทางหลังนำ AI มาใช้' ในชั้นที่ 1"),
-    ("", "Data Available from & by …", "-> คอลัมน์ K 'ข้อมูลที่มีอยู่ตอนนี้' ในชั้นที่ 1"),
-    ("", "ปัญหาที่ต้องการแก้ / Output ที่คาดหวัง (แบบ GSK)",
-     "-> คอลัมน์ F และ H ในชั้นที่ 1"),
-    ("", "ข้อมูลเชิงปริมาณ + ความต้องการเชิงเทคนิค (แบบ GSK)",
-     "-> ย้ายไปอยู่ชั้นที่ 2 ทั้งหมด พร้อมเพิ่มที่ขาด เช่น Peak concurrent, ประเภทข้อมูล Input, "
-     "ขนาดคลังเอกสาร, ความต้องการ Fine-tune"),
-    ("S", "ข้อมูลแต่ละกลุ่มถูกนำไปใช้ทำอะไร", ""),
-    ("", "ผลกระทบ (สีส้ม)", "ชั่วโมง/สัปดาห์ + มูลค่าความเสียหาย -> คะแนน Impact (น้ำหนัก 35%)"),
-    ("", "ความพร้อมข้อมูล (สีเขียว)", "รูปแบบ + ย้อนหลัง + สิทธิ์ใช้ข้อมูล -> คะแนน Data (น้ำหนัก 25%)"),
-    ("", "ความเป็นไปได้ (สีม่วง)", "ระบบเดิมที่ต้องเชื่อม + คนดูแลต่อ -> คะแนน Feasibility (น้ำหนัก 25%)"),
-    ("", "ความเสี่ยง (สีแดง)", "ผลถ้า AI ผิด + การตรวจซ้ำ + ความลับข้อมูล -> คะแนน Risk (น้ำหนัก 15% กลับด้าน)"),
-    ("", "ชั้นที่ 2 ทั้งหมด", "ใช้กำหนด Spec Hardware : Latency + ประเภทข้อมูล -> ตัดสินว่าต้องใช้ GPU หรือ CPU  |  "
-                              "Peak concurrent + Requests -> ตัดสินขนาดเครื่อง  |  "
-                              "ระดับความลับ -> มาตรการเข้ารหัส/จำกัดสิทธิ์ (ทุกงานรันบน On-premise ไม่ใช้ Cloud)"),
+    ("S", "ใช้ยังไง (4 ขั้นตอน)", ""),
+    ("", "1  กรอกชีต 1", "กรอกให้ครบทุก Use Case ตั้งแต่แถวที่ 7 ลงไป (ใส่ได้ 30 รายการ)"),
+    ("", "2  กรอกชีต 2", "ดูชื่อ Use Case ที่ระบบดึงมาให้ แล้วกรอกช่องสีเหลืองต่อ"),
+    ("", "3  ดูผลชีต 3", "ระบบให้คะแนนและจัดอันดับเอง ไม่ต้องกรอกอะไร"),
+    ("", "4  ส่งไฟล์ต่อ", "ส่งไฟล์ให้ทีม AI นำเข้าโปรแกรม เพื่อดูผลและวางแผน Server"),
+    ("S", "ความหมายของสี", ""),
+    ("C", "เหลือง", "ช่องที่ต้องกรอกเอง", FILL_INPUT, "000000"),
+    ("C", "เทา", "ระบบเติมให้ ไม่ต้องกด และห้ามพิมพ์ทับ", FILL_AUTO, "595959"),
+    ("C", "ฟ้า", "ทีม AI/IT เติมทีหลัง แผนกข้ามไปได้", FILL_IT, "000000"),
+    ("C", "เทาอ่อน (แถวที่ 6)", "แถวตัวอย่าง ตัวเลขสมมติ อย่าลบทิ้ง", FILL_EX, "808080"),
+    ("S", "ข้อควรจำ", ""),
+    ("", "ช่องที่มีลูกศร", "เลือกจากรายการเท่านั้น ห้ามพิมพ์เอง"),
+    ("", "ไม่แน่ใจ", "เลือก 'ยังไม่แน่ใจ' ดีกว่าเดาตัวเลข"),
+    ("", "ช่องบังคับ 10 ช่อง", "ชีต 1 คอลัมน์ L M O P R S T U V W ต้องกรอกครบ ไม่งั้นชีต 3 จะขึ้น 'ข้อมูลไม่ครบ' แทนคะแนน"),
+    ("", "สถานที่ตั้ง (คอลัมน์ AA)", "เลือกจากรายการ 5 ที่ตั้ง (นาดีของ 2 บริษัทคือที่เดียวกัน ใช้ Server ร่วมกัน)"),
+    ("", "คะแนนคือ", "ตัวช่วยกรองเบื้องต้น ผู้บริหารเป็นคนตัดสินใจเลือกโครงการจริง"),
 ]
 r = 4
-for kind, label, detail in rows:
+for row in rows:
+    kind, label, detail = row[0], row[1], row[2]
     if kind == "S":
         ws0.merge_cells(start_row=r, start_column=2, end_row=r, end_column=3)
         c = ws0.cell(row=r, column=2, value=label)
@@ -849,17 +841,18 @@ for kind, label, detail in rows:
         ws0.row_dimensions[r].height = 24
     else:
         a = ws0.cell(row=r, column=2, value=label)
-        a.font = Font(name=FONT, size=9, bold=True); a.alignment = WRAP_T
+        if kind == "C":
+            a.fill = row[3]
+            a.font = Font(name=FONT, size=10, bold=True, color=row[4])
+            a.alignment = WRAP_C
+        else:
+            a.font = Font(name=FONT, size=10, bold=True); a.alignment = WRAP_T
+        a.border = BORDER
         b = ws0.cell(row=r, column=3, value=detail)
-        b.font = F_BODY; b.alignment = WRAP_T
-        ws0.row_dimensions[r].height = 32 if len(detail) < 110 else 48
+        b.font = Font(name=FONT, size=10); b.alignment = Alignment(wrap_text=True, vertical="center")
+        b.border = BORDER
+        ws0.row_dimensions[r].height = 26 if len(detail) < 70 else 38
     r += 1
-r += 1
-ws0.merge_cells(start_row=r, start_column=2, end_row=r, end_column=3)
-c = ws0.cell(row=r, column=2,
-             value="หมายเหตุ : ข้อมูลในแถวตัวอย่าง (แถวสีเทา) เป็นตัวเลขสมมติเพื่อแสดงรูปแบบการกรอกเท่านั้น "
-                   "ไม่ใช่ข้อมูลจริงของบริษัท")
-c.font = F_NOTE; c.alignment = WRAP_T
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 wb._sheets = [ws0, ws1, ws2, ws3, ws_d]
