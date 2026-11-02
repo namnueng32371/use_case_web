@@ -973,7 +973,7 @@
     <p class="ai-note">ต้องใช้ AI (Claude) — ใช้ได้เฉพาะเมื่อเปิดผ่าน Claude Artifact · ถ้าเปิดไฟล์ HTML ในเครื่อง ส่วนนี้จะใช้งานไม่ได้</p>
     <p class="import-desc">แนบไฟล์ PDF, Word (.docx) หรือ PowerPoint (.pptx) — Claude จะอ่านเนื้อหา เทียบกับ use case ที่มีอยู่แล้วในระบบ แล้วเสนอเฉพาะ use case ที่ยังไม่มี ให้คุณเลือกเพิ่มทีละอันเอง (รองรับหลายไฟล์พร้อมกัน, ไม่เกิน 10MB ต่อไฟล์ — ไฟล์ .doc/.ppt แบบเก่ายังไม่รองรับ กรุณา Save As เป็น .docx/.pptx ก่อน)</p>
     <div class="import-controls">
-      <input type="file" id="import-file-input" accept=".pdf,.docx,.pptx" multiple>
+      <input type="file" id="import-file-input" accept=".pdf,.docx,.pptx,.xlsx" multiple>
       <button class="btn-primary" id="import-run-btn">วิเคราะห์หา Use Case ใหม่</button>
     </div>
     <div class="import-status" id="import-status"></div>
@@ -3990,6 +3990,21 @@
     renderImportCandidates();
   }
 
+  function routeXlsxToExcelPanel(file){
+    var panel = document.getElementById('excel-panel');
+    var input = document.getElementById('excel-file-input');
+    panel.classList.add('open');
+    try{
+      var dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+    }catch(e){
+      document.getElementById('excel-status').textContent = 'กรุณาเลือกไฟล์ Excel อีกครั้งในช่องนี้';
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    readExcelFile();
+  }
+
   async function runImportAnalysis(){
     var input = document.getElementById('import-file-input');
     var statusEl = document.getElementById('import-status');
@@ -3997,6 +4012,13 @@
     var files = input && input.files ? Array.prototype.slice.call(input.files) : [];
     if(files.length === 0){
       if(statusEl){ statusEl.style.color = '#A32D2D'; statusEl.textContent = 'กรุณาเลือกไฟล์ก่อน (PDF, .docx หรือ .pptx)'; }
+      return;
+    }
+    // ไฟล์ Excel (template) ไม่ต้องใช้ AI อ่าน — ส่งต่อไปแผง Excel Template ให้อัตโนมัติ
+    var xlsxFile = files.filter(function(f){ return /\.xlsx$/i.test(f.name); })[0];
+    if(xlsxFile){
+      routeXlsxToExcelPanel(xlsxFile);
+      if(statusEl){ statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'ไฟล์ Excel ถูกส่งไปที่แผง "Excel Template" ด้านล่างแล้ว (ช่องนี้สำหรับ PDF/Word/PPT)'; }
       return;
     }
     btn.disabled = true;
