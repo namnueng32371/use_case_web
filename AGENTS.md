@@ -9,11 +9,12 @@
 โปรเจกต์คือ **AI Use Case Prioritization Tool** — เครื่องมือรวบรวม ให้คะแนน และจัดลำดับ use case AI ของกลุ่มบริษัท
 
 - ทำงานเป็น **Claude Artifact ล้วน** (HTML/CSS/JS ไฟล์เดียว) **ไม่มี backend/MySQL/Flask แล้ว** ข้อมูลเก็บใน Artifact database
-- 2 ไฟล์แอป: `artifact.html` (ตัวหลัก publish ขึ้น Artifact) และ `AI_Use_Case_Program12.html` (ไฟล์สำรองในเครื่อง ต้องตรงกัน)
-- Excel template (`docs/AI_UseCase_Template_v2.xlsx`) สร้างจาก `docs/build_template.py` และต้องตรงกับฟอร์มในแอป
+- 2 ไฟล์แอปอยู่ใน `app/`: `app/artifact.html` (ตัวหลัก publish ขึ้น Artifact) และ `app/AI_Use_Case_Program12.html` (ไฟล์สำรองในเครื่อง ต้องตรงกัน)
+- โครงสร้างโฟลเดอร์ (จัดใหม่ 2026-11-02): `app/` แอป · `template/` สคริปต์และไฟล์ Excel · `docs/` เอกสาร · `ตัวอย่าง/` ไฟล์ทดสอบ · `source/` ต้นฉบับจากแผนก · `backup/` ข้อมูลสำรอง — `README.md`, `AGENTS.md`, `PRODUCT.md` ต้องอยู่ root ห้ามย้าย
+- Excel template (`template/AI_UseCase_Template_v2.xlsx`) สร้างจาก `template/build_template.py` และต้องตรงกับฟอร์มในแอป
 - Artifact ตัวหลัก: **AI Use Case Prioritization Tool** — `https://claude.ai/artifact/U5akAKHk25wHyje3oQQU2e`
 
-เอกสารที่ใช้ร่วมกัน: [PRD.md](PRD.md) (ความต้องการ) · [ARCHITECTURE.md](ARCHITECTURE.md) (โครงสร้างจริง) · [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) (ดีไซน์) · [CONTEXT.md](CONTEXT.md) (ข้อตกลงและหลัก sizing Spec) · [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) (แผนงาน)
+เอกสารที่ใช้ร่วมกัน: [PRD.md](docs/PRD.md) (ความต้องการ) · [ARCHITECTURE.md](docs/ARCHITECTURE.md) (โครงสร้างจริง) · [DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) (ดีไซน์) · [CONTEXT.md](docs/CONTEXT.md) (ข้อตกลงและหลัก sizing Spec) · [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) (แผนงาน)
 
 ---
 
@@ -33,7 +34,7 @@
 > [!CAUTION]
 > **กฎเหล็ก — ละเมิดไม่ได้**
 > 1. **ห้าม `git commit` / `git push` จนกว่าผู้ใช้จะสั่งชัดเจน** (เช่น "commit ให้หน่อย") แก้ไฟล์ ตรวจ รายงาน แล้วรอ การอนุญาตครั้งหนึ่งไม่ครอบคลุมครั้งต่อไป
-> 2. **พอ commit ได้รับอนุญาตแล้ว ต้อง publish `artifact.html` ขึ้น Artifact ตัวหลักด้วยเสมอ** โดยระบุ `url` เดิม (ห้าม publish แบบไม่ใส่ `url` จะสร้างอันใหม่หรือทับผิดตัว)
+> 2. **พอ commit ได้รับอนุญาตแล้ว ต้อง publish `artifact.html` ขึ้น Artifact ตัวหลักด้วยเสมอ** โดยระบุ `url` เดิม (ห้าม publish แบบไม่ใส่ `url` จะสร้างอันใหม่หรือทับผิดตัว) — publish โดยไม่ใส่ `capabilities` เพื่อคง `sample`/`db`/`downloads` ไว้
 > 3. **`artifact.html` และ `AI_Use_Case_Program12.html` ต้องแก้คู่กันเสมอ** แก้ไฟล์หนึ่งแล้วลืมอีกไฟล์ = ฟีเจอร์ไม่ตรงกัน
 > 4. **Artifact คือช่องทางทดสอบหลักแบบเรียลไทม์** แก้ `artifact.html` เสร็จแล้ว publish ทันที ไม่ต้องรอ commit (ไม่เปลี่ยนสิทธิ์ commit ตามข้อ 1) ไฟล์ local มีหน้าที่เก็บสำรอง ไม่ต้องเปิดในเบราว์เซอร์ทดสอบทุกรอบ เว้นแต่ผู้ใช้ขอ
 
@@ -46,8 +47,8 @@
 
 ## 4. ห้ามแก้ไข
 
-- **ห้ามแก้ `docs/AI_UseCase_Template_v2.xlsx` ด้วยมือ** แก้ที่ `docs/build_template.py` แล้วรันสร้างใหม่เท่านั้น (ไฟล์มีสูตรและ dropdown หลายสิบชุด)
-- ห้ามลบหรือแก้ไฟล์ backup: `backup_ai_usecase_db_*.sql`, `data/use_cases_export.json` เว้นแต่ผู้ใช้สั่ง
+- **ห้ามแก้ `template/AI_UseCase_Template_v2.xlsx` ด้วยมือ** แก้ที่ `template/build_template.py` แล้วรันสร้างใหม่เท่านั้น (ไฟล์มีสูตรและ dropdown หลายสิบชุด)
+- ห้ามลบหรือแก้ไฟล์ backup: `backup/backup_ai_usecase_db_*.sql`, `backup/use_cases_export.json` เว้นแต่ผู้ใช้สั่ง
 - ห้ามลบ/แก้ข้อมูล use case ใน Artifact database เกินที่ผู้ใช้ขอ ข้อมูลใช้ร่วมกันทุกคน และการเขียนเป็นการทับทั้งก้อน (`usecases/all`) ต้องอ่านเวอร์ชันล่าสุดก่อนเขียนเสมอ
 - ห้ามรื้อค่าที่ตกลงแล้วใน `CONTEXT.md` (สูตรคะแนน, Server เป็น On-premise แยกตามสถานที่ตั้ง, ตารางราคาอ้างอิงต้องตายตัว) โดยไม่ขอผู้ใช้
 - ห้ามแตะ `.claude/skills/impeccable/` และ `.claude/agents/` (ของ skill) และห้ามรัน `npx impeccable update` โดยไม่ถูกขอ
@@ -63,7 +64,7 @@
 - **ข้อความจากผู้ใช้/AI ที่ใส่ใน `innerHTML` ต้องผ่าน `escapeHtml()` เสมอ** (ป้องกัน XSS) ใช้ `fillOrDash()`/`nl2br()` กับค่าว่าง
 - ห้ามค้นหา/แทนที่แบบหยาบกับ `</body>`, `</html>`: ฟังก์ชันสร้าง Word (`.doc`) มี tag เหล่านี้อยู่ใน string literal ใช้ Edit ที่ระบุบริบทเฉพาะเจาะจง
 - Word export ใช้ฟอนต์ Arial และ inline style (Word ไม่โหลด Google Fonts) ห้ามเปลี่ยนเป็น CSS Token
-- **Dropdown/ฟิลด์ใหม่:** แก้ 3 ที่พร้อมกัน — `docs/build_template.py` (`LISTS`/คอลัมน์), `artifact.html`, `AI_Use_Case_Program12.html` (`DATA_LISTS`, `FORM_TEXT_FIELDS`/`FORM_SELECT_FIELDS`, ฟอร์ม, เอกสาร, CSV) และเพิ่มคอลัมน์ Excel **ต่อท้าย**เพื่อไม่ให้ตัวอักษรคอลัมน์ที่สูตรอ้างอิงเลื่อน
+- **Dropdown/ฟิลด์ใหม่:** แก้ 3 ที่พร้อมกัน — `template/build_template.py` (`LISTS`/คอลัมน์), `artifact.html`, `AI_Use_Case_Program12.html` (`DATA_LISTS`, `FORM_TEXT_FIELDS`/`FORM_SELECT_FIELDS`, ฟอร์ม, เอกสาร, CSV) และเพิ่มคอลัมน์ Excel **ต่อท้าย**เพื่อไม่ให้ตัวอักษรคอลัมน์ที่สูตรอ้างอิงเลื่อน
 - คะแนนไม่ถูกเก็บ คำนวณสดจาก `computeScoreDetail()` ห้ามบันทึกค่าคะแนนลงข้อมูล
 - ใช้ `encoding='utf-8'` เสมอเมื่ออ่าน/เขียนไฟล์ด้วย Python และรักษา line ending เดิมของไฟล์ (`AI_Use_Case_Program12.html` เป็น CRLF)
 - Terminal Windows แสดงไทยเพี้ยน (cp874) ให้ตรวจโดย redirect ลงไฟล์แล้วอ่านเป็น UTF-8
@@ -77,7 +78,7 @@
 1. อ่านโค้ดจุดที่เกี่ยวข้องในทั้งสองไฟล์ → 2. แก้ `artifact.html` → 3. แก้ `AI_Use_Case_Program12.html` ให้เหมือนกัน → 4. ตรวจด้วย diff เทียบสองไฟล์ → 5. **publish `artifact.html`** ให้ผู้ใช้ทดสอบ → 6. รายงานแล้วรอคำสั่ง commit
 
 **แก้ Excel template**
-- แก้ `docs/build_template.py` → รัน `python docs/build_template.py` → **ปิดไฟล์ `.xlsx` ใน Excel ก่อน** (ไม่งั้นบันทึกไม่ได้) → เปิดตรวจด้วย Excel จริง (ดูรายการตรวจใน `CONTEXT.md` หัวข้อ "สิ่งที่ต้องตรวจทุกครั้งหลังแก้ template") ห้ามเชื่อการอ่านด้วย Python อย่างเดียว
+- แก้ `template/build_template.py` → รัน `python template/build_template.py` (ใส่ 3 case เดิมด้วย `SEED_JSON` ถ้าต้องการ) → **รัน `python template/embed_template.py`** เพื่อฝัง template ว่างลงเว็บทั้งสองไฟล์ (ปุ่มดาวน์โหลดในเว็บ) → **ปิดไฟล์ `.xlsx` ใน Excel ก่อน** (ไม่งั้นบันทึกไม่ได้) → เปิดตรวจด้วย Excel จริง (ดูรายการตรวจใน `CONTEXT.md` หัวข้อ "สิ่งที่ต้องตรวจทุกครั้งหลังแก้ template") ห้ามเชื่อการอ่านด้วย Python อย่างเดียว
 
 **งานดีไซน์:** ใช้ skill `impeccable` ทีละส่วน (ถามสั้นๆ → ออกแบบ → `impeccable detect` → publish) สถานะดู `IMPLEMENTATION_PLAN.md` เฟส 2
 
@@ -95,7 +96,7 @@
 - **Regression:** ก่อนแก้ `grep` หาผู้เรียกใช้ฟังก์ชัน/ฟิลด์ทั้งสองไฟล์ ตรวจว่าจุดอื่นที่ใช้ร่วมกัน (การ์ด, เอกสาร, Word, CSV, Spec, แผนงาน, Flow) ยังทำงาน เช่น ฟิลด์เก่าที่ถูกลบแล้วต้องไม่เหลืออ้างอิง
 - **Side effects:** เช็คผลต่อข้อมูลเดิมใน Artifact database (use case ที่ไม่มีฟิลด์ใหม่ต้องไม่พัง), ต่อ template (3 ที่ต้องตรงกัน), ต่อสูตรคะแนน
 - **การตรวจโค้ด:** `diff` สองไฟล์ในจุดที่แก้ · `.claude/skills/impeccable/scripts/impeccable detect --json <ไฟล์>` เมื่อแก้ UI (แยกปัญหาที่เราสร้างออกจากที่มีอยู่เดิม)
-- **คะแนน:** เทียบกับสูตรใน `docs/SCORING.md` ด้วยตัวอย่างคำนวณมือ · เทียบกับ Excel จริงได้โดยคัดลอก `docs/AI_UseCase_Template_v2.xlsx` ไปโฟลเดอร์ชั่วคราว เปิดด้วย Excel ผ่าน COM (`New-Object -ComObject Excel.Application` ใน PowerShell, `Visible=$false`) เติมข้อมูลลง sheet 1/2 สั่ง `CalculateFull()` แล้วอ่านผลจาก sheet 3 เทียบกับ `computeScoreDetail()`/`aiKindLabel()` ที่รันด้วย node (ห้ามแก้ไฟล์จริง และต้องปิด Excel ที่เปิดไว้ให้หมดหลังใช้ — ตรวจด้วย `Get-Process EXCEL`)
+- **คะแนน:** เทียบกับสูตรใน `docs/SCORING.md` ด้วยตัวอย่างคำนวณมือ · เทียบกับ Excel จริงได้โดยคัดลอก `template/AI_UseCase_Template_v2.xlsx` ไปโฟลเดอร์ชั่วคราว เปิดด้วย Excel ผ่าน COM (`New-Object -ComObject Excel.Application` ใน PowerShell, `Visible=$false`) เติมข้อมูลลง sheet 1/2 สั่ง `CalculateFull()` แล้วอ่านผลจาก sheet 3 เทียบกับ `computeScoreDetail()`/`aiKindLabel()` ที่รันด้วย node (ห้ามแก้ไฟล์จริง และต้องปิด Excel ที่เปิดไว้ให้หมดหลังใช้ — ตรวจด้วย `Get-Process EXCEL`)
 - **Security:** ตรวจทุกจุดที่ใส่ข้อความลง `innerHTML` ว่า escape · ไม่เพิ่ม Secrets · ไม่เพิ่มการเรียกภายนอกใหม่โดยไม่แจ้ง · ไฟล์แนบจำกัด 10MB
 - **หน้าเว็บจริง:** เครื่องมือเบราว์เซอร์ของ Agent เปิดไฟล์ local นอกโปรเจกต์ไม่เสถียรและเข้าหน้าต่าง Artifact ของผู้ใช้ไม่ได้ ให้ระบุตรงๆ ว่า**ยังไม่ได้ดูผลบนหน้าจอเอง** แล้วให้ผู้ใช้ตรวจบน Artifact
 - ใช้ข้อมูลทดสอบที่ผู้ใช้อนุมัติแล้วเท่านั้น และเก็บกวาดข้อมูลทดสอบที่สร้างเองหลังใช้เสร็จ

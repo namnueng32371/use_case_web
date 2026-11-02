@@ -9,7 +9,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule, FormulaRule
 from openpyxl.utils import get_column_letter
 
-OUT = r"C:\Users\Jengza\Desktop\use_case_web\docs\AI_UseCase_Template_v2.xlsx"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "AI_UseCase_Template_v2.xlsx")
 FIRST, LAST = 7, 36          # แถวข้อมูลจริง
 S1 = "'1-UseCase ทั้งหมด'"   # ชื่อ sheet มีเว้นวรรค ต้องครอบ '
 

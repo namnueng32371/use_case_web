@@ -32,7 +32,7 @@
 | ฟอนต์ | IBM Plex Sans Thai (Google Fonts) | ดู `DESIGN_SYSTEM.md` |
 | ฐานข้อมูล | Artifact database (`claudeDb`) | ผ่าน `window.claude.use('db')` |
 | AI | Claude ผ่าน `window.claude.use('sample')` | `claudeSample.json(prompt, opts)` |
-| สร้าง Excel template | Python 3 + `openpyxl` | `docs/build_template.py` |
+| สร้าง Excel template | Python 3 + `openpyxl` | `template/build_template.py` |
 | เครื่องมือออกแบบ | skill `impeccable` | `.claude/skills/impeccable/` (ไม่เกี่ยวกับ runtime) |
 
 ไม่มี `package.json` / `requirements.txt` / ชุดทดสอบอัตโนมัติ (ตรวจแล้วไม่พบไฟล์ test ใน git)
@@ -43,21 +43,20 @@
 
 ```
 use_case_web/
-├── artifact.html                 # ตัวหลัก (publish ขึ้น Artifact)
-├── AI_Use_Case_Program12.html    # ไฟล์สำรองในเครื่อง (ต้องตรงกับตัวหลัก)
-├── AGENTS.md · ARCHITECTURE.md · DESIGN_SYSTEM.md · PRD.md   # เอกสารสำหรับ Agent/ทีม
-├── CONTEXT.md                    # ข้อตกลงโครงการ + หลัก sizing Spec Hardware
-├── IMPLEMENTATION_PLAN.md        # แผนงาน 4 เฟส (task checklist)
-├── README.md                     # คู่มือผู้ใช้ (ยุค Artifact)
-├── PRODUCT.md                    # บริบทผลิตภัณฑ์สำหรับ skill impeccable
-├── data/use_cases_export.json    # สำรองข้อมูลก่อนย้ายมา Artifact
-├── backup_ai_usecase_db_*.sql    # สำรองจากยุค MySQL
-├── docs/
-│   ├── AI_UseCase_Template_v2.xlsx   # Template แจกแผนกกรอก (สร้างจากสคริปต์)
-│   ├── build_template.py             # สคริปต์สร้าง template (ห้ามแก้ .xlsx มือ)
-│   ├── SCORING.md · TEMPLATE_GUIDE.md · dept_codes.json
-│   └── use_cases_source/ · use_cases_source2/   # ไฟล์ต้นฉบับจากแผนก
-└── .claude/                      # skill impeccable + agents + launch.json
+├── README.md · AGENTS.md · PRODUCT.md   # ต้องอยู่ root (เครื่องมือ AI / GitHub / skill impeccable หาไฟล์ที่นี่)
+├── app/
+│   ├── artifact.html                 # ตัวหลัก (publish ขึ้น Artifact)
+│   └── AI_Use_Case_Program12.html    # ไฟล์สำรองในเครื่อง (ต้องตรงกับตัวหลัก)
+├── template/
+│   ├── build_template.py             # สร้าง Excel template (ห้ามแก้ .xlsx มือ)
+│   ├── embed_template.py             # ฝัง template ว่างลงหน้าเว็บ (ปุ่มดาวน์โหลด)
+│   ├── AI_UseCase_Template_v2.xlsx   # Template + 3 case จริง (แถว 7–9)
+│   └── TEMPLATE_GUIDE.md             # คู่มือทุกคอลัมน์
+├── docs/                             # CONTEXT · PRD · ARCHITECTURE · DESIGN_SYSTEM · IMPLEMENTATION_PLAN · SCORING · fill_guide_3_cases
+├── ตัวอย่าง/                         # ไฟล์ Excel ตัวอย่าง 5 เคส (ใช้ทดสอบการนำเข้า)
+├── source/                           # ไฟล์ต้นฉบับจากแผนก (use_cases_source, use_cases_source2, dept_codes.json)
+├── backup/                           # backup ยุค MySQL (.sql) + use_cases_export.json — ห้ามลบ
+└── .claude/                          # skill impeccable + agents + launch.json (เสิร์ฟไฟล์ static พอร์ต 8765)
 ```
 
 โครงสร้างภายใน `artifact.html` (ไฟล์เดียวแบ่งเป็นส่วน): `<style>` → ส่วน HTML `<header class="app-header">` + `<div id="view-…">` 5 มุมมอง (`usecases`, `org`, `flow`, `spec`, `plan`) + modal 4 ตัว (`doc-modal`, `plan-modal`, `flow-modal`, `org-role-modal`) + footer → `<script>` ตัวเดียวเรียงตาม: ค่าคงที่/ICONS → ตัวช่วย AI → `loadData`/`saveData` → `DATA_LISTS` และสูตรคะแนน → render → สร้างเอกสาร/แผน/Flow → ฟอร์ม → bind event
@@ -85,7 +84,7 @@ use_case_web/
 - ไฟล์แนบ: `attachment` (`{name,type,size,data}` base64 ≤ 10MB) และ `attachRef`
 - ค่าที่ระบบคำนวณ/เติม: `aiType` (derive จาก `inputType` + `modelAdaptation` ผ่าน `deriveLegacyAiType()`), `aiPlan` และ `aiFlow` (ผลวิเคราะห์ AI ที่เก็บไว้กับ use case)
 - **คะแนนไม่ถูกเก็บ** คำนวณสดทุกครั้งจาก 10 ช่องบังคับ: `computeScoreDetail()` = `(Impact×0.35 + Feasibility×0.25 + Data×0.25 + (6−Risk)×0.15) × 20` (ช่วง 20–100; สูง ≥75, กลาง 50–74, ต่ำ <50) ถ้ากรอกไม่ครบจะแสดง "ข้อมูลไม่ครบ"
-- `DATA_LISTS` (29 รายการ) คือแหล่งตัวเลือกและคะแนนของ dropdown ต้องตรงกับ `LISTS` ใน `docs/build_template.py` (ตรวจแล้ว 2026-10-12 ว่าตรงกันทั้ง 3 ที่ ทั้งข้อความและคะแนน; รายการ `P` "ที่ตั้งระบบ" ที่ไม่มีใครใช้ ลบออกจากสคริปต์แล้ว)
+- `DATA_LISTS` (29 รายการ) คือแหล่งตัวเลือกและคะแนนของ dropdown ต้องตรงกับ `LISTS` ใน `template/build_template.py` (ตรวจแล้ว 2026-10-12 ว่าตรงกันทั้ง 3 ที่ ทั้งข้อความและคะแนน; รายการ `P` "ที่ตั้งระบบ" ที่ไม่มีใครใช้ ลบออกจากสคริปต์แล้ว)
 
 **ความสัมพันธ์:** ไม่มี (use case เป็นรายการแบน ไม่มีตารางเชื่อม; `site`/`company` เป็นข้อความอิสระ)
 
@@ -138,7 +137,7 @@ use_case_web/
 | `fonts.googleapis.com` / `fonts.gstatic.com` | ฟอนต์ IBM Plex Sans Thai | |
 | `cdnjs.cloudflare.com` | Chart.js, JSZip, pdf.js | เปิดแบบออฟไลน์แล้วกราฟ/นำเข้าไฟล์ใช้ไม่ได้ |
 | n8n | รับไฟล์ JSON ที่ export ไปนำเข้าเอง | ไม่มีการเรียก n8n โดยตรง |
-| Excel template | แผนกกรอกแบบออฟไลน์ แล้วให้นำข้อมูลเข้าโปรแกรม | ไม่มีฟีเจอร์นำเข้า `.xlsx` ในเว็บ (ที่มีคือนำเข้า PDF/Word/PPT ผ่าน AI) — ตัดสินใจ 2026-10-12 ใช้วิธีให้ AI Agent อ่านไฟล์แล้วเขียน `usecases/all` ผ่านเครื่องมือ ArtifactData โดยเพิ่มต่อท้ายและล็อกเวอร์ชัน |
+| Excel template | แผนกกรอกแบบออฟไลน์ แล้วให้นำข้อมูลเข้าโปรแกรม | ปุ่ม **"Excel Template (ดาวน์โหลด / นำเข้า)"** ในหน้าจัดลำดับ (เพิ่ม 2026-11-02): ดาวน์โหลด template ว่างที่ฝังอยู่ในหน้า (ผ่าน capability `downloads`) และนำเข้าไฟล์ .xlsx ที่กรอกแล้ว — อ่านชีต 1/2 แถว 7–36 ด้วย SheetJS ตรวจค่า dropdown (ไม่ตรง = เว้นว่าง + แจ้งเตือน) ติดป้ายชื่อซ้ำ ให้ติ๊กเลือกก่อน แล้วเพิ่มต่อท้าย `usecases/all` หลังอ่านข้อมูลล่าสุด ไม่เขียนทับ case เดิม · ฟังก์ชัน `downloadExcelTemplate` / `readExcelFile` / `addExcelRows` · ตัวแปร `XL_TEMPLATE_B64` สร้างด้วย `template/embed_template.py` · ไลบรารี SheetJS 0.18.5 จาก cdnjs · Artifact declare capability `sample`, `db`, `downloads` |
 
 ---
 

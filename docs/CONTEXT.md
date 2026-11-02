@@ -6,8 +6,8 @@
   อ่านก่อนเริ่มงานใหม่ จะได้ไม่ต้องย้อนถามเรื่องที่ตัดสินใจไปแล้ว
 - **ส่วนที่ 2** บรีฟสำหรับ AI agent ที่จะทำงานกับโปรเจกต์นี้บนเครื่องใหม่ (ยุค Artifact — ไม่ต้องติดตั้ง server แล้ว)
 
-ถ้าเป็นมนุษย์ที่อยากรู้วิธีใช้งาน ให้อ่าน [README.md](README.md) แทน
-เอกสารประกอบอื่น: [AGENTS.md](AGENTS.md) (กฎการทำงาน) · [PRD.md](PRD.md) (ความต้องการ) ·
+ถ้าเป็นมนุษย์ที่อยากรู้วิธีใช้งาน ให้อ่าน [README.md](../README.md) แทน
+เอกสารประกอบอื่น: [AGENTS.md](../AGENTS.md) (กฎการทำงาน) · [PRD.md](PRD.md) (ความต้องการ) ·
 [ARCHITECTURE.md](ARCHITECTURE.md) (สถาปัตยกรรม/โครงสร้างข้อมูล) · [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) (ดีไซน์) ·
 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) (แผนงานและสถานะ)
 
@@ -83,8 +83,9 @@
 
 - **ชีตที่ซ่อนของ `AI Transformation Plan (Prod) E&E.xlsx` (`Prod`, `Prod (2)`) มี redesign อีก 6 เรื่อง — ตัดสินใจ 2026-10-12 ไม่นำเข้า** (นำเข้าเฉพาะ 3 เรื่องในชีต `Prod (3)`) ไฟล์ Excel 15 case จากแผนก: ใช้เท่าที่มีไปก่อน ผู้ใช้เปิดตรวจ `AI_UseCase_Template_v2.xlsx` ด้วย Excel จริงแล้ว ไม่พัง และจะแชร์หน้าจอให้หัวหน้าดู (Artifact ยังเป็น private)
 
-- **นำข้อมูลจาก Excel เข้าเว็บ: **ตัดสินใจ 2026-10-12 ใช้วิธีที่ 1 — ส่งไฟล์ Excel ที่กรอกแล้วให้ AI Agent นำเข้าให้** (อ่านไฟล์ → ตรวจค่า dropdown กับตัวเลือกจริง → เพิ่มต่อท้ายใน `usecases/all` ไม่เขียนทับ case เดิม → ส่งตารางสรุปให้เทียบก่อนเปิดให้คนอื่นดู) ปุ่มนำเข้า `.xlsx` ในเว็บ (วิธีที่ 2) ยังไม่ทำ ไว้พิจารณาเมื่อต้องนำเข้าบ่อย**
-- **ไฟล์ `AI_UseCase_Template_v2.xlsx` ที่ commit ตอนนี้มี use case จริง 3 รายการในแถว 7–9** (สร้างด้วย `SEED_JSON=<ไฟล์> python docs/build_template.py`) ถ้าจะแจกแผนกเป็น template ว่างให้รันสคริปต์โดยไม่กำหนด `SEED_JSON` — และการรัน build ซ้ำจะลบข้อมูลที่กรอกใน Excel ทิ้งทั้งหมด
+- **ปุ่ม **"Excel Template (ดาวน์โหลด / นำเข้า)"** ในหน้าจัดลำดับ (เพิ่ม 2026-11-02): ดาวน์โหลด template ว่างที่ฝังอยู่ในหน้า (ผ่าน capability `downloads`) และนำเข้าไฟล์ .xlsx ที่กรอกแล้ว — อ่านชีต 1/2 แถว 7–36 ด้วย SheetJS ตรวจค่า dropdown (ไม่ตรง = เว้นว่าง + แจ้งเตือน) ติดป้ายชื่อซ้ำ ให้ติ๊กเลือกก่อน แล้วเพิ่มต่อท้าย `usecases/all` หลังอ่านข้อมูลล่าสุด ไม่เขียนทับ case เดิม (แทนการตัดสินใจเดิมด้านล่าง ผู้ใช้สั่งทำปุ่มเมื่อ 2026-11-02)**
+- ~~นำข้อมูลจาก Excel เข้าเว็บ~~ (เดิม): **ตัดสินใจ 2026-10-12 ใช้วิธีที่ 1 — ส่งไฟล์ Excel ที่กรอกแล้วให้ AI Agent นำเข้าให้** (อ่านไฟล์ → ตรวจค่า dropdown กับตัวเลือกจริง → เพิ่มต่อท้ายใน `usecases/all` ไม่เขียนทับ case เดิม → ส่งตารางสรุปให้เทียบก่อนเปิดให้คนอื่นดู) ปุ่มนำเข้า `.xlsx` ในเว็บ (วิธีที่ 2) ยังไม่ทำ ไว้พิจารณาเมื่อต้องนำเข้าบ่อย**
+- **ไฟล์ `AI_UseCase_Template_v2.xlsx` ที่ commit ตอนนี้มี use case จริง 3 รายการในแถว 7–9** (สร้างด้วย `SEED_JSON=<ไฟล์> python template/build_template.py`) ถ้าจะแจกแผนกเป็น template ว่างให้รันสคริปต์โดยไม่กำหนด `SEED_JSON` — และการรัน build ซ้ำจะลบข้อมูลที่กรอกใน Excel ทิ้งทั้งหมด
 
 - **แยก 2 ชั้น** — ชั้น 1 ข้อมูลสำหรับคิดคะแนน (ทุก use case กรอก)
   ชั้น 2 ข้อมูลเทคนิคสำหรับตั้ง spec (กรอกทุก use case เหมือนกัน)
@@ -553,11 +554,11 @@ Predictive maintenance, Anomaly detection, AI agent/automation) ว่าคว�
 
 | ไฟล์ | คืออะไร |
 |---|---|
-| `docs/AI_UseCase_Template_v2.xlsx` | Template ที่แจกให้แผนกกรอก (ของจริงที่ส่งมอบ) |
-| `docs/TEMPLATE_GUIDE.md` | คู่มืออธิบายทุกคอลัมน์ว่าใช้ทำอะไร |
+| `template/AI_UseCase_Template_v2.xlsx` | Template ที่แจกให้แผนกกรอก (ของจริงที่ส่งมอบ) |
+| `template/TEMPLATE_GUIDE.md` | คู่มืออธิบายทุกคอลัมน์ว่าใช้ทำอะไร |
 | `docs/SCORING.md` | ที่มาของสูตรคะแนนและเหตุผลที่ตัดบางปัจจัยออก |
-| `docs/build_template.py` | สคริปต์สร้างไฟล์ Excel |
-| `docs/use_cases_source/`, `docs/use_cases_source2/` | ไฟล์ Excel template เดิมของแต่ละแผนก (ต้นฉบับ) |
+| `template/build_template.py` | สคริปต์สร้างไฟล์ Excel |
+| `source/use_cases_source/`, `source/use_cases_source2/` | ไฟล์ Excel template เดิมของแต่ละแผนก (ต้นฉบับ) |
 | `artifact.html` | โค้ดตัวจริงที่ publish เป็น Claude Artifact ตัวหลัก |
 | `AI_Use_Case_Program12.html` | สำเนาแบบไฟล์เต็มหน้า เก็บเป็นไฟล์สำรองบนเครื่อง (ต้องแก้คู่กับ `artifact.html` เสมอ) |
 | `IMPLEMENTATION_PLAN.md` | แผนงานเฟส 1–4 และสถานะ checklist |
@@ -577,7 +578,7 @@ use case 1 รายการเป็น JS object ที่ field ไม่ต
 แบบ JSON ในยุค MySQL (ตาราง `use_cases`: `id`, `name`, `dept`, `payload`, `created_at`, `updated_at`)
 
 ถ้าต้องการกู้ข้อมูลกลับเป็น MySQL ในอนาคต ไฟล์
-`backup_ai_usecase_db_20260910_092621_pre_artifact_sync.sql`
+`backup/backup_ai_usecase_db_20260910_092621_pre_artifact_sync.sql`
 มีทั้งคำสั่งสร้างตารางและข้อมูลครบในไฟล์เดียว รันไฟล์เดียวจบ
 
 ### วิธีแก้ไข Template
@@ -586,7 +587,7 @@ use case 1 รายการเป็น JS object ที่ field ไม่ต
 และ dropdown หลายสิบชุดที่ต้องสร้างให้ตรงกันทุกครั้ง
 
 ```bash
-python docs/build_template.py
+python template/build_template.py
 ```
 
 ### สิ่งที่ต้องตรวจทุกครั้งหลังแก้ template
@@ -630,8 +631,8 @@ path เดียวกันในบทสนทนานั้น (เคย�
 | ใช้ทำอะไร | ต้องมี |
 |---|---|
 | แก้โค้ดแอป | แค่ text editor — แอปเป็นไฟล์ HTML เดี่ยว (`artifact.html` + สำเนา `AI_Use_Case_Program12.html`) |
-| ดู/ทดสอบผล | publish `artifact.html` ขึ้น Artifact ตัวหลักโดยระบุ `url` เดิม (ดู [AGENTS.md](AGENTS.md)) |
-| สร้าง Excel template ใหม่ | Python 3 + `openpyxl` แล้วรัน `python docs/build_template.py` (ปิดไฟล์ใน Excel ก่อน) และเปิดตรวจด้วย Excel ตัวจริง |
+| ดู/ทดสอบผล | publish `artifact.html` ขึ้น Artifact ตัวหลักโดยระบุ `url` เดิม (ดู [AGENTS.md](../AGENTS.md)) |
+| สร้าง Excel template ใหม่ | Python 3 + `openpyxl` แล้วรัน `python template/build_template.py` (ปิดไฟล์ใน Excel ก่อน) และเปิดตรวจด้วย Excel ตัวจริง |
 | git | clone repo แล้วทำงานบน branch ที่ผู้ใช้กำหนด (ตอนนี้ `trim-form-fields`) |
 
 ## จุดที่ต้องรักษาไว้ ห้ามเปลี่ยนเอง
@@ -640,7 +641,7 @@ path เดียวกันในบทสนทนานั้น (เคย�
 - **use case เป็น object ที่ field ไม่ตายตัว** อย่า normalize เอง
 - **fallback ของ `loadData`/`saveData`**: Artifact db → `/api/usecases` (ซากจากยุค Flask ไม่มี server แล้ว) → `window.storage` → `localStorage` (`ai_usecase_program_data`) — การ fallback เงียบๆ ตอนเปิดไฟล์ local เป็นพฤติกรรมที่ตั้งใจ ไม่ใช่บั๊ก
 - **ไม่มีระบบ login ในแอป** — การเข้าถึงคุมด้วยสิทธิ์แชร์ของ Artifact
-- **ห้ามลบไฟล์ backup ยุค MySQL** (`backup_ai_usecase_db_*.sql`, `data/use_cases_export.json`) เว้นแต่ผู้ใช้สั่ง
+- **ห้ามลบไฟล์ backup ยุค MySQL** (`backup/backup_ai_usecase_db_*.sql`, `backup/use_cases_export.json`) เว้นแต่ผู้ใช้สั่ง
 - **ห้าม seed ข้อมูลทดสอบค้างไว้ใน Artifact db** — ถ้าทดสอบเพิ่มข้อมูล ต้องลบออกหลังทดสอบ
 
 ## ปัญหาที่เคยเจอมาแล้ว (อย่าทำซ้ำ)

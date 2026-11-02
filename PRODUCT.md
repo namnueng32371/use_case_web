@@ -24,7 +24,7 @@ Unlike ad-hoc spreadsheets that each department fills out with no shared scoring
 
 - Runs as a Claude Artifact; data lives in the Artifact's own shared database (`window.claude.use('db')`, document `usecases/all`). No backend, no MySQL, no LAN server anymore.
 - The local file `AI_Use_Case_Program12.html` is a backup copy of the code; opened directly it falls back to the browser's `localStorage`.
-- Source material arrives as Excel workbooks (the department template `docs/AI_UseCase_Template_v2.xlsx`, older source sheets in `docs/use_cases_source*/`) or PDF/Word/PowerPoint files that Claude reads through the import feature.
+- Source material arrives as Excel workbooks (the department template `template/AI_UseCase_Template_v2.xlsx`, older source sheets in `source/use_cases_source*/`) or PDF/Word/PowerPoint files that Claude reads through the import feature.
 - All AI workloads must run **on-premise**, with **one server per site** (each factory/branch hosts its own). Hardware is datacenter/workstation class only.
 - Also hosts a team-structure tab ("โครงสร้างทีม AI Star") and a workflow tab ("Flow การทำงาน AI Start") that exports n8n-compatible JSON.
 
@@ -45,8 +45,8 @@ Header shows the "Polymate" logo (wordmark plus a diamond/cube mark in orange/ta
 
 ## Evidence on Hand
 
-- The Artifact database currently holds 2 demo use cases. Real submissions from the MySQL era are preserved in `backup_ai_usecase_db_*.sql` and `data/use_cases_export.json`.
-- Source workbooks live under `docs/use_cases_source/` and `docs/use_cases_source2/`.
+- The Artifact database currently holds 2 demo use cases. Real submissions from the MySQL era are preserved in `backup/backup_ai_usecase_db_*.sql` and `backup/use_cases_export.json`.
+- Source workbooks live under `source/use_cases_source/` and `source/use_cases_source2/`.
 - No customer-facing marketing copy, testimonials, or pricing exists. This is an internal operations tool, not a product with external buyers.
 
 ## Product Principles

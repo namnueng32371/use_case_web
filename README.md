@@ -2,7 +2,7 @@
 
 เครื่องมือรวบรวม ให้คะแนน และจัดลำดับความสำคัญ use case AI ของกลุ่มบริษัท (โรงงานผลิตยาง/พลาสติก) ทำงานเป็น **Claude Artifact ไฟล์เดียว** — ไม่มี server, ไม่มี MySQL, ไม่ต้องติดตั้งอะไรบนเครื่อง
 
-> เอกสารนี้สำหรับ "คนใช้งาน" ถ้าจะแก้โค้ดหรือให้ AI Agent ทำงานกับโปรเจกต์ ให้อ่าน [AGENTS.md](AGENTS.md) และ [CONTEXT.md](CONTEXT.md) ก่อน
+> เอกสารนี้สำหรับ "คนใช้งาน" ถ้าจะแก้โค้ดหรือให้ AI Agent ทำงานกับโปรเจกต์ ให้อ่าน [AGENTS.md](AGENTS.md) และ [CONTEXT.md](docs/CONTEXT.md) ก่อน
 > ยุคเก่า (Flask + MySQL, `start_all.bat`, `server.py`) **เลิกใช้แล้ว** — ถ้าเจอเอกสารหรือคำแนะนำที่อ้างถึงสิ่งเหล่านี้ ให้ถือว่าล้าสมัย
 
 ---
@@ -15,8 +15,8 @@
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| [artifact.html](artifact.html) | โค้ดตัวจริงที่ publish ขึ้น Artifact (ตัวที่ใช้งาน) |
-| [AI_Use_Case_Program12.html](AI_Use_Case_Program12.html) | สำเนาโค้ดแบบไฟล์เต็มหน้า เก็บเป็นไฟล์สำรองบนเครื่อง (เปิดในเบราว์เซอร์ได้ แต่จะเก็บข้อมูลใน `localStorage` ของเครื่องนั้นแทน ไม่ได้แชร์กับ Artifact) |
+| [artifact.html](app/artifact.html) | โค้ดตัวจริงที่ publish ขึ้น Artifact (ตัวที่ใช้งาน) |
+| [AI_Use_Case_Program12.html](app/AI_Use_Case_Program12.html) | สำเนาโค้ดแบบไฟล์เต็มหน้า เก็บเป็นไฟล์สำรองบนเครื่อง (เปิดในเบราว์เซอร์ได้ แต่จะเก็บข้อมูลใน `localStorage` ของเครื่องนั้นแทน ไม่ได้แชร์กับ Artifact) |
 
 ---
 
@@ -48,11 +48,11 @@
 
 ## เก็บ use case จากแผนกแบบออฟไลน์ (Excel Template)
 
-แจกไฟล์ [docs/AI_UseCase_Template_v2.xlsx](docs/AI_UseCase_Template_v2.xlsx) ให้แผนกกรอก แล้วทีม AI นำมาลงในเว็บ — คู่มืออธิบายทุกคอลัมน์อยู่ที่ [docs/TEMPLATE_GUIDE.md](docs/TEMPLATE_GUIDE.md)
+แจกไฟล์ [template/AI_UseCase_Template_v2.xlsx](template/AI_UseCase_Template_v2.xlsx) ให้แผนกกรอก แล้วทีม AI นำมาลงในเว็บ — คู่มืออธิบายทุกคอลัมน์อยู่ที่ [template/TEMPLATE_GUIDE.md](template/TEMPLATE_GUIDE.md)
 
-- **ห้ามแก้ไฟล์ .xlsx ด้วยมือ** — แก้ที่ [docs/build_template.py](docs/build_template.py) แล้วสร้างใหม่:
+- **ห้ามแก้ไฟล์ .xlsx ด้วยมือ** — แก้ที่ [template/build_template.py](template/build_template.py) แล้วสร้างใหม่:
   ```bash
-  python docs/build_template.py
+  python template/build_template.py
   ```
   (ต้องปิดไฟล์ .xlsx ใน Excel ก่อนรัน ไม่งั้นจะขึ้น PermissionError)
 - ช่องในฟอร์มเว็บกับคอลัมน์ใน template ต้องตรงกันเสมอ
@@ -61,7 +61,11 @@
 
 ### นำข้อมูลจาก Excel เข้าเว็บ
 
-ส่งไฟล์ Excel ที่กรอกแล้วให้ AI Agent (Claude Code) นำเข้าให้ (ตัดสินใจ 2026-10-12) — Agent จะตรวจค่า dropdown เพิ่มต่อท้ายโดยไม่เขียนทับ case เดิม และส่งตารางสรุปให้เทียบกับต้นฉบับก่อนเปิดให้คนอื่นดู ยังไม่มีปุ่มนำเข้า `.xlsx` ในเว็บ ปุ่มนำเข้าที่มีเป็นของ PDF/Word/PPT (ใช้ AI อ่าน)
+กดปุ่ม **"Excel Template (ดาวน์โหลด / นำเข้า)"** ในหน้าจัดลำดับ → ดาวน์โหลด template ว่างส่งให้แผนก → แผนกกรอกเสร็จ เลือกไฟล์แล้วกด "อ่านไฟล์และตรวจข้อมูล" → ดูตาราง (ค่าที่ไม่ตรงตัวเลือกจะเว้นว่างและแจ้งเตือน, ชื่อซ้ำจะไม่ถูกติ๊กไว้) → กด "เพิ่มรายการที่เลือกเข้าระบบ" ไม่เขียนทับ case เดิม ปุ่มนี้ไม่ใช้ AI ใช้ได้ทั้งบน Artifact และไฟล์ local
+
+ส่วนที่**ต้องใช้ AI** (นำเข้าจาก PDF/Word/PPT, ประเมิน Spec, วิเคราะห์แผนงาน/Flow ด้วย AI) มีป้ายสีเหลือง "ต้องใช้ AI (Claude)" กำกับ ใช้ได้เฉพาะเมื่อเปิดผ่าน Claude Artifact ถ้าเปิดไฟล์ HTML ในเครื่อง ป้ายจะเป็นสีแดง
+
+ถ้าแก้ `template/build_template.py` ต้องรัน `python template/embed_template.py` ด้วย เพื่อให้ template ที่ดาวน์โหลดจากเว็บเป็นเวอร์ชันล่าสุด
 
 > ไฟล์ .xlsx ที่อยู่ในโฟลเดอร์ตอนนี้สร้างใหม่แล้ว (27 คอลัมน์ รวม AA "สถานที่ตั้งที่ใช้งาน") และ**มี use case จริง 3 รายการในแถว 7–9** ถ้าจะแจกแผนกให้ลบแถวเหล่านั้นหรือสร้างไฟล์ว่างด้วยการรันสคริปต์ปกติ ผู้ใช้เปิดตรวจด้วย Excel จริงแล้ว (2026-10-12) รายงานว่าไม่พัง
 
@@ -74,9 +78,9 @@
 | ฟอร์ม + คะแนน + เอกสารรายเคส (ดู/พิมพ์ PDF) + นำเข้าเอกสาร | ใช้งานได้ (ปุ่มส่งออก CSV และดาวน์โหลด Word เอาออกแล้ว เพราะบน Artifact ดาวน์โหลดไม่ได้) |
 | คะแนนเว็บ = คะแนน Excel | ตรวจแล้ว (เฟส 1 ปิด 2026-10-12) ตรงกันทุกกรณีทดสอบ และผู้ใช้ลองกรอกในฟอร์มจริงแล้วได้ 89 / 82 ตามที่คาด |
 | ช่อง "สถานที่ตั้ง" | dropdown 5 ที่ตั้ง ทั้งเว็บและ Excel (2026-10-14) — นาดีของ Thairubbtech กับ SKPolymer คือที่เดียวกัน |
-| หน้าประเมิน Spec + หน้าแผนโครงการ | **วางแผนเสร็จแล้ว ยังไม่ได้แก้โค้ด** — เปลี่ยนเป็นเครื่องคำนวณ spec แบบกำหนดสูตรตายตัว (ไม่ให้ AI เดาราคา), แยก server ตามสถานที่ตั้ง, เทียบ scenario ให้ผู้บริหารเลือก — รายละเอียดใน [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) เฟส 3 |
+| หน้าประเมิน Spec + หน้าแผนโครงการ | **วางแผนเสร็จแล้ว ยังไม่ได้แก้โค้ด** — เปลี่ยนเป็นเครื่องคำนวณ spec แบบกำหนดสูตรตายตัว (ไม่ให้ AI เดาราคา), แยก server ตามสถานที่ตั้ง, เทียบ scenario ให้ผู้บริหารเลือก — รายละเอียดใน [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) เฟส 3 |
 
-เอกสารอื่นที่เกี่ยวข้อง: [PRD.md](PRD.md) (ความต้องการ), [ARCHITECTURE.md](ARCHITECTURE.md) (สถาปัตยกรรม), [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) (ดีไซน์), [PRODUCT.md](PRODUCT.md) (บริบทผลิตภัณฑ์สำหรับ impeccable)
+เอกสารอื่นที่เกี่ยวข้อง: [PRD.md](docs/PRD.md) (ความต้องการ), [ARCHITECTURE.md](docs/ARCHITECTURE.md) (สถาปัตยกรรม), [DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) (ดีไซน์), [PRODUCT.md](PRODUCT.md) (บริบทผลิตภัณฑ์สำหรับ impeccable)
 
 ---
 
@@ -84,8 +88,8 @@
 
 | ไฟล์ | คืออะไร |
 |---|---|
-| `backup_ai_usecase_db_*.sql` | dump ฐานข้อมูล MySQL ก่อนย้ายมาเป็น Artifact |
-| `data/use_cases_export.json` | ข้อมูล use case ที่ export ออกมาตอนย้ายระบบ |
+| `backup/backup_ai_usecase_db_*.sql` | dump ฐานข้อมูล MySQL ก่อนย้ายมาเป็น Artifact |
+| `backup/use_cases_export.json` | ข้อมูล use case ที่ export ออกมาตอนย้ายระบบ |
 
 **ห้ามลบ** — เก็บไว้เผื่อต้องกู้คืน
 
@@ -139,5 +143,5 @@ git push origin trim-form-fields
 | เปิด Artifact แล้วไม่มีข้อมูล | ไม่ได้ล็อกอิน/ไม่มีสิทธิ์ใน Artifact ตัวหลัก หรือเปิด Artifact ผิดตัว | ตรวจว่าเปิดลิงก์ "AI Use Case Prioritization Tool" ตัวหลัก |
 | เปิด `AI_Use_Case_Program12.html` จากเครื่องแล้วข้อมูลไม่ตรงกับบน Artifact | ไฟล์ local เก็บข้อมูลใน `localStorage` ของเครื่อง ไม่ได้เชื่อมกับฐานข้อมูลของ Artifact | ใช้งานจริงผ่าน Artifact เท่านั้น |
 | ปุ่ม AI (วิเคราะห์ flow / spec / นำเข้าเอกสาร) ไม่ตอบ | ต้องเปิดผ่าน Artifact จึงเรียก Claude ได้ | เปิดผ่าน Artifact |
-| `python docs/build_template.py` ขึ้น PermissionError | ไฟล์ .xlsx เปิดค้างอยู่ใน Excel | ปิด Excel แล้วรันใหม่ |
+| `python template/build_template.py` ขึ้น PermissionError | ไฟล์ .xlsx เปิดค้างอยู่ใน Excel | ปิด Excel แล้วรันใหม่ |
 | ภาษาไทยในคอนโซลเพี้ยน | คอนโซล Windows ใช้ cp874 | ไฟล์จริงเป็น UTF-8 ปกติ ตรวจด้วยการเปิดไฟล์แทนการดูจากคอนโซล |

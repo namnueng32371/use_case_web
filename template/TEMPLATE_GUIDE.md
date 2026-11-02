@@ -1,12 +1,12 @@
 # คู่มือ AI Use Case Template v2
 
-ไฟล์: `docs/AI_UseCase_Template_v2.xlsx` (สร้างจาก `docs/build_template.py`)
+ไฟล์: `template/AI_UseCase_Template_v2.xlsx` (สร้างจาก `template/build_template.py`)
 
 มี 5 sheet: `คู่มือการใช้งาน` · `1-UseCase ทั้งหมด` · `2-รายละเอียดเทคนิค` · `3-คะแนนและลำดับ` · `DATA`
 
 > ไฟล์ .xlsx สร้างใหม่แล้ว (2026-10-12) มีคอลัมน์ **AA (สถานที่ตั้งที่ใช้งาน)** ครบ 27 คอลัมน์ ผู้ใช้เปิดตรวจด้วย Excel จริงแล้ว (2026-10-12) รายงานว่าไม่พัง
 >
-> ไฟล์ที่ commit ตอนนี้มี **use case จริง 3 รายการในแถว 7–9 ของ sheet 1** (จาก `AI Transformation Plan (Prod) E&E.xlsx` เฉพาะแถวที่มี Redesign) สร้างด้วยตัวเลือก `SEED_JSON=<ไฟล์ JSON> python docs/build_template.py` — ใส่เฉพาะช่องข้อความที่มีในต้นฉบับ (บริษัท หน่วยงาน QWP kQI ขั้นตอน ปัญหา Existing Work Redesign Data Available หมายเหตุ) ช่อง dropdown ทั้งหมดเว้นว่าง รันสคริปต์โดยไม่กำหนด `SEED_JSON` จะได้ template ว่าง
+> ไฟล์ที่ commit ตอนนี้มี **use case จริง 3 รายการในแถว 7–9 ของ sheet 1** (จาก `AI Transformation Plan (Prod) E&E.xlsx` เฉพาะแถวที่มี Redesign) สร้างด้วยตัวเลือก `SEED_JSON=<ไฟล์ JSON> python template/build_template.py` — ใส่เฉพาะช่องข้อความที่มีในต้นฉบับ (บริษัท หน่วยงาน QWP kQI ขั้นตอน ปัญหา Existing Work Redesign Data Available หมายเหตุ) ช่อง dropdown ทั้งหมดเว้นว่าง รันสคริปต์โดยไม่กำหนด `SEED_JSON` จะได้ template ว่าง
 
 ## ภาพรวม: ข้อมูลไหลยังไง
 
@@ -293,6 +293,6 @@ use case แบ่งได้ 4 ประเภท และ **3 ใน 4 ป�
 แล้วรันใหม่ สูตรและ dropdown ทั้งหมดจะถูกสร้างใหม่ให้ครบเหมือนเดิมทุกครั้ง
 
 ```bash
-python docs/build_template.py
+python template/build_template.py
 ```
 
